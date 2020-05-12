@@ -24,7 +24,7 @@
     "./wasm_asm_stub.js": "./wasm_asm.js"
   },
   "scripts": {
-    "build": "./scripts/build.sh",
+    "build": "wasm-pack build -- --release",
     "build:release": "./scripts/build-release.sh",
     "format": "TODO",
     "lint": "TODO",

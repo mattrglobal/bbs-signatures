@@ -25,3 +25,6 @@ package-lock.json
 report.*.json
 yarn-debug.log*
 yarn-error.log*
+target/
+.idea/
+Cargo.lock
