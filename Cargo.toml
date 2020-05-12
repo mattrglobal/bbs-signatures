@@ -1,0 +1,26 @@
+
+[package]
+authors = ["Tobias Looker <tobias.looker@mattr.global>", "Mike Lodder <redmike7@gmail.com>"]
+description = "WASM binding to bbs rust crate"
+edition = "2018"
+license = "Apache-2.0"
+name = "wasm"
+publish = false
+repository = "https://github.com/mattrglobal/wasm-bbs-signatures"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+bbs = { git = "https://github.com/mikelodder7/ursa", branch = "master"}
+wasm-bindgen = "0.2"
+wee_alloc = "0.4.3"
+
+[dev-dependencies]
+rand = { version = "0.6.5", features = ["wasm-bindgen"] }
+
+[profile.release]
+debug = true # remove this in release builds
+lto = true
+opt-level = "z"

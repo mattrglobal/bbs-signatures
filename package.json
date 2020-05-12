@@ -1,0 +1,41 @@
+{
+  "name": "wasm-bbs-signatures",
+  "version": "0.0.1",
+  "description": "An implementation of BBS+ signatures using rust and JS/TS",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "repository": "https://github.com/mattrglobal/wasm-bbs-signatures",
+  "author": "Tobias Looker <tobias.looker@mattr.global>",
+  "license": "Apache-2",
+  "private": false,
+  "files": [
+    "crypto-polyfill.js",
+    "exports.js",
+    "index.d.ts",
+    "index.js",
+    "wasm.d.ts",
+    "wasm.js",
+    "wasm_asm.js",
+    "wasm_asm_stub.js",
+    "wasm_promise.js",
+    "wasm_wasm.js"
+  ],
+  "react-native": {
+    "./wasm_asm_stub.js": "./wasm_asm.js"
+  },
+  "scripts": {
+    "build": "./scripts/build.sh",
+    "build:release": "./scripts/build-release.sh",
+    "format": "TODO",
+    "lint": "TODO",
+    "lint:fix": "TODO",
+    "clean": "rm -rf build && cargo clean",
+    "test": "./scripts/test-package.sh"
+  },
+  "peerDependencies": {
+    "@polkadot/util": "*"
+  },
+  "devDependencies": {
+    "override-require": "^1.1.1"
+  }
+}
