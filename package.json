@@ -29,7 +29,7 @@
     "format": "TODO",
     "lint": "TODO",
     "lint:fix": "TODO",
-    "clean": "rm -rf build && cargo clean",
+    "clean": "rm -rf build && rm -rf pkg && cargo clean",
     "test": "./scripts/test-package.sh"
   },
   "peerDependencies": {

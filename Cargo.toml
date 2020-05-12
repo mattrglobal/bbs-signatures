@@ -1,16 +1,17 @@
-
 [package]
 authors = ["Tobias Looker <tobias.looker@mattr.global>", "Mike Lodder <redmike7@gmail.com>"]
 description = "WASM binding to bbs rust crate"
 edition = "2018"
 license = "Apache-2.0"
 name = "wasm"
-publish = false
 repository = "https://github.com/mattrglobal/wasm-bbs-signatures"
-version = "0.0.0"
+version = "0.1.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
 
 [dependencies]
 bbs = { version = "0.4.0", git = "https://github.com/mikelodder7/ursa", branch = "master"}
@@ -18,7 +19,7 @@ console_error_panic_hook = "0.1"
 js-sys = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
-wee_alloc = "0.4"
+wee_alloc = { version = "0.4", optional = true }
 
 [profile.release]
 lto = true
