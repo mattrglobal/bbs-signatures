@@ -16,5 +16,9 @@ fn pass() {
 #[wasm_bindgen_test]
 fn bls_generate_key_test() {
     let key = bls_generate_key();
+    match key.as_string() {
+        Some(val) => log(&val),
+        None => log("no key")
+    }
     assert_eq!(1 + 1, 2);
 }
