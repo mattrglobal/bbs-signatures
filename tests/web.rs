@@ -5,6 +5,7 @@
 extern crate wasm_bindgen_test;
 use wasm_bindgen_test::*;
 use wasm_bbs_signatures::*;
+use wasm_bindgen::JsValue;
 
 wasm_bindgen_test_configure!(run_in_browser);
 
@@ -16,9 +17,6 @@ fn pass() {
 #[wasm_bindgen_test]
 fn bls_generate_key_test() {
     let key = bls_generate_key();
-    match key.as_string() {
-        Some(val) => log(&val),
-        None => log("no key")
-    }
-    assert_eq!(1 + 1, 2);
+
+    assert!(key.is_object());
 }
