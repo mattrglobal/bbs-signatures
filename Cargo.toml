@@ -1,29 +1,30 @@
 [package]
-name = "wasm-bbs-signatures"
-version = "0.1.0"
-authors = ["Tobias <tplooker@gmail.com>"]
+authors = ["Tobias Looker <tobias.looker@mattr.global>", "Mike Lodder <redmike7@gmail.com>"]
+description = "WASM binding to bbs rust crate"
 edition = "2018"
+license = "Apache-2.0"
+name = "wasm-bbs-signatures"
+repository = "https://github.com/mattrglobal/wasm-bbs-signatures"
+version = "0.1.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = ["console_error_panic_hook"]
+console = ["console_error_panic_hook"]
+default = []
 
 [dependencies]
-wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
-web-sys = { version = "0.3.39", features = ['console'] }
-rand = { version = "0.7.0", features = ["wasm-bindgen"] }
-bbs = { version = "0.4.0", default-features = false, git = "https://github.com/mikelodder7/ursa", branch = "master"}
-serde = { version = "1.0", features = ["derive"] }
-js-sys = "0.3"
-
+bbs = { version = "0.4.0", default-features = false, git = "https://github.com/mikelodder7/ursa", branch = "master" }
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.1", optional = true }
-
+rand = { version = "0.7", features = ["wasm-bindgen"] }
+serde = { version = "1.0", features = ["derive"] }
+wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
+web-sys = { version = "0.3.39", features = ['console'] }
 # `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
 # compared to the default allocator's ~10K. It is slower than the default
 # allocator, however.
@@ -33,6 +34,7 @@ wee_alloc = { version = "0.4.2", optional = true }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.2"
+js-sys = "0.3"
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.

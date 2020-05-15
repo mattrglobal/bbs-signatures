@@ -1,7 +1,3 @@
-mod utils;
-
-use bbs::prelude::*;
-use serde::{Serialize, Deserialize};
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -10,32 +6,14 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[wasm_bindgen]
-extern {
-    fn alert(s: &str);
-}
+#[cfg(feature = "console")]
+mod utils;
+pub mod bls12381;
+pub mod bbs_plus;
 
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, wasm-bbs-signatures!");
-}
-
-#[allow(non_snake_case)]
-#[derive(Serialize, Deserialize)]
-pub struct KeyPair {
-    publicKey: Option<DeterministicPublicKey>,
-    secretKey: Option<SecretKey>
-}
-
-#[wasm_bindgen]
-pub fn bls_generate_key() -> JsValue {
-	let (pk, sk) = DeterministicPublicKey::new(None);
-    let keypair = KeyPair {
-        publicKey: Some(pk),
-        secretKey: Some(sk)
-    };
-    log("test key gen");
-    JsValue::from_serde(&keypair).unwrap()
+pub mod prelude {
+    pub use crate::bls12381::*;
+    pub use crate::bbs_plus::*;
 }
 
 #[wasm_bindgen]
