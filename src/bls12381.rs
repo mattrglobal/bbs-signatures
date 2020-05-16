@@ -18,10 +18,21 @@ use wasm_bindgen::prelude::*;
 /// Option allows both of the keys to be JS::null
 /// or only one of them set.
 #[allow(non_snake_case)]
-#[derive(Serialize, Deserialize)]
+#[wasm_bindgen]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct KeyPair {
     publicKey: Option<DeterministicPublicKey>,
     secretKey: Option<SecretKey>
+}
+
+#[allow(non_snake_case)]
+impl KeyPair {
+    pub fn new(publicKey: Option<DeterministicPublicKey>, secretKey: Option<SecretKey>) -> Self {
+        Self {
+            publicKey,
+            secretKey
+        }
+    }
 }
 
 /// Generate a BLS 12-381 key pair.
@@ -45,6 +56,16 @@ pub fn bls_generate_key(seed: Option<Vec<u8>>) -> JsValue {
 pub struct Bls12381ToBbsRequest {
     keyPair: KeyPair,
     messageCount: usize
+}
+
+#[allow(non_snake_case)]
+impl Bls12381ToBbsRequest {
+    pub fn new(keyPair: KeyPair, messageCount: usize) -> Self {
+        Self {
+            keyPair,
+            messageCount
+        }
+    }
 }
 
 /// Get the BBS public key associated with the private key
