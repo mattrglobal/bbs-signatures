@@ -104,22 +104,23 @@ pub struct BlindSignatureVerifyContextRequest {
     proofOfHiddenMessages: ProofG1,
     challengeHash: ProofChallenge,
     publicKey: PublicKey,
-    blinded: Vec<usize>,
+    blinded: BTreeSet<usize>,
     nonce: String
 }
 
 #[wasm_bindgen]
 pub fn bbs_verify_blind_signature_proof(request: BlindSignatureVerifyContextRequest) -> JsValue {
-    if request.blinded.iter().any(|b| *b > request.publicKey.message_count()) {
+    let total = request.publicKey.message_count();
+    if request.blinded.iter().any(|b| *b > total) {
         return JsValue::from("blinded value is out of bounds");
     }
+    let messages = (0..total).filter(|i| !request.blinded.contains(i)).collect();
     let nonce = ProofNonce::hash(&request.nonce);
     let ctx = BlindSignatureContext {
         commitment: request.commitment,
         challenge_hash: request.challengeHash,
         proof_of_hidden_messages: request.proofOfHiddenMessages,
     };
-    let messages: BTreeMap<usize, SignatureMessage> = request.blinded.iter().map(|i| (*i, SignatureMessage::from([0u8; FR_COMPRESSED_SIZE]))).collect();
     match ctx.verify(&messages, &request.publicKey, &nonce) {
         Err(e) => JsValue::from(&format!("{:?}", e)),
         Ok(b) => JsValue::from_bool(b)
