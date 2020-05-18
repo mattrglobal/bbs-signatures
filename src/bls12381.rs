@@ -11,29 +11,22 @@
  * limitations under the License.
  */
 use bbs::prelude::*;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
-/// Convenience struct for interfacing with JS.
-/// Option allows both of the keys to be JS::null
-/// or only one of them set.
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-#[derive(Debug, Deserialize, Serialize)]
-pub struct KeyPair {
+wasm_object_impl!(
+    /// Convenience struct for interfacing with JS.
+    /// Option allows both of the keys to be JS::null
+    /// or only one of them set.
+    #[allow(non_snake_case)]
+    #[wasm_bindgen]
+    #[derive(Debug, Deserialize, Serialize)]
+    KeyPair,
     publicKey: Option<DeterministicPublicKey>,
     secretKey: Option<SecretKey>
-}
+);
 
-#[allow(non_snake_case)]
-impl KeyPair {
-    pub fn new(publicKey: Option<DeterministicPublicKey>, secretKey: Option<SecretKey>) -> Self {
-        Self {
-            publicKey,
-            secretKey
-        }
-    }
-}
+wasm_object_impl!(Bls12381ToBbsRequest, keyPair: KeyPair, messageCount: usize);
 
 /// Generate a BLS 12-381 key pair.
 ///
@@ -43,29 +36,12 @@ impl KeyPair {
 /// followed by the public key (96) bytes.
 #[wasm_bindgen]
 pub fn bls_generate_key(seed: Option<Vec<u8>>) -> JsValue {
-	let (pk, sk) = DeterministicPublicKey::new(seed.map(|s| KeyGenOption::UseSeed(s)));
+    let (pk, sk) = DeterministicPublicKey::new(seed.map(|s| KeyGenOption::UseSeed(s)));
     let keypair = KeyPair {
         publicKey: Some(pk),
-        secretKey: Some(sk)
+        secretKey: Some(sk),
     };
     JsValue::from_serde(&keypair).unwrap()
-}
-
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct Bls12381ToBbsRequest {
-    keyPair: KeyPair,
-    messageCount: usize
-}
-
-#[allow(non_snake_case)]
-impl Bls12381ToBbsRequest {
-    pub fn new(keyPair: KeyPair, messageCount: usize) -> Self {
-        Self {
-            keyPair,
-            messageCount
-        }
-    }
 }
 
 /// Get the BBS public key associated with the private key
@@ -75,10 +51,15 @@ pub fn bls_secret_key_to_bbs_key(request: Bls12381ToBbsRequest) -> JsValue {
         return JsValue::from("SecretKey cannot be empty");
     }
 
-    let (dpk, _) = DeterministicPublicKey::new(request.keyPair.secretKey.map(|s| KeyGenOption::FromSecretKey(s)));
+    let (dpk, _) = DeterministicPublicKey::new(
+        request
+            .keyPair
+            .secretKey
+            .map(|s| KeyGenOption::FromSecretKey(s)),
+    );
     let res = match dpk.to_public_key(request.messageCount) {
         Ok(pk) => JsValue::from_serde(&pk).unwrap(),
-        Err(e) => JsValue::from(&format!("{:?}", e))
+        Err(e) => JsValue::from(&format!("{:?}", e)),
     };
     res
 }
@@ -89,9 +70,14 @@ pub fn bls_public_key_to_bbs_key(request: Bls12381ToBbsRequest) -> JsValue {
     if request.keyPair.publicKey.is_none() {
         return JsValue::from("PublicKey cannot be empty");
     }
-    let res = match request.keyPair.publicKey.unwrap().to_public_key(request.messageCount) {
+    let res = match request
+        .keyPair
+        .publicKey
+        .unwrap()
+        .to_public_key(request.messageCount)
+    {
         Ok(pk) => JsValue::from_serde(&pk).unwrap(),
-        Err(e) => JsValue::from(&format!("{:?}", e))
+        Err(e) => JsValue::from(&format!("{:?}", e)),
     };
     res
 }

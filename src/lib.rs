@@ -18,6 +18,10 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+#[macro_use]
+mod macros;
+pub mod bbs_plus;
+pub mod bls12381;
 #[cfg(feature = "console")]
 mod utils;
 
@@ -25,8 +29,8 @@ pub mod bls12381;
 pub mod bbs_plus;
 
 pub mod prelude {
-    pub use crate::bls12381::*;
     pub use crate::bbs_plus::*;
+    pub use crate::bls12381::*;
 }
 
 #[wasm_bindgen]
@@ -46,5 +50,3 @@ extern "C" {
     #[wasm_bindgen(js_namespace = console, js_name = log)]
     pub fn log_many(a: &str, b: &str);
 }
-
-

@@ -14,60 +14,111 @@ use bbs::prelude::*;
 use serde::Serialize;
 use std::{
     collections::{BTreeMap, BTreeSet},
-    iter::FromIterator
+    iter::FromIterator,
 };
 use wasm_bindgen::prelude::*;
 
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct BbsSignRequest {
-    secretKey: SecretKey,
+wasm_object_impl!(
+    BbsSignRequest,
     publicKey: PublicKey,
+    secretKey: SecretKey,
     messages: Vec<String>
-}
+);
 
-#[wasm_bindgen]
-pub fn bbs_sign(request: BbsSignRequest) -> JsValue {
-    let messages: Vec<SignatureMessage> = request.messages.iter().map(|m| SignatureMessage::hash(m)).collect();
-    match Signature::new(messages.as_slice(), &request.secretKey, &request.publicKey) {
-        Ok(sig) => JsValue::from_serde(&sig).unwrap(),
-        Err(e) => JsValue::from(&format!("{:?}", e))
-    }
-}
-
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct BbsVerifyRequest {
+wasm_object_impl!(
+    BbsVerifyRequest,
     publicKey: PublicKey,
     signature: Signature,
-    messages: Vec<String>,
-}
+    messages: Vec<String>
+);
 
-#[wasm_bindgen]
-pub fn bbs_verify(request: BbsVerifyRequest) -> JsValue {
-    let messages: Vec<SignatureMessage> = request.messages.iter().map(|m| SignatureMessage::hash(m)).collect();
-    match request.signature.verify(messages.as_slice(), &request.publicKey) {
-        Ok(b) => JsValue::from_bool(b),
-        Err(e) => JsValue::from(&format!("{:?}", e))
-    }
-}
-
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct BlindSignatureContextRequest {
+wasm_object_impl!(
+    BlindSignatureContextRequest,
     publicKey: PublicKey,
     messages: Vec<String>,
     blinded: Vec<usize>,
     nonce: String
-}
+);
 
-#[allow(non_snake_case)]
-#[derive(Serialize)]
-pub struct BlindSignatureContextResponse {
+wasm_object_impl!(
+    #[derive(Serialize)]
+    BlindSignatureContextResponse,
     commitment: Commitment,
     proofOfHiddenMessages: ProofG1,
     challengeHash: ProofChallenge,
     blindingFactor: SignatureBlinding
+);
+
+wasm_object_impl!(
+    BlindSignatureVerifyContextRequest,
+    commitment: Commitment,
+    proofOfHiddenMessages: ProofG1,
+    challengeHash: ProofChallenge,
+    publicKey: PublicKey,
+    blinded: BTreeSet<usize>,
+    nonce: String
+);
+
+wasm_object_impl!(
+    BlindSignContextRequest,
+    commitment: Commitment,
+    publicKey: PublicKey,
+    secretKey: SecretKey,
+    messages: Vec<String>,
+    known: Vec<usize>
+);
+
+wasm_object_impl!(
+    UnblindSignatureRequest,
+    signature: BlindSignature,
+    blindingFactor: SignatureBlinding
+);
+
+wasm_object_impl!(
+    CreateProofRequest,
+    signature: Signature,
+    publicKey: PublicKey,
+    messages: Vec<String>,
+    revealed: Vec<usize>,
+    nonce: String
+);
+
+wasm_object_impl!(
+    VerifyProofContext,
+    proof: PoKOfSignatureProof,
+    publicKey: PublicKey,
+    messages: Vec<String>,
+    revealed: Vec<usize>,
+    nonce: String
+);
+
+#[wasm_bindgen]
+pub fn bbs_sign(request: BbsSignRequest) -> JsValue {
+    let messages: Vec<SignatureMessage> = request
+        .messages
+        .iter()
+        .map(|m| SignatureMessage::hash(m))
+        .collect();
+    match Signature::new(messages.as_slice(), &request.secretKey, &request.publicKey) {
+        Ok(sig) => JsValue::from_serde(&sig).unwrap(),
+        Err(e) => JsValue::from(&format!("{:?}", e)),
+    }
+}
+
+#[wasm_bindgen]
+pub fn bbs_verify(request: BbsVerifyRequest) -> JsValue {
+    let messages: Vec<SignatureMessage> = request
+        .messages
+        .iter()
+        .map(|m| SignatureMessage::hash(m))
+        .collect();
+    match request
+        .signature
+        .verify(messages.as_slice(), &request.publicKey)
+    {
+        Ok(b) => JsValue::from_bool(b),
+        Err(e) => JsValue::from(&format!("{:?}", e)),
+    }
 }
 
 #[wasm_bindgen]
@@ -75,12 +126,19 @@ pub fn bbs_blind_signature_commitment(request: BlindSignatureContextRequest) -> 
     if request.messages.len() != request.blinded.len() {
         return JsValue::from("messages.len() != blinded.len()");
     }
-    if request.blinded.iter().any(|b| *b > request.publicKey.message_count()) {
+    if request
+        .blinded
+        .iter()
+        .any(|b| *b > request.publicKey.message_count())
+    {
         return JsValue::from("blinded value is out of bounds");
     }
     let mut messages = BTreeMap::new();
     for i in 0..request.blinded.len() {
-        messages.insert(request.blinded[i], SignatureMessage::hash(&request.messages[i]));
+        messages.insert(
+            request.blinded[i],
+            SignatureMessage::hash(&request.messages[i]),
+        );
     }
     let nonce = ProofNonce::hash(&request.nonce);
     match Prover::new_blind_signature_context(&request.publicKey, &messages, &nonce) {
@@ -90,22 +148,11 @@ pub fn bbs_blind_signature_commitment(request: BlindSignatureContextRequest) -> 
                 commitment: cx.commitment,
                 proofOfHiddenMessages: cx.proof_of_hidden_messages,
                 challengeHash: cx.challenge_hash,
-                blindingFactor: bf
+                blindingFactor: bf,
             };
             JsValue::from_serde(&response).unwrap()
         }
     }
-}
-
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct BlindSignatureVerifyContextRequest {
-    commitment: Commitment,
-    proofOfHiddenMessages: ProofG1,
-    challengeHash: ProofChallenge,
-    publicKey: PublicKey,
-    blinded: BTreeSet<usize>,
-    nonce: String
 }
 
 #[wasm_bindgen]
@@ -114,7 +161,9 @@ pub fn bbs_verify_blind_signature_proof(request: BlindSignatureVerifyContextRequ
     if request.blinded.iter().any(|b| *b > total) {
         return JsValue::from("blinded value is out of bounds");
     }
-    let messages = (0..total).filter(|i| !request.blinded.contains(i)).collect();
+    let messages = (0..total)
+        .filter(|i| !request.blinded.contains(i))
+        .collect();
     let nonce = ProofNonce::hash(&request.nonce);
     let ctx = BlindSignatureContext {
         commitment: request.commitment,
@@ -123,18 +172,8 @@ pub fn bbs_verify_blind_signature_proof(request: BlindSignatureVerifyContextRequ
     };
     match ctx.verify(&messages, &request.publicKey, &nonce) {
         Err(e) => JsValue::from(&format!("{:?}", e)),
-        Ok(b) => JsValue::from_bool(b)
+        Ok(b) => JsValue::from_bool(b),
     }
-}
-
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct BlindSignContextRequest {
-    commitment: Commitment,
-    publicKey: PublicKey,
-    secretKey: SecretKey,
-    messages: Vec<String>,
-    known: Vec<usize>
 }
 
 #[wasm_bindgen]
@@ -142,21 +181,28 @@ pub fn bbs_blind_sign(request: BlindSignContextRequest) -> JsValue {
     if request.messages.len() != request.known.len() {
         return JsValue::from("messages.len() != known.len()");
     }
-    if request.known.iter().any(|k| *k > request.publicKey.message_count()) {
+    if request
+        .known
+        .iter()
+        .any(|k| *k > request.publicKey.message_count())
+    {
         return JsValue::from("known value is out of bounds");
     }
-    let messages: BTreeMap<usize, SignatureMessage> = request.known.iter().zip(request.messages.iter()).map(|(k, m)| (*k, SignatureMessage::hash(m))).collect();
-    match BlindSignature::new(&request.commitment, &messages, &request.secretKey, &request.publicKey) {
+    let messages: BTreeMap<usize, SignatureMessage> = request
+        .known
+        .iter()
+        .zip(request.messages.iter())
+        .map(|(k, m)| (*k, SignatureMessage::hash(m)))
+        .collect();
+    match BlindSignature::new(
+        &request.commitment,
+        &messages,
+        &request.secretKey,
+        &request.publicKey,
+    ) {
         Ok(s) => JsValue::from_serde(&s).unwrap(),
-        Err(e) => JsValue::from(&format!("{:?}", e))
+        Err(e) => JsValue::from(&format!("{:?}", e)),
     }
-}
-
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct UnblindSignatureRequest {
-    signature: BlindSignature,
-    blindingFactor: SignatureBlinding
 }
 
 #[wasm_bindgen]
@@ -164,28 +210,26 @@ pub fn bbs_get_unblinded_signature(request: UnblindSignatureRequest) -> JsValue 
     JsValue::from_serde(&request.signature.to_unblinded(&request.blindingFactor)).unwrap()
 }
 
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct CreateProofRequest {
-    signature: Signature,
-    publicKey: PublicKey,
-    messages: Vec<String>,
-    revealed: Vec<usize>,
-    nonce: String
-}
-
 #[wasm_bindgen]
 pub fn bbs_create_proof(request: CreateProofRequest) -> JsValue {
-    if request.revealed.iter().any(|r| *r > request.publicKey.message_count()) {
+    if request
+        .revealed
+        .iter()
+        .any(|r| *r > request.publicKey.message_count())
+    {
         return JsValue::from("revealed value is out of bounds");
     }
     let revealed = BTreeSet::from_iter(request.revealed.iter());
     let mut messages = Vec::new();
     for i in 0..request.messages.len() {
         if revealed.contains(&i) {
-            messages.push(ProofMessage::Revealed(SignatureMessage::hash(&request.messages[i])));
+            messages.push(ProofMessage::Revealed(SignatureMessage::hash(
+                &request.messages[i],
+            )));
         } else {
-            messages.push(ProofMessage::Hidden(HiddenMessage::ProofSpecificBlinding(SignatureMessage::hash(&request.messages[i]))));
+            messages.push(ProofMessage::Hidden(HiddenMessage::ProofSpecificBlinding(
+                SignatureMessage::hash(&request.messages[i]),
+            )));
         }
     }
     match PoKOfSignature::init(&request.signature, &request.publicKey, messages.as_slice()) {
@@ -201,20 +245,10 @@ pub fn bbs_create_proof(request: CreateProofRequest) -> JsValue {
             let challenge_hash = ProofChallenge::hash(&challenge_bytes);
             match pok.gen_proof(&challenge_hash) {
                 Ok(proof) => JsValue::from_serde(&proof).unwrap(),
-                Err(e) => JsValue::from(&format!("{:?}", e))
+                Err(e) => JsValue::from(&format!("{:?}", e)),
             }
         }
     }
-}
-
-#[allow(non_snake_case)]
-#[wasm_bindgen]
-pub struct VerifyProofContext {
-    proof: PoKOfSignatureProof,
-    publicKey: PublicKey,
-    messages: Vec<String>,
-    revealed: Vec<usize>,
-    nonce: String
 }
 
 #[wasm_bindgen]
@@ -226,7 +260,7 @@ pub fn bbs_verify_proof(request: VerifyProofContext) -> JsValue {
     };
     let proof_request = ProofRequest {
         revealed_messages: BTreeSet::from_iter(request.revealed.clone().into_iter()),
-        verification_key: request.publicKey
+        verification_key: request.publicKey,
     };
 
     let mut revealed_messages = BTreeMap::new();
@@ -239,5 +273,7 @@ pub fn bbs_verify_proof(request: VerifyProofContext) -> JsValue {
         proof: request.proof,
     };
 
-    JsValue::from_bool(Verifier::verify_signature_pok(&proof_request, &signature_proof, &nonce).is_ok())
+    JsValue::from_bool(
+        Verifier::verify_signature_pok(&proof_request, &signature_proof, &nonce).is_ok(),
+    )
 }
