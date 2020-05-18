@@ -4,7 +4,7 @@
 
 extern crate wasm_bindgen_test;
 use wasm_bindgen_test::*;
-use wasm_bbs_signatures::prelude::*;
+use wasm::prelude::*;
 
 wasm_bindgen_test_configure!(run_in_browser);
 

@@ -8,6 +8,7 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[cfg(feature = "console")]
 mod utils;
+
 pub mod bls12381;
 pub mod bbs_plus;
 
