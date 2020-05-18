@@ -5,3 +5,8 @@ bin/
 pkg/
 wasm-pack.log
 .idea/
+/node_modules
+/binaryen
+/.DS_Store
+/dist
+/lib
