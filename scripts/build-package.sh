@@ -2,6 +2,7 @@
 
 set -e
 
+WASM_OPT=./binaryen/bin/wasm-opt
 WASM=lib/wasm_bg.wasm
 OPT_WASM=lib/wasm_opt.wasm
 
@@ -11,7 +12,7 @@ OPT_WASM=lib/wasm_opt.wasm
 rustup run nightly wasm-pack build --release --out-dir lib --target nodejs
 
 # Optimize WASM
-./binaryen/bin/wasm-opt -O4 -o $OPT_WASM $WASM
+$WASM_OPT -O4 -o $OPT_WASM $WASM
 
 rm $WASM
 mv $OPT_WASM $WASM
