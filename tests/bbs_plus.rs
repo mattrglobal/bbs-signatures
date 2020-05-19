@@ -3,11 +3,12 @@
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
 use bbs::prelude::*;
+use std::collections::BTreeMap;
+use std::convert::TryFrom;
 use wasm::log;
 use wasm::prelude::*;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_test::*;
-use std::collections::BTreeMap;
 
 wasm_bindgen_test_configure!(run_in_browser);
 
@@ -79,14 +80,34 @@ pub fn bbs_blind_sign_tests() {
         fields.insert(name.unwrap(), value.unwrap());
     }
 
-    // let request = BlindSignatureVerifyContextRequest::new(
-    //     commitment: Commitment,
-    //     proofOfHiddenMessages: ProofG1,
-    //     challengeHash: ProofChallenge,
-    //     publicKey: PublicKey,
-    //     blinded: BTreeSet<usize>,
-    //     nonce: String
-    // );
+    let commitment = Commitment::try_from(fields.get("commitment").unwrap()).unwrap();
+    let proofOfHiddenMessages =
+        ProofG1::try_from(fields.get("proofOfHiddenMessages").unwrap()).unwrap();
+    let challengeHash = ProofChallenge::try_from(fields.get("challengeHash").unwrap()).unwrap();
+
+    let request = BlindSignatureVerifyContextRequest::new(
+        commitment.clone(),
+        proofOfHiddenMessages.clone(),
+        challengeHash.clone(),
+        pk.clone(),
+        vec![0],
+        "dummy nonce".to_string(),
+    );
+
+    let result = bbs_verify_blind_signature_proof(request);
+    assert!(result.is_truthy());
+
+    let request = BlindSignatureVerifyContextRequest::new(
+        commitment.clone(),
+        proofOfHiddenMessages.clone(),
+        challengeHash.clone(),
+        pk.clone(),
+        vec![0],
+        "bad nonce".to_string()
+    );
+
+    let result = bbs_verify_blind_signature_proof(request);
+    assert!(result.is_falsy());
 
     log(&format!("{:?}", fields));
 }
