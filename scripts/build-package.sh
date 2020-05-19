@@ -11,7 +11,7 @@ OPT_WASM=lib/wasm_opt.wasm
 # Run wasm-pack building for release and nodejs target
 rustup run stable wasm-pack build --release --out-dir lib --target nodejs
 
-# Optimize WASM
+# Optimize WASM - using the additional `-Oz` flag provides further optimizations
 $WASM_OPT -O4 -o $OPT_WASM $WASM
 
 rm $WASM
