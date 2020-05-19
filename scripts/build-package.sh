@@ -9,7 +9,7 @@ OPT_WASM=lib/wasm_opt.wasm
 # TODO deal with when rustup not installed?
 
 # Run wasm-pack building for release and nodejs target
-rustup run nightly wasm-pack build --release --out-dir lib --target nodejs
+rustup run stable wasm-pack build --release --out-dir lib --target nodejs
 
 # Optimize WASM
 $WASM_OPT -O4 -Oz -o $OPT_WASM $WASM
