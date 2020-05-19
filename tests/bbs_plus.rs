@@ -3,11 +3,11 @@
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
 use bbs::prelude::*;
-use wasm_bbs_signatures::log;
-use wasm_bbs_signatures::prelude::*;
+use wasm::log;
+use wasm::prelude::*;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_test::*;
-use wasm_bindgen::__rt::std::collections::BTreeMap;
+use std::collections::BTreeMap;
 
 wasm_bindgen_test_configure!(run_in_browser);
 
@@ -79,14 +79,14 @@ pub fn bbs_blind_sign_tests() {
         fields.insert(name.unwrap(), value.unwrap());
     }
 
-    let request = BlindSignatureVerifyContextRequest::new(
-        commitment: Commitment,
-        proofOfHiddenMessages: ProofG1,
-        challengeHash: ProofChallenge,
-        publicKey: PublicKey,
-        blinded: BTreeSet<usize>,
-        nonce: String
-    );
+    // let request = BlindSignatureVerifyContextRequest::new(
+    //     commitment: Commitment,
+    //     proofOfHiddenMessages: ProofG1,
+    //     challengeHash: ProofChallenge,
+    //     publicKey: PublicKey,
+    //     blinded: BTreeSet<usize>,
+    //     nonce: String
+    // );
 
     log(&format!("{:?}", fields));
 }

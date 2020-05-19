@@ -41,6 +41,8 @@ wasm_object_impl!(
 );
 
 wasm_object_impl!(
+    #[allow(non_snake_case)]
+    #[wasm_bindgen]
     #[derive(Serialize)]
     BlindSignatureContextResponse,
     commitment: Commitment,
