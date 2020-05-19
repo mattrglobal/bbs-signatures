@@ -3,7 +3,7 @@
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
 use bbs::prelude::*;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::convert::TryFrom;
 use wasm::log;
 use wasm::prelude::*;
@@ -80,17 +80,23 @@ pub fn bbs_blind_sign_tests() {
         fields.insert(name.unwrap(), value.unwrap());
     }
 
-    let commitment = Commitment::try_from(fields.get("commitment").unwrap()).unwrap();
+    let commit = fields.get("commitment").unwrap();
+    let commitment = Commitment::try_from(commit.as_slice()).unwrap();
+    let proof_of_hidden_messages = fields.get("proofOfHiddenMessages").unwrap();
     let proofOfHiddenMessages =
-        ProofG1::try_from(fields.get("proofOfHiddenMessages").unwrap()).unwrap();
-    let challengeHash = ProofChallenge::try_from(fields.get("challengeHash").unwrap()).unwrap();
+        ProofG1::try_from(proof_of_hidden_messages.as_slice()).unwrap();
+    let challenge_hash = fields.get("challengeHash").unwrap();
+    let challengeHash = ProofChallenge::try_from(challenge_hash.as_slice()).unwrap();
+
+    let mut blinded = BTreeSet::new();
+    blinded.insert(0);
 
     let request = BlindSignatureVerifyContextRequest::new(
         commitment.clone(),
         proofOfHiddenMessages.clone(),
         challengeHash.clone(),
         pk.clone(),
-        vec![0],
+        blinded.clone(),
         "dummy nonce".to_string(),
     );
 
@@ -102,7 +108,7 @@ pub fn bbs_blind_sign_tests() {
         proofOfHiddenMessages.clone(),
         challengeHash.clone(),
         pk.clone(),
-        vec![0],
+        blinded.clone(),
         "bad nonce".to_string()
     );
 
