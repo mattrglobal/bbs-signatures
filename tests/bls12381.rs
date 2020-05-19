@@ -3,7 +3,7 @@
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
 use bbs::prelude::*;
-use wasm_bbs_signatures::prelude::*;
+use wasm::prelude::*;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_test::*;
 

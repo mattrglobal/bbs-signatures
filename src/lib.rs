@@ -25,9 +25,6 @@ pub mod bls12381;
 #[cfg(feature = "console")]
 mod utils;
 
-pub mod bls12381;
-pub mod bbs_plus;
-
 pub mod prelude {
     pub use crate::bbs_plus::*;
     pub use crate::bls12381::*;

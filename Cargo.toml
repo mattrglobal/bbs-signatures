@@ -15,7 +15,7 @@ console = ["console_error_panic_hook"]
 default = []
 
 [dependencies]
-bbs = { version = "0.4.0", default-features = false, git = "https://github.com/mikelodder7/ursa", rev = "c8a150eef2a26269c6c02e9aa226a59705cead84" }
+bbs = { version = "0.4.0", default-features = false }
 console_error_panic_hook = { version = "0.1.1", optional = true }
 rand = { version = "0.7", features = ["wasm-bindgen"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -30,4 +30,3 @@ js-sys = "0.3"
 [profile.release]
 lto = true
 opt-level = "s"
-lto = true
