@@ -26,7 +26,14 @@ wasm_object_impl!(
     secretKey: Option<SecretKey>
 );
 
-wasm_object_impl!(Bls12381ToBbsRequest, keyPair: KeyPair, messageCount: usize);
+wasm_object_impl!(
+    #[allow(non_snake_case)]
+    #[wasm_bindgen]
+    #[derive(Debug, Deserialize, Serialize)]
+    Bls12381ToBbsRequest,
+    keyPair: KeyPair,
+    messageCount: usize
+);
 
 /// Generate a BLS 12-381 key pair.
 ///
@@ -46,7 +53,9 @@ pub fn bls_generate_key(seed: Option<Vec<u8>>) -> JsValue {
 
 /// Get the BBS public key associated with the private key
 #[wasm_bindgen]
-pub fn bls_secret_key_to_bbs_key(request: Bls12381ToBbsRequest) -> JsValue {
+pub fn bls_secret_key_to_bbs_key(request: JsValue) -> JsValue {
+    let request = JsValue::into_serde::<Bls12381ToBbsRequest>(&request).unwrap();
+
     if request.keyPair.secretKey.is_none() {
         return JsValue::from("SecretKey cannot be empty");
     }

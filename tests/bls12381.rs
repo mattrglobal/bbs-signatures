@@ -4,6 +4,7 @@
 extern crate wasm_bindgen_test;
 use bbs::prelude::*;
 use wasm::prelude::*;
+use wasm::log;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_test::*;
 
@@ -29,7 +30,9 @@ fn bls_secret_key_to_bbs_key_test() {
     let (_, sk) = DeterministicPublicKey::new(None);
     let keyPair = KeyPair::new(None, Some(sk));
     let request = Bls12381ToBbsRequest::new(keyPair, 5);
-    let bbs_res = bls_secret_key_to_bbs_key(request);
+    let js_value = JsValue::from_serde(&request);
+    log(&format!("{:?}", js_value));
+    let bbs_res = bls_secret_key_to_bbs_key(js_value.unwrap());
     assert!(bbs_res.is_object());
     let public_key_res = JsValue::into_serde::<Vec<u8>>(&bbs_res);
     assert!(public_key_res.is_ok());
