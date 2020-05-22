@@ -111,6 +111,7 @@ macro_rules! wasm_impl {
      $name:ident,
      $($field:ident:$type:ident),+) => {
         #[allow(non_snake_case)]
+        #[derive(Debug, Deserialize, Serialize)]
         pub struct $name {
             $(
                 pub $field: $type,
@@ -137,9 +138,10 @@ macro_rules! wasm_impl {
      $name:ident,
      $($field:ident:$type:ty),*) => {
         #[allow(non_snake_case)]
+        #[derive(Debug, Deserialize, Serialize)]
         pub struct $name {
             $(
-                $field: $type,
+                pub $field: $type,
             )*
         }
 

@@ -3,7 +3,11 @@
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
 use bbs::prelude::*;
-// use wasm::log;
+use wasm::log;
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    convert::{TryFrom, TryInto},
+};
 use wasm::prelude::*;
 use wasm_bindgen_test::*;
 
@@ -15,8 +19,10 @@ pub fn bbs_sign_tests() {
     let (pk, sk) = generate(1).unwrap();
     let messages = vec!["Message1".to_string()];
     let request = BbsSignRequest{
-        publicKey: pk,
-        secretKey: sk,
+        keyPair: BbsKeyPair {
+            publicKey: pk,
+            secretKey: Some(sk)
+        },
         messages
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
@@ -36,8 +42,10 @@ pub fn bbs_sign_tests() {
         "Message5".to_string(),
     ];
     let request = BbsSignRequest {
-        publicKey: pk,
-        secretKey: sk,
+        keyPair: BbsKeyPair {
+            publicKey: pk,
+            secretKey: Some(sk)
+        },
         messages
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
@@ -78,67 +86,51 @@ pub fn bbs_verify_tests() {
     assert!(result.is_falsy());
 }
 
-// #[allow(non_snake_case)]
-// #[wasm_bindgen_test]
-// pub fn bbs_blind_sign_tests() {
-//     let (pk, sk) = generate(3).unwrap();
-//     let messages = vec!["Message1".to_string()];
-//     let request =
-//         BlindSignatureContextRequest::new(pk.clone(), messages, vec![0], "dummy nonce".to_string());
-//     let result = bbs_blind_signature_commitment(request);
-//
-//     assert!(result.is_object());
-//
-//     let obj = js_sys::Object::try_from(&result).unwrap();
-//     let entries = js_sys::Object::entries(&obj).to_vec();
-//     assert_eq!(entries.len(), 4);
-//
-//     let keys = js_sys::Object::keys(&obj);
-//     let values = js_sys::Object::values(&obj);
-//
-//     let mut fields = BTreeMap::new();
-//     for i in 0..4 {
-//         let name = JsValue::into_serde::<String>(&keys.get(i));
-//         let value = JsValue::into_serde::<Vec<u8>>(&values.get(i));
-//         assert!(name.is_ok());
-//         assert!(value.is_ok());
-//         fields.insert(name.unwrap(), value.unwrap());
-//     }
-//
-//     let commit = fields.get("commitment").unwrap();
-//     let commitment = Commitment::try_from(commit.as_slice()).unwrap();
-//     let proof_of_hidden_messages = fields.get("proofOfHiddenMessages").unwrap();
-//     let proofOfHiddenMessages =
-//         ProofG1::try_from(proof_of_hidden_messages.as_slice()).unwrap();
-//     let challenge_hash = fields.get("challengeHash").unwrap();
-//     let challengeHash = ProofChallenge::try_from(challenge_hash.as_slice()).unwrap();
-//
-//     let mut blinded = BTreeSet::new();
-//     blinded.insert(0);
-//
-//     let request = BlindSignatureVerifyContextRequest::new(
-//         commitment.clone(),
-//         proofOfHiddenMessages.clone(),
-//         challengeHash.clone(),
-//         pk.clone(),
-//         blinded.clone(),
-//         "dummy nonce".to_string(),
-//     );
-//
-//     let result = bbs_verify_blind_signature_proof(request);
-//     assert!(result.is_truthy());
-//
-//     let request = BlindSignatureVerifyContextRequest::new(
-//         commitment.clone(),
-//         proofOfHiddenMessages.clone(),
-//         challengeHash.clone(),
-//         pk.clone(),
-//         blinded.clone(),
-//         "bad nonce".to_string()
-//     );
-//
-//     let result = bbs_verify_blind_signature_proof(request);
-//     assert!(result.is_falsy());
-//
-//     log(&format!("{:?}", fields));
-// }
+#[allow(non_snake_case)]
+#[wasm_bindgen_test]
+pub fn bbs_blind_sign_tests() {
+    let (pk, sk) = generate(3).unwrap();
+    let messages = vec!["Message1".to_string()];
+    let request = BlindSignatureContextRequest {
+            publicKey: pk.clone(),
+            messages,
+            blinded: vec![0],
+            nonce: "dummy nonce".to_string()
+        };
+    let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
+    let result = bbs_blind_signature_commitment(js_value);
+    assert!(result.is_ok());
+    let result: BlindSignatureContextResponse = result.unwrap().try_into().unwrap();
+
+    let mut blinded = BTreeSet::new();
+    blinded.insert(0);
+    let request = BlindSignatureVerifyContextRequest {
+        commitment: result.commitment.clone(),
+        proofOfHiddenMessages: result.proofOfHiddenMessages.clone(),
+        challengeHash: result.challengeHash.clone(),
+        publicKey: pk.clone(),
+        blinded: blinded.clone(),
+        nonce: "dummy nonce".to_string(),
+    };
+    let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
+
+    let res = bbs_verify_blind_signature_proof(js_value);
+    assert!(res.is_ok());
+    let res = res.unwrap();
+    assert!(res.is_truthy());
+
+    let request = BlindSignatureVerifyContextRequest {
+        commitment: result.commitment.clone(),
+        proofOfHiddenMessages: result.proofOfHiddenMessages.clone(),
+        challengeHash: result.challengeHash.clone(),
+        publicKey: pk.clone(),
+        blinded: blinded.clone(),
+        nonce: "bad nonce".to_string()
+    };
+    let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
+
+    let res = bbs_verify_blind_signature_proof(js_value);
+    assert!(res.is_ok());
+    let res = res.unwrap();
+    assert!(res.is_falsy());
+}
