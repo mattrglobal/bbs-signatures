@@ -11,21 +11,26 @@
  * limitations under the License.
  */
 use bbs::prelude::*;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::{
     collections::{BTreeMap, BTreeSet},
     iter::FromIterator,
+    convert::TryInto,
 };
 use wasm_bindgen::prelude::*;
 
-wasm_object_impl!(
+wasm_impl!(
+    #[allow(non_snake_case)]
+    #[derive(Debug, Deserialize, Serialize)]
     BbsSignRequest,
     publicKey: PublicKey,
     secretKey: SecretKey,
     messages: Vec<String>
 );
 
-wasm_object_impl!(
+wasm_impl!(
+    #[allow(non_snake_case)]
+    #[derive(Debug, Deserialize, Serialize)]
     BbsVerifyRequest,
     publicKey: PublicKey,
     signature: Signature,
@@ -95,20 +100,22 @@ wasm_object_impl!(
 );
 
 #[wasm_bindgen]
-pub fn bbs_sign(request: BbsSignRequest) -> JsValue {
+pub fn bbs_sign(request: JsValue) -> Result<JsValue, JsValue> {
+    let request: BbsSignRequest = request.try_into()?;
     let messages: Vec<SignatureMessage> = request
         .messages
         .iter()
         .map(|m| SignatureMessage::hash(m))
         .collect();
     match Signature::new(messages.as_slice(), &request.secretKey, &request.publicKey) {
-        Ok(sig) => JsValue::from_serde(&sig).unwrap(),
-        Err(e) => JsValue::from(&format!("{:?}", e)),
+        Ok(sig) => Ok(serde_wasm_bindgen::to_value(&sig).unwrap()),
+        Err(e) => Err(JsValue::from(&format!("{:?}", e))),
     }
 }
 
 #[wasm_bindgen]
-pub fn bbs_verify(request: BbsVerifyRequest) -> JsValue {
+pub fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
+    let request: BbsVerifyRequest = request.try_into()?;
     let messages: Vec<SignatureMessage> = request
         .messages
         .iter()
@@ -118,8 +125,8 @@ pub fn bbs_verify(request: BbsVerifyRequest) -> JsValue {
         .signature
         .verify(messages.as_slice(), &request.publicKey)
     {
-        Ok(b) => JsValue::from_bool(b),
-        Err(e) => JsValue::from(&format!("{:?}", e)),
+        Ok(b) => Ok(JsValue::from_bool(b)),
+        Err(e) => Err(JsValue::from(&format!("{:?}", e))),
     }
 }
 
@@ -152,7 +159,7 @@ pub fn bbs_blind_signature_commitment(request: BlindSignatureContextRequest) -> 
                 challengeHash: cx.challenge_hash,
                 blindingFactor: bf,
             };
-            JsValue::from_serde(&response).unwrap()
+            serde_wasm_bindgen::to_value(&response).unwrap()
         }
     }
 }
@@ -202,14 +209,14 @@ pub fn bbs_blind_sign(request: BlindSignContextRequest) -> JsValue {
         &request.secretKey,
         &request.publicKey,
     ) {
-        Ok(s) => JsValue::from_serde(&s).unwrap(),
+        Ok(s) => serde_wasm_bindgen::to_value(&s).unwrap(),
         Err(e) => JsValue::from(&format!("{:?}", e)),
     }
 }
 
 #[wasm_bindgen]
 pub fn bbs_get_unblinded_signature(request: UnblindSignatureRequest) -> JsValue {
-    JsValue::from_serde(&request.signature.to_unblinded(&request.blindingFactor)).unwrap()
+    serde_wasm_bindgen::to_value(&request.signature.to_unblinded(&request.blindingFactor)).unwrap()
 }
 
 #[wasm_bindgen]
@@ -246,7 +253,7 @@ pub fn bbs_create_proof(request: CreateProofRequest) -> JsValue {
             }
             let challenge_hash = ProofChallenge::hash(&challenge_bytes);
             match pok.gen_proof(&challenge_hash) {
-                Ok(proof) => JsValue::from_serde(&proof).unwrap(),
+                Ok(proof) => serde_wasm_bindgen::to_value(&proof).unwrap(),
                 Err(e) => JsValue::from(&format!("{:?}", e)),
             }
         }

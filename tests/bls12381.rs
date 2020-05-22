@@ -4,8 +4,7 @@
 extern crate wasm_bindgen_test;
 use bbs::prelude::*;
 use wasm::prelude::*;
-use wasm::log;
-use wasm_bindgen::JsValue;
+// use wasm::log;
 use wasm_bindgen_test::*;
 
 wasm_bindgen_test_configure!(run_in_browser);
@@ -14,11 +13,16 @@ wasm_bindgen_test_configure!(run_in_browser);
 #[wasm_bindgen_test]
 fn bls_public_key_to_bbs_key_test() {
     let (dpk, _) = DeterministicPublicKey::new(None);
-    let keyPair = KeyPair::new(Some(dpk), None);
-    let request = Bls12381ToBbsRequest::new(keyPair, 5);
-    let bbs_res = bls_public_key_to_bbs_key(request);
-    assert!(bbs_res.is_object());
-    let public_key_res = JsValue::into_serde::<Vec<u8>>(&bbs_res);
+    let request = Bls12381ToBbsRequest {
+        key: dpk.to_bytes_compressed_form().to_vec(),
+        messageCount: 5,
+    };
+    let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
+    let bbs_res = bls_public_key_to_bbs_key(js_value);
+    assert!(bbs_res.is_ok());
+    let bbs = bbs_res.unwrap();
+    assert!(bbs.is_object());
+    let public_key_res = serde_wasm_bindgen::from_value::<Vec<u8>>(bbs);
     assert!(public_key_res.is_ok());
     let dpk_bytes = public_key_res.unwrap();
     assert_eq!(dpk_bytes.len(), 388);
@@ -28,13 +32,16 @@ fn bls_public_key_to_bbs_key_test() {
 #[wasm_bindgen_test]
 fn bls_secret_key_to_bbs_key_test() {
     let (_, sk) = DeterministicPublicKey::new(None);
-    let keyPair = KeyPair::new(None, Some(sk));
-    let request = Bls12381ToBbsRequest::new(keyPair, 5);
-    let js_value = JsValue::from_serde(&request);
-    log(&format!("{:?}", js_value));
-    let bbs_res = bls_secret_key_to_bbs_key(js_value.unwrap());
-    assert!(bbs_res.is_object());
-    let public_key_res = JsValue::into_serde::<Vec<u8>>(&bbs_res);
+    let request = Bls12381ToBbsRequest {
+        key: sk.to_bytes_compressed_form().to_vec(),
+        messageCount: 5
+    };
+    let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
+    let bbs_res = bls_secret_key_to_bbs_key(js_value);
+    assert!(bbs_res.is_ok());
+    let bbs = bbs_res.unwrap();
+    assert!(bbs.is_object());
+    let public_key_res = serde_wasm_bindgen::from_value::<Vec<u8>>(bbs);
     assert!(public_key_res.is_ok());
     let pk_bytes = public_key_res.unwrap();
     assert_eq!(pk_bytes.len(), 388);
@@ -55,8 +62,8 @@ fn bls_generate_key_from_seed_test() {
     let values = js_sys::Object::values(&obj);
     assert_eq!(keys.get(0), "publicKey");
     assert_eq!(keys.get(1), "secretKey");
-    let public_key_res = JsValue::into_serde::<Vec<u8>>(&values.get(0));
-    let secret_key_res = JsValue::into_serde::<Vec<u8>>(&values.get(1));
+    let public_key_res = serde_wasm_bindgen::from_value::<Vec<u8>>(values.get(0));
+    let secret_key_res = serde_wasm_bindgen::from_value::<Vec<u8>>(values.get(1));
     assert!(public_key_res.is_ok());
     assert!(secret_key_res.is_ok());
     let public_key = public_key_res.unwrap();
