@@ -11,18 +11,18 @@
  * limitations under the License.
  */
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+import { BlsKeyPair } from "./BlsKeyPair";
 
-#[macro_use]
-mod macros;
-pub mod bbs_plus;
-pub mod bls12381;
-
-pub mod prelude {
-    pub use crate::bbs_plus::*;
-    pub use crate::bls12381::*;
+/**
+ * Converts a BLS12-381 key to a BBS+ public key
+ */
+export interface Bls12381ToBbsRequest {
+  /**
+   * The BLS 12-381 key pair to convert
+   */
+  readonly keyPair: BlsKeyPair;
+  /**
+   * The number of messages for the BBS+ key
+   */
+  readonly messageCount: number;
 }

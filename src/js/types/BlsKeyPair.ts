@@ -11,18 +11,26 @@
  * limitations under the License.
  */
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+/**
+ * Default BLS 12-381 private key length
+ */
+export const DEFAULT_BLS12381_PRIVATE_KEY_LENGTH: number = 32;
 
-#[macro_use]
-mod macros;
-pub mod bbs_plus;
-pub mod bls12381;
+/**
+ * Default BLS 12-381 public key length
+ */
+export const DEFAULT_BLS12381_PUBLIC_KEY_LENGTH: number = 96;
 
-pub mod prelude {
-    pub use crate::bbs_plus::*;
-    pub use crate::bls12381::*;
+/**
+ * A BLS 12-381 key pair
+ */
+export interface BlsKeyPair {
+  /**
+   * Raw public key value for the key pair
+   */
+  readonly publicKey: Uint8Array;
+  /**
+   * Raw secret/private key value for the key pair
+   */
+  readonly secretKey?: Uint8Array;
 }

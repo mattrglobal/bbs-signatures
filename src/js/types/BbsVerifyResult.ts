@@ -11,18 +11,16 @@
  * limitations under the License.
  */
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
-#[macro_use]
-mod macros;
-pub mod bbs_plus;
-pub mod bls12381;
-
-pub mod prelude {
-    pub use crate::bbs_plus::*;
-    pub use crate::bls12381::*;
+/**
+ * The result returned from a verify operation
+ */
+export interface BbsVerifyResult {
+  /**
+   * Indicates whether the verification was successful
+   */
+  readonly verified: boolean;
+  /**
+   * Messages to sign
+   */
+  readonly error?: string;
 }

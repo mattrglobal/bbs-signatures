@@ -1,12 +1,32 @@
-export interface BlsKeyPair {
-  /**
-   * Raw public key value for the key pair
-   */
-  readonly publicKey: Uint8Array;
-  /**
-   * Raw secret/private key value for the key pair
-   */
-  readonly secretKey?: Uint8Array;
-}
+/*
+ * Copyright 2020 - MATTR Limited
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-export function generateBls12381KeyPair(seed?: Uint8Array): BlsKeyPair;
+ import { BlsKeyPair, Bls12381ToBbsRequest, BbsKeyPair, BbsSignRequest, BlsBbsSignRequest, BbsVerifyRequest, BbsVerifyResult, BlsBbsVerifyRequest, BbsCreateProofRequest } from "./types";
+
+ export * from "./types";
+
+ export function generateBls12381KeyPair(seed?: Uint8Array): BlsKeyPair;
+
+ export function bls12381toBbs(request: Bls12381ToBbsRequest): BbsKeyPair;
+
+ export function sign(request: BbsSignRequest): Uint8Array;
+
+ export function blsSign(request: BlsBbsSignRequest): Uint8Array;
+
+ export function verify(request: BbsVerifyRequest): BbsVerifyResult;
+
+ export function blsVerify(request: BlsBbsVerifyRequest): BbsVerifyResult;
+
+ export function createProof(request: BbsCreateProofRequest): Uint8Array;
+
+ export function blsCreateProof(request: BbsCreateProofRequest): Uint8Array;

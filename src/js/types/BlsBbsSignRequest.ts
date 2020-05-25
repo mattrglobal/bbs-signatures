@@ -11,18 +11,18 @@
  * limitations under the License.
  */
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+import { BlsKeyPair } from "./BlsKeyPair";
 
-#[macro_use]
-mod macros;
-pub mod bbs_plus;
-pub mod bls12381;
-
-pub mod prelude {
-    pub use crate::bbs_plus::*;
-    pub use crate::bls12381::*;
+/**
+ * A request to create a BBS signature for a set of messages from a BLS12-381 key pair
+ */
+export interface BlsBbsSignRequest {
+  /**
+   * BLS12-381 key pair
+   */
+  readonly keyPair: BlsKeyPair;
+  /**
+   * Messages to sign
+   */
+  readonly messages: readonly string[];
 }

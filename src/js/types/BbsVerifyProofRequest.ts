@@ -11,18 +11,24 @@
  * limitations under the License.
  */
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
-#[macro_use]
-mod macros;
-pub mod bbs_plus;
-pub mod bls12381;
-
-pub mod prelude {
-    pub use crate::bbs_plus::*;
-    pub use crate::bls12381::*;
+/**
+ * A request to verify a BBS proof
+ */
+export interface BbsVerifyProofRequest {
+  /**
+   * The BBS proof to verify
+   */
+  readonly proof: Uint8Array;
+  /**
+   * Public key of the signer of the proof to verify
+   */
+  readonly publicKey: Uint8Array;
+  /**
+   * Revealed messages to verify (TODO maybe rename this field??)
+   */
+  readonly messages: readonly string[];
+  /**
+   * Nonce included in the proof for the un-revealed attributes (OPTIONAL)
+   */
+  readonly nonce: string;
 }

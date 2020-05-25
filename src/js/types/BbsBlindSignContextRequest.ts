@@ -11,18 +11,24 @@
  * limitations under the License.
  */
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
-#[macro_use]
-mod macros;
-pub mod bbs_plus;
-pub mod bls12381;
-
-pub mod prelude {
-    pub use crate::bbs_plus::*;
-    pub use crate::bls12381::*;
+/**
+ * A request to create a BBS signature that features blinded/committed messages
+ */
+export interface BbsBlindSignContextRequest {
+  /**
+   * The resulting commitment of the blinded messages to sign
+   */
+  readonly publicKey: Uint8Array;
+  /**
+   * The zero based indices of which messages to hide
+   */
+  readonly hidden: readonly number[];
+  /**
+   * A nonce for the resulting proof
+   */
+  readonly nonce: string;
+  /**
+   * The known messages to sign
+   */
+  readonly messages: readonly string[];
 }
