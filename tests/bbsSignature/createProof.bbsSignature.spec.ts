@@ -45,11 +45,15 @@ describe("bbsSignature", () => {
       };
 
       const proof = createProof(request);
-      expect(proof.length).toEqual(383);
+      expect(proof.length).toEqual(380); //TODO need to revisit this
     });
 
     it("should create proof revealing all messages from multi-message signature", () => {
-      const messages = ["J42AxhciOVkE9w==", "PNMnARWIHP+s2g==", "ti9WYhhEej85jw=="];
+      const messages = [
+        "J42AxhciOVkE9w==",
+        "PNMnARWIHP+s2g==",
+        "ti9WYhhEej85jw==",
+      ];
 
       const bbsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pbiZ/pmArLDr3oSCqthKgSZw4VFzzJMFEuHP9AAnOnUJmqkOmvI1ctGLO6kCLFuwQVAAAAA4GrOHdyZEbTWRrTwIdz+KXWcEUHdIx41XSr/RK0TE5+qU7irAhQekOGFpGWQY4rYrDxoHToB4DblaJWUgkSZQLQ5sOfJg3qUJr9MpnDNJ8nNNitL65e6mqnpfsbbT3k94LBQI3/HijeRl29y5dGcLhOxldMtx2SvQg//kWOJ/Ug8e1aVo3V07XkR1Ltx76uzA=="
@@ -67,11 +71,15 @@ describe("bbsSignature", () => {
       };
 
       const proof = createProof(request);
-      expect(proof.length).toEqual(383); //TODO add a reason for this and some constants?
+      expect(proof.length).toEqual(380); //TODO need to revisit this
     });
 
     it("should create proof revealing single message from multi-message signature", () => {
-      const messages = ["J42AxhciOVkE9w==", "PNMnARWIHP+s2g==", "ti9WYhhEej85jw=="];
+      const messages = [
+        "J42AxhciOVkE9w==",
+        "PNMnARWIHP+s2g==",
+        "ti9WYhhEej85jw==",
+      ];
 
       const bbsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pbiZ/pmArLDr3oSCqthKgSZw4VFzzJMFEuHP9AAnOnUJmqkOmvI1ctGLO6kCLFuwQVAAAAA4GrOHdyZEbTWRrTwIdz+KXWcEUHdIx41XSr/RK0TE5+qU7irAhQekOGFpGWQY4rYrDxoHToB4DblaJWUgkSZQLQ5sOfJg3qUJr9MpnDNJ8nNNitL65e6mqnpfsbbT3k94LBQI3/HijeRl29y5dGcLhOxldMtx2SvQg//kWOJ/Ug8e1aVo3V07XkR1Ltx76uzA=="
@@ -89,11 +97,15 @@ describe("bbsSignature", () => {
       };
 
       const proof = createProof(request);
-      expect(proof.length).toEqual(447); //TODO add a reason for this and some constants?
+      expect(proof.length).toEqual(444); //TODO need to revisit this
     });
 
     it("should create proof revealing multiple messages from multi-message signature", () => {
-      const messages = ["J42AxhciOVkE9w==", "PNMnARWIHP+s2g==", "ti9WYhhEej85jw=="];
+      const messages = [
+        "J42AxhciOVkE9w==",
+        "PNMnARWIHP+s2g==",
+        "ti9WYhhEej85jw==",
+      ];
 
       const bbsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pbiZ/pmArLDr3oSCqthKgSZw4VFzzJMFEuHP9AAnOnUJmqkOmvI1ctGLO6kCLFuwQVAAAAA4GrOHdyZEbTWRrTwIdz+KXWcEUHdIx41XSr/RK0TE5+qU7irAhQekOGFpGWQY4rYrDxoHToB4DblaJWUgkSZQLQ5sOfJg3qUJr9MpnDNJ8nNNitL65e6mqnpfsbbT3k94LBQI3/HijeRl29y5dGcLhOxldMtx2SvQg//kWOJ/Ug8e1aVo3V07XkR1Ltx76uzA=="
@@ -111,7 +123,7 @@ describe("bbsSignature", () => {
       };
 
       const proof = createProof(request);
-      expect(proof.length).toEqual(415); //TODO evaluate this length properly add a reason for this and some constants?
+      expect(proof.length).toEqual(412); //TODO need to revisit this
     });
   });
 
@@ -134,11 +146,15 @@ describe("bbsSignature", () => {
       };
 
       const proof = blsCreateProof(request);
-      expect(proof.length).toEqual(383);
+      expect(proof.length).toEqual(380); //TODO need to revisit this
     });
 
     it("should create proof revealing all messages from multi-message signature", () => {
-      const messages = ["C+n1rPz1/tVzPg==", "h3x8cbySqC4rLA==", "MGf74ofGdRwNbw=="];
+      const messages = [
+        "C+n1rPz1/tVzPg==",
+        "h3x8cbySqC4rLA==",
+        "MGf74ofGdRwNbw==",
+      ];
 
       const blsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pb"
@@ -156,11 +172,15 @@ describe("bbsSignature", () => {
       };
 
       const proof = blsCreateProof(request);
-      expect(proof.length).toEqual(383); //TODO add a reason for this and some constants?
+      expect(proof.length).toEqual(380); //TODO need to revisit this
     });
 
     it("should create proof revealing single message from multi-message signature", () => {
-      const messages = ["uiSKIfNoO2rMrA==", "lMoHHrFx0LxwAw==", "wdwqLVm9chMMnA=="];
+      const messages = [
+        "uiSKIfNoO2rMrA==",
+        "lMoHHrFx0LxwAw==",
+        "wdwqLVm9chMMnA==",
+      ];
 
       const blsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pb"
@@ -178,11 +198,15 @@ describe("bbsSignature", () => {
       };
 
       const proof = blsCreateProof(request);
-      expect(proof.length).toEqual(447); //TODO add a reason for this and some constants?
+      expect(proof.length).toEqual(444); //TODO need to revisit this
     });
 
     it("should create proof revealing multiple messages from multi-message signature", () => {
-      const messages = ["uiSKIfNoO2rMrA==", "lMoHHrFx0LxwAw==", "wdwqLVm9chMMnA=="];
+      const messages = [
+        "uiSKIfNoO2rMrA==",
+        "lMoHHrFx0LxwAw==",
+        "wdwqLVm9chMMnA==",
+      ];
 
       const blsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pb"
@@ -200,7 +224,7 @@ describe("bbsSignature", () => {
       };
 
       const proof = blsCreateProof(request);
-      expect(proof.length).toEqual(415); //TODO evaluate this length properly add a reason for this and some constants?
+      expect(proof.length).toEqual(412); //TODO need to revisit this
     });
   });
 });

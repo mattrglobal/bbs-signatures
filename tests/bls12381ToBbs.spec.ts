@@ -53,6 +53,6 @@ describe("bls12381toBbs", () => {
         keyPair: blsKeyPair,
         messageCount: 0,
       })
-    ).toThrowError("Failed to convert key");
+    ).toThrowError("Error: Key Generation Error");
   });
 });

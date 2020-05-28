@@ -35,7 +35,8 @@ wasm_impl!(
 wasm_impl!(
     BbsKeyPair,
     publicKey: PublicKey,
-    secretKey: Option<SecretKey>
+    secretKey: Option<SecretKey>,
+    messageCount: usize
 );
 
 /// Generate a BLS 12-381 key pair.
@@ -44,7 +45,7 @@ wasm_impl!(
 ///
 /// returned vector is the concatenation of first the private key (32 bytes)
 /// followed by the public key (96) bytes.
-#[wasm_bindgen]
+#[wasm_bindgen(js_name = generateBls12381KeyPair)]
 pub fn bls_generate_key(seed: Option<Vec<u8>>) -> JsValue {
     let (pk, sk) = DeterministicPublicKey::new(seed.map(|s| KeyGenOption::UseSeed(s)));
     let keypair = BlsKeyPair {
@@ -55,28 +56,16 @@ pub fn bls_generate_key(seed: Option<Vec<u8>>) -> JsValue {
 }
 
 /// Get the BBS public key associated with the private key
-#[wasm_bindgen]
-pub fn bls_secret_key_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
-    let request: Bls12381ToBbsRequest = request.try_into()?;
-    let sk = request.keyPair.secretKey.ok_or_else(|| JsValue::from("SecretKey is not specified"))?;
-    let (dpk, sk) = DeterministicPublicKey::new(Some(KeyGenOption::FromSecretKey(sk)));
-    let pk = dpk.to_public_key(request.messageCount)?;
-    let key_pair = BbsKeyPair {
-        publicKey: pk,
-        secretKey: Some(sk)
-    };
-    Ok(serde_wasm_bindgen::to_value(&key_pair).unwrap())
-}
-
-/// Get the BBS public key associated with the public key
-#[wasm_bindgen]
-pub fn bls_public_key_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
+#[wasm_bindgen(js_name = bls12381toBbs)]
+pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
     let request: Bls12381ToBbsRequest = request.try_into()?;
     let dpk = request.keyPair.publicKey.ok_or_else(|| JsValue::from("PublicKey is not specified"))?;
     let pk = dpk.to_public_key(request.messageCount)?;
     let key_pair = BbsKeyPair {
         publicKey: pk,
-        secretKey: None,
+        secretKey: request.keyPair.secretKey,
+        messageCount: request.messageCount
     };
+
     Ok(serde_wasm_bindgen::to_value(&key_pair).unwrap())
 }
