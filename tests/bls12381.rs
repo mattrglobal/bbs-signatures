@@ -21,7 +21,7 @@ fn bls_public_key_to_bbs_key_test() {
         messageCount: 5,
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
-    let bbs_res = bls_public_key_to_bbs_key(js_value);
+    let bbs_res = bls_to_bbs_key(js_value);
     assert!(bbs_res.is_ok());
     let bbs = bbs_res.unwrap();
     assert!(bbs.is_object());
@@ -38,12 +38,12 @@ fn bls_secret_key_to_bbs_key_test() {
     let request = Bls12381ToBbsRequest {
         keyPair: BlsKeyPair {
             publicKey: None,
-            secretKey: Some(sk)
+            secretKey: Some(sk),
         },
-        messageCount: 5
+        messageCount: 5,
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
-    let bbs_res = bls_secret_key_to_bbs_key(js_value);
+    let bbs_res = bls_to_bbs_key(js_value);
     assert!(bbs_res.is_ok());
     let bbs = bbs_res.unwrap();
     assert!(bbs.is_object());

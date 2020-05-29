@@ -59,12 +59,15 @@ pub fn bls_generate_key(seed: Option<Vec<u8>>) -> JsValue {
 #[wasm_bindgen(js_name = bls12381toBbs)]
 pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
     let request: Bls12381ToBbsRequest = request.try_into()?;
-    let dpk = request.keyPair.publicKey.ok_or_else(|| JsValue::from("PublicKey is not specified"))?;
+    let dpk = request
+        .keyPair
+        .publicKey
+        .ok_or_else(|| JsValue::from("PublicKey is not specified"))?;
     let pk = dpk.to_public_key(request.messageCount)?;
     let key_pair = BbsKeyPair {
         publicKey: pk,
         secretKey: request.keyPair.secretKey,
-        messageCount: request.messageCount
+        messageCount: request.messageCount,
     };
 
     Ok(serde_wasm_bindgen::to_value(&key_pair).unwrap())

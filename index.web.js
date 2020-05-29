@@ -1,1 +1,1 @@
-export default import("./pkg");
+export default import('./pkg');

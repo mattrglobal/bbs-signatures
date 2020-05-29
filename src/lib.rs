@@ -18,6 +18,9 @@
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[macro_use]
+extern crate arrayref;
+
+#[macro_use]
 mod macros;
 pub mod bbs_plus;
 pub mod bls12381;
