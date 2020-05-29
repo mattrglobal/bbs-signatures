@@ -125,19 +125,15 @@ pub fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
         .signature
         .verify(messages.as_slice(), &request.publicKey)
     {
-        Ok(b) => Ok(JsValue::from({
+        Ok(b) => Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
             verified: b,
             error: None
-        })),
-        Err(e) => Err(JsValue::from(&format!("{:?}", e))),
+        }).unwrap()),
+        Err(e) => Err(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
+            verified: false,
+            error: Some(format!("{:?}", e))
+        }).unwrap())
     }
-
-    let response = BbsVerifyResponse {
-        verified: b,
-        error: Some(e)
-    };
-
-    Ok(response);
 }
 
 #[wasm_bindgen(js_name = blindSignCommitment)]
