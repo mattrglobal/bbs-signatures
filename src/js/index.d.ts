@@ -11,22 +11,37 @@
  * limitations under the License.
  */
 
- import { BlsKeyPair, Bls12381ToBbsRequest, BbsKeyPair, BbsSignRequest, BlsBbsSignRequest, BbsVerifyRequest, BbsVerifyResult, BlsBbsVerifyRequest, BbsCreateProofRequest } from "./types";
+import {
+  BlsKeyPair,
+  Bls12381ToBbsRequest,
+  BbsKeyPair,
+  BbsSignRequest,
+  BlsBbsSignRequest,
+  BbsVerifyRequest,
+  BbsVerifyResult,
+  BlsBbsVerifyRequest,
+  BbsCreateProofRequest,
+  BbsVerifyProofRequest,
+} from "./types";
 
- export * from "./types";
+export * from "./types";
 
- export function generateBls12381KeyPair(seed?: Uint8Array): BlsKeyPair;
+export const BBS_SIGNATURE_LENGTH = 112;
 
- export function bls12381toBbs(request: Bls12381ToBbsRequest): BbsKeyPair;
+export function generateBls12381KeyPair(seed?: Uint8Array): BlsKeyPair;
 
- export function sign(request: BbsSignRequest): Uint8Array;
+export function bls12381toBbs(request: Bls12381ToBbsRequest): BbsKeyPair;
 
- export function blsSign(request: BlsBbsSignRequest): Uint8Array;
+export function sign(request: BbsSignRequest): Uint8Array;
 
- export function verify(request: BbsVerifyRequest): BbsVerifyResult;
+export function blsSign(request: BlsBbsSignRequest): Uint8Array;
 
- export function blsVerify(request: BlsBbsVerifyRequest): BbsVerifyResult;
+export function verify(request: BbsVerifyRequest): BbsVerifyResult;
 
- export function createProof(request: BbsCreateProofRequest): Uint8Array;
+export function blsVerify(request: BlsBbsVerifyRequest): BbsVerifyResult;
 
- export function blsCreateProof(request: BbsCreateProofRequest): Uint8Array;
+export function createProof(request: BbsCreateProofRequest): Uint8Array;
+
+export function verifyProof(request: BbsVerifyProofRequest): BbsVerifyResult;
+
+export function blsCreateProof(request: BbsCreateProofRequest): Uint8Array;
