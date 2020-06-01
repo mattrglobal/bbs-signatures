@@ -368,7 +368,7 @@ pub fn bbs_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
 
 #[wasm_bindgen(js_name = verifyProof)]
 pub fn bbs_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
-    let res = request.try_into();
+    let res = serde_wasm_bindgen::from_value::<VerifyProofContext>(request);
     let request: VerifyProofContext;
     match res {
         Ok(r) => request = r,

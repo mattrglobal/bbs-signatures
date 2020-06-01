@@ -96,10 +96,10 @@ describe("bbsSignature", () => {
     it("should not verify with bad nonce", () => {
       const messages = ["KNK0ITRAF+NrGg=="];
       const bbsPublicKey = base64Decode(
-        "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pboZyjM38YgjaUBcjftZi5gb58Qz13XeRJpiuUHH06I7/1Eb8oVtIW5SGMNfKaqKhBAAAAAYPPztgxfWWw01/0SSug1oLfVuI4XUqhgyZ3rS6eTkOLjnyR3ObXb0XCD2Mfcxiv6w=="
+        "q4OA1O/iLQyZkwil2XatmWC1nWVSml3rd9UKV8zfy0hKOuzxpq0dJZhbRCp3tvCIGOkpRfSXKbUU9ns93QUas8n16nv6voGvffPNezqhnYknkzlnp2CwXgsEuVMp01l5hxlGTmlb/Jx7K3TVxe+eBXZ8EoeM86LyExaqBRjKE1LBTDcMxoOiHl/kaEsT3nHQAAAAAZZN6NYDjeW0ebiyilkT1tqkanRAFzobr+XnZp053ADCGH94oEPknwSN6WHt3JIrbg=="
       );
       const proof = base64Decode(
-        "pIeLfsSfc1OiVl+pl/JhNuUCU4QgxbWrh65HGF3E+O/RvlZbWxXwQaFlT6FNZjpQqxbiTRy11m4eU4IUyjLUVbJM37Q0WNAHi8ZtHgRzet4WvXAceUAd/uMTMAXkYYcKtejUTHHNznH4lXDfvX0Cwhd9K0jNKtOoH6/cU2UoWs3xXmIU8VzAlK2D5USD0XugAAAAdJVWlU2ZGa5oqSfBbW9r4d2nS/iF/0mC47gK5vAprhIA7cZg2g+a4WvgkGa7O9rr/gAAAAJmNzGETKIxJgvAECZDbURQzj+ty9MXZjja8m1tuy8DCEzM7hSK8BLL63mvSfiPYwuzSPrTAGNHVx2o2+OqXLZyt0ZAl+ObXg7lo5wOtjBrhvh/duOon2bkr+H3lSg9KGsjy4K9Eg8CkHnbKQnJ3R21AAAAAg1ueBGiTp1ucUqlD62vuEiBmR01q16EkdjLB4TYPfBcZ0GeQ3P7t+3ar0k+CZcoVyLktXjwmtsLxcjntzbHyN0="
+        "AAEBmcER3JpPCkjONMcS99mtx9VSw7X8GQ1800Ktj50bcgl8JmzDfT3h/LU1QcFUPHZ0gXjh3Zz/5dITbw9DHLfnffEJWUOmJ8YRF7eZ9L6X7lMqP7GAeGIHxnEDseJZylrqoaFeCtZE3NHctAT4OU3elpKUsLVtygHeiK47yeRugybWaGEnOn8jAlAS9puijhMvAAAAdKgUZ80tNbHiiJqjJgb5gWx+b5Sh85rDhQZLqyBoUHBcjrMaIkwgZwKareF1l8CskgAAAAJxrqkZI4i9tD2xVBn3YM5j4L+AuWTzQo9nxgbWYnTXIhxxYnFxKyaer5K0QfoQTMOvzq2V2tAxFlXQLt6cdbTtjxt89OBXLhbgEu5DIv0Z6azU1fpE7zG46wtu5JZ6XFE0RDLcglSjFyyXVsAodKGHAAAAAloBMAixvTBgslXOa74lNMI8OM3532AVYgZsW/oP+dVdKDzD2z9GW6gbmCvcEyQcqBCHKfdeoYR7MMwFZBFRxbY="
       );
 
       const request: BbsVerifyProofRequest = {
@@ -116,10 +116,10 @@ describe("bbsSignature", () => {
       // Expects messages to be ["Message1", "Message2", "Message3", "Message4"];
       const messages = ["BadMessage1", "Message2", "Message3", "Message4"];
       const bbsPublicKey = base64Decode(
-        "S+bRoSJJOet/8hKDpXFV+8TXzg0gPcD64lMFtIUzhYtMJAnNqfJRJnFIS0Vs2VC8AK6MBa6TYgILMqVv4RTSEl3H66mOF6jrEOHelKGlkJCNY8u3bI2aXrmqTkhnjxck"
+        "q4OA1O/iLQyZkwil2XatmWC1nWVSml3rd9UKV8zfy0hKOuzxpq0dJZhbRCp3tvCIGOkpRfSXKbUU9ns93QUas8n16nv6voGvffPNezqhnYknkzlnp2CwXgsEuVMp01l5pUJV2GPln0b83JAUfFT1Nnc6OKXs/sthpURDvvl8fRo+GTN/jNQGynH2vRux5GsnAAAABIHQEgcXZCbwf7H2FYcOKE1OWduzDix0PJO0aJBcjUBvNFnrX34JsOsXm8E+sOaZibSnY2azAVjO6YjdcsuKg5rx7Rrc/1/gzyi2U5CVgXyc+859CHLCnJUc4SCfHJjoFbbtJNcPWrb8wRl4PmcPVwSOBODfGABQR3blZNrg2Y10zogxK2o272tYiCr7Memp/pFL+/8toB/FhuuDi3/ZmlCFt7myAptWv1k8ABrFqZXU3wVJz5VuEysU9pTp/gRMeQ=="
       );
       const proof = base64Decode(
-        "hB0FDeTQc5KEm00wG5HNRvCJ6uoA9flPeTv08PGQct5URoP+mxn6K4hmgRFUMPDZGGspwrc4fCs5SDF+O0nbSyHNLRemj8IMsoruTqhLWrqDWxDhdDDoPYZ4uYoOGIuTBoJqxkv9uFjDRiRnINGvcIJ+QV2iwzwesAHcFmQnxOu/UBEm4XMCDiU93HABZn1uAAAAdJbRgZKb314nZ/PcSUH79GQacq9OAtiOfrCxyaVL5Nt8wXmoY0ri9cBF3XzrySjY7QAAAAIfsXyZmQFTmcislP+mYAk+9nl3V7hTQnc6VIz1Vzayyyses57/fYftogle+iFyMP9kfMujXAf0AOx268LFfZnuA4+PYfY+mH1l/ieGMkvaTFRrfi+sfxFX14wCTH8Qy7Z4+DjTUIPIBGwqCMiBWZ3ZAAAABUtLeqN3HfQNyXQNf7A5MKx00tYvssxatlylAv+lmU2cD2ke0dY7hltzXgGFJ8LjtPIe6uMlZdmdu6+l/0IHK4RGYhEYGwZ4NHu6mlydV/7XiFpJKd9vtmfGBYXU6nXHkxGZ3I0D3FfFFA30B/UFBYqGZ7EKFIObMmvmcQWbTFkkHYAlabXh2RAVSlTmNL+NrIu1LbLW0CBExF4f+H8kZmM="
+        "AAQBgaF0seRhy4H1X1cryL0tThe6GNtB7Gs0q9Tm8dYTfHGBZXmJFuh5fgjAJJGWKBLgrpvR2vEXMRd8cE6ilpAd+bQNBiu2RxP2A7vTIZKq67ihaw+v4gfEePx2eifct/6QtAAEaEnlKXYdngYkg//77nWW8kA6TnUJ4OepZBh9DCiszp/l909nSgom29uGZqpiAAAAdKDppCJUjXoMnL8d5MONB8NeRtUrNONEwIWqvbR6LWjB+DA0Cnd8lctTTpMlYLdXDwAAAAJc9/NhiGxJpBaLiN/8skkvqt3j2SyFqXCDrTMwWIN381p3kyErb+XY16zx+jY4aybhyjDLAS6qMcgKLx34d7o8k+wGRs00z2zgi47RTw1O/CRM64DFEwVE+budre3JGUJH9QWWrp4nXwXXOwytxYUHAAAABQMbru+5iUilyg5FLYcgl50d+PsXwXHprpCuNMYZjIEFJ/71dcGO4ZuOEZsEzrHTrRnLcB29ReJard5lDEkUEY0/HgYUkRtB5hBL08BkvfWkHq12g9AcDZgAmAd19TzWZV+IV86JEBSunlUEhWGlYTmaejLPgJ2alrBPMA8gM3AHBuCpY6Ad9b9afxk/NFDbm6ValLK62FUVxzBsDUDFiok="
       );
 
       const request: BbsVerifyProofRequest = {

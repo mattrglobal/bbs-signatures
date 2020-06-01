@@ -22,6 +22,7 @@ extern crate arrayref;
 
 #[macro_use]
 mod macros;
+mod utils;
 pub mod bbs_plus;
 pub mod bls12381;
 
