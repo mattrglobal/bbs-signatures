@@ -192,7 +192,17 @@ pub fn bbs_sign(request: JsValue) -> Result<JsValue, JsValue> {
 
 #[wasm_bindgen(js_name = verify)]
 pub fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
-    let request: BbsVerifyRequest = request.try_into()?;
+    let res  = request.try_into();
+
+    let request: BbsVerifyRequest;
+    match res {
+        Ok(r) => request = r,
+        Err(e) => return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+            verified: false,
+            error: Some(format!("{:?}", e))
+        }).unwrap())
+    };
+
     let messages: Vec<SignatureMessage> = request
         .messages
         .iter()
@@ -207,7 +217,7 @@ pub fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
             error: None,
         })
         .unwrap()),
-        Err(e) => Err(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+        Err(e) => Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
             verified: false,
             error: Some(format!("{:?}", e)),
         })
@@ -358,7 +368,16 @@ pub fn bbs_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
 
 #[wasm_bindgen(js_name = verifyProof)]
 pub fn bbs_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
-    let request: VerifyProofContext = request.try_into()?;
+    let res = request.try_into();
+    let request: VerifyProofContext;
+    match res {
+        Ok(r) => request = r,
+        Err(e)  => return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
+            verified: false,
+            error: Some(format!("{:?}", e))
+        }).unwrap())
+    };
+
     let nonce = if request.nonce.is_empty() {
         ProofNonce::default()
     } else {
@@ -381,9 +400,10 @@ pub fn bbs_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
         proof
     };
 
-    Ok(JsValue::from_bool(
-        Verifier::verify_signature_pok(&proof_request, &signature_proof, &nonce).is_ok(),
-    ))
+    Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
+        verified: Verifier::verify_signature_pok(&proof_request, &signature_proof, &nonce).is_ok(),
+        error: None
+    }).unwrap())
 }
 
 /// Expects `revealed` to be sorted
