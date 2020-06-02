@@ -16,8 +16,11 @@ import {
   BbsSignRequest,
   sign,
   bls12381toBbs,
+  blsSign,
   BBS_SIGNATURE_LENGTH,
   BbsKeyPair,
+  BlsBbsSignRequest,
+  BlsKeyPair,
 } from "../../lib";
 
 describe("bbsSignature", () => {
@@ -78,6 +81,45 @@ describe("bbsSignature", () => {
         messages: ["ExampleMessage", "ExampleMessage", "ExampleMessage"],
       };
       expect(() => sign(request)).toThrowError();
+    });
+  });
+
+  describe("blsSign", () => {
+    it("should sign a single message", () => {
+      const request: BlsBbsSignRequest = {
+        keyPair: blsKeyPair,
+        messages: ["ExampleMessage"],
+      };
+      const signature = blsSign(request);
+      expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
+    });
+
+    it("should sign multiple messages", () => {
+      const request: BlsBbsSignRequest = {
+        keyPair: blsKeyPair,
+        messages: ["ExampleMessage", "ExampleMessage2", "ExampleMessage3"],
+      };
+      const signature = blsSign(request);
+      expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
+    });
+
+    it.only("should throw error if secret key not present", () => {
+      const blsKey: BlsKeyPair = {
+        publicKey: blsKeyPair.publicKey,
+      };
+      const request: BlsBbsSignRequest = {
+        keyPair: blsKey,
+        messages: ["ExampleMessage", "ExampleMessage2", "ExampleMessage3"],
+      };
+      expect(() => blsSign(request)).toThrowError("Failed to sign");
+    });
+
+    it("should throw error when messages empty", () => {
+      const request: BlsBbsSignRequest = {
+        keyPair: blsKeyPair,
+        messages: [],
+      };
+      expect(() => blsSign(request)).toThrowError("Failed to convert key");
     });
   });
 });

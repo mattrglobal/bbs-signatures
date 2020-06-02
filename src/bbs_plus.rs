@@ -10,7 +10,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-use crate::bls12381::BbsKeyPair;
+use crate::{
+    BbsVerifyResponse,
+    bls12381::BbsKeyPair
+};
 use bbs::prelude::*;
 use serde::{
     de::{Error as DError, Visitor},
@@ -32,8 +35,6 @@ wasm_impl!(
     signature: Signature,
     messages: Vec<String>
 );
-
-wasm_impl!(BbsVerifyResponse, verified: bool, error: Option<String>);
 
 wasm_impl!(
     BlindSignatureContextRequest,

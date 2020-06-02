@@ -10,8 +10,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use crate::BbsVerifyResponse;
 use bbs::prelude::*;
-use serde::{Deserialize, Serialize};
+use serde::{
+    Deserialize, Serialize,
+};
 use std::convert::TryInto;
 use wasm_bindgen::prelude::*;
 
@@ -37,6 +40,19 @@ wasm_impl!(
     publicKey: PublicKey,
     secretKey: Option<SecretKey>,
     messageCount: usize
+);
+
+wasm_impl!(
+    BlsBbsSignRequest,
+    keyPair: BlsKeyPair,
+    messages: Vec<String>
+);
+
+wasm_impl!(
+    BlsBbsVerifyRequest,
+    publicKey: DeterministicPublicKey,
+    signature: Signature,
+    messages: Vec<String>
 );
 
 /// Generate a BLS 12-381 key pair.
@@ -71,4 +87,56 @@ pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
     };
 
     Ok(serde_wasm_bindgen::to_value(&key_pair).unwrap())
+}
+
+/// Signs a set of messages with a BLS 12-381 key pair and produces a BBS signature
+#[wasm_bindgen(js_name = blsSign)]
+pub fn bls_sign(request: JsValue) -> Result<JsValue, JsValue> {
+    let request: BlsBbsSignRequest = request.try_into()?;
+    let pk_res = request.keyPair.publicKey.unwrap().to_public_key(request.messages.len());
+    let pk;
+    match pk_res {
+        Err(_) => return Err(JsValue::from_str("Failed to convert key")),
+        Ok(p) => pk = p,
+    };
+    if request.keyPair.secretKey.is_none() {
+        return Err(JsValue::from_str("Failed to sign"));
+    }
+    let messages: Vec<SignatureMessage> = request.messages.iter().map(|m| SignatureMessage::hash(m)).collect();
+    match Signature::new(messages.as_slice(), &request.keyPair.secretKey.unwrap(), &pk) {
+        Ok(sig) => Ok(serde_wasm_bindgen::to_value(&sig).unwrap()),
+        Err(e) => Err(JsValue::from(&format!("{:?}", e))),
+    }
+}
+
+/// Verifies a BBS+ signature for a set of messages with a with a BLS 12-381 public key
+#[wasm_bindgen(js_name = blsVerify)]
+pub fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
+    let res = request.try_into();
+    let result: BlsBbsVerifyRequest;
+    match res {
+        Ok(r) => result = r,
+        Err(e) => return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+            verified: false,
+            error: Some(format!("{:?}", e))
+        }).unwrap())
+    };
+    if result.messages.is_empty() {
+        return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+            verified: false,
+            error: Some("Messages cannot be empty".to_string())
+        }).unwrap());
+    }
+    let pk = result.publicKey.to_public_key(result.messages.len())?;
+    let messages: Vec<SignatureMessage> = result.messages.iter().map(|m| SignatureMessage::hash(m)).collect();
+    match result.signature.verify(messages.as_slice(), &pk) {
+        Err(e) => Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+            verified: false,
+            error: Some(format!("{:?}", e))
+        }).unwrap()),
+        Ok(b) => Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+            verified: b,
+            error: None
+        }).unwrap())
+    }
 }

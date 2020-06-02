@@ -20,11 +20,16 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[macro_use]
 extern crate arrayref;
 
+use serde::{Deserialize, Serialize};
+use wasm_bindgen::prelude::*;
+
 #[macro_use]
 mod macros;
 mod utils;
 pub mod bbs_plus;
 pub mod bls12381;
+
+wasm_impl!(BbsVerifyResponse, verified: bool, error: Option<String>);
 
 pub mod prelude {
     pub use crate::bbs_plus::*;
