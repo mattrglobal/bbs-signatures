@@ -1,6 +1,6 @@
 ![Mattr logo](./docs/assets/mattr-black.svg)
 
-# wasm-bbs-sigantures
+# wasm-bbs-signatures
 
 This repository is the home to a performant multi-message digital signature algorithm implementation which supports
 deriving zero knowledge proofs that enable selective disclosure from the originally signed message set.
@@ -23,8 +23,6 @@ For more details on the signature algorithm please refer to [here](https://githu
 
 ## Getting started
 
-### Node 
-
 To use this package within your project simply run
 
 ```
@@ -37,11 +35,7 @@ Or with [Yarn](https://yarnpkg.com/)
 yarn add @mattrglobal/node-bbs-signatures
 ```
 
-### React Native
-
-//TODO
-
-### Browser
+### Using CDN Distribution
 
 //TODO
 
@@ -121,8 +115,7 @@ yarn benchmark
 ## Dependencies
 
 This library uses the [bbs](https://crates.io/crates/bbs) rust crate for the implementation of BBS+ signatures and
-BLS12-381 which is then wrapped and exposed in javascript/typescript using
-[neon-bindings](https://github.com/neon-bindings/neon).
+BLS12-381 which is then wrapped and exposed in javascript/typescript using [Web Assembly](https://webassembly.org/).
 
 ## Relevant References
 

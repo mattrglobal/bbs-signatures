@@ -11,22 +11,20 @@
  * limitations under the License.
  */
 
-import { benchmark, report } from "@stablelib/benchmark";
-import { generateBls12381KeyPair, bls12381toBbs } from "../lib";
-
-const keyPair = generateBls12381KeyPair();
-
-report(
-  "BLS 12-381 Key Generation",
-  benchmark(() => generateBls12381KeyPair())
-);
-
-report(
-  "BLS to BBS KeyPair Conversion: 10 messages",
-  benchmark(() =>
-    bls12381toBbs({
-      keyPair,
-      messageCount: 10,
-    })
-  )
-);
+/**
+ * A request verify a BBS signature for a set of messages
+ */
+export interface BlsBbsVerifyRequest {
+  /**
+   * BLS12-381 public key of the signer of the signature
+   */
+  readonly publicKey: Uint8Array;
+  /**
+   * Raw signature value
+   */
+  readonly signature: Uint8Array;
+  /**
+   * Messages that were signed to produce the signature
+   */
+  readonly messages: readonly string[];
+}

@@ -11,22 +11,26 @@
  * limitations under the License.
  */
 
-import { benchmark, report } from "@stablelib/benchmark";
-import { generateBls12381KeyPair, bls12381toBbs } from "../lib";
+/**
+ * Default BLS 12-381 private key length
+ */
+export const DEFAULT_BLS12381_PRIVATE_KEY_LENGTH: number = 32;
 
-const keyPair = generateBls12381KeyPair();
+/**
+ * Default BLS 12-381 public key length
+ */
+export const DEFAULT_BLS12381_PUBLIC_KEY_LENGTH: number = 96;
 
-report(
-  "BLS 12-381 Key Generation",
-  benchmark(() => generateBls12381KeyPair())
-);
-
-report(
-  "BLS to BBS KeyPair Conversion: 10 messages",
-  benchmark(() =>
-    bls12381toBbs({
-      keyPair,
-      messageCount: 10,
-    })
-  )
-);
+/**
+ * A BLS 12-381 key pair
+ */
+export interface BlsKeyPair {
+  /**
+   * Raw public key value for the key pair
+   */
+  readonly publicKey: Uint8Array;
+  /**
+   * Raw secret/private key value for the key pair
+   */
+  readonly secretKey?: Uint8Array;
+}

@@ -3,10 +3,9 @@
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
 use bbs::prelude::*;
-use wasm::log;
 use std::{
-    collections::{BTreeMap, BTreeSet},
-    convert::{TryFrom, TryInto},
+    collections::BTreeSet,
+    convert::TryInto,
 };
 use wasm::prelude::*;
 use wasm_bindgen_test::*;
@@ -18,12 +17,13 @@ wasm_bindgen_test_configure!(run_in_browser);
 pub fn bbs_sign_tests() {
     let (pk, sk) = generate(1).unwrap();
     let messages = vec!["Message1".to_string()];
-    let request = BbsSignRequest{
+    let request = BbsSignRequest {
         keyPair: BbsKeyPair {
             publicKey: pk,
-            secretKey: Some(sk)
+            secretKey: Some(sk),
+            messageCount: 1
         },
-        messages
+        messages,
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
     let s_res = bbs_sign(js_value);
@@ -44,9 +44,10 @@ pub fn bbs_sign_tests() {
     let request = BbsSignRequest {
         keyPair: BbsKeyPair {
             publicKey: pk,
-            secretKey: Some(sk)
+            secretKey: Some(sk),
+            messageCount: 5
         },
-        messages
+        messages,
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
     let s_res = bbs_sign(js_value);
@@ -66,7 +67,7 @@ pub fn bbs_verify_tests() {
     let request = BbsVerifyRequest {
         publicKey: pk.clone(),
         signature: signature.clone(),
-        messages: vec!["Message1".to_string()]
+        messages: vec!["Message1".to_string()],
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
 
@@ -77,7 +78,7 @@ pub fn bbs_verify_tests() {
     let request = BbsVerifyRequest {
         publicKey: pk,
         signature,
-        messages: vec!["BadMessage".to_string()]
+        messages: vec!["BadMessage".to_string()],
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
     let result = bbs_verify(js_value);
@@ -89,14 +90,14 @@ pub fn bbs_verify_tests() {
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
 pub fn bbs_blind_sign_tests() {
-    let (pk, sk) = generate(3).unwrap();
+    let (pk, _) = generate(3).unwrap();
     let messages = vec!["Message1".to_string()];
     let request = BlindSignatureContextRequest {
-            publicKey: pk.clone(),
-            messages,
-            blinded: vec![0],
-            nonce: "dummy nonce".to_string()
-        };
+        publicKey: pk.clone(),
+        messages,
+        blinded: vec![0],
+        nonce: "dummy nonce".to_string(),
+    };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
     let result = bbs_blind_signature_commitment(js_value);
     assert!(result.is_ok());
@@ -125,7 +126,7 @@ pub fn bbs_blind_sign_tests() {
         challengeHash: result.challengeHash.clone(),
         publicKey: pk.clone(),
         blinded: blinded.clone(),
-        nonce: "bad nonce".to_string()
+        nonce: "bad nonce".to_string(),
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
 

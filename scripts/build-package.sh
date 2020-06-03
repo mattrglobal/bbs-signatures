@@ -21,4 +21,4 @@ mv $OPT_WASM $WASM
 rm lib/package.json lib/.gitignore lib/README.md
 
 # Copy over package sources
-cp src/js/* lib/
+cp -r src/js/* lib/

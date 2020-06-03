@@ -11,22 +11,24 @@
  * limitations under the License.
  */
 
-import { benchmark, report } from "@stablelib/benchmark";
-import { generateBls12381KeyPair, bls12381toBbs } from "../lib";
-
-const keyPair = generateBls12381KeyPair();
-
-report(
-  "BLS 12-381 Key Generation",
-  benchmark(() => generateBls12381KeyPair())
-);
-
-report(
-  "BLS to BBS KeyPair Conversion: 10 messages",
-  benchmark(() =>
-    bls12381toBbs({
-      keyPair,
-      messageCount: 10,
-    })
-  )
-);
+/**
+ * A request to verify a BBS proof
+ */
+export interface BbsVerifyProofRequest {
+  /**
+   * The BBS proof to verify
+   */
+  readonly proof: Uint8Array;
+  /**
+   * Public key of the signer of the proof to verify
+   */
+  readonly publicKey: Uint8Array;
+  /**
+   * Revealed messages to verify (TODO maybe rename this field??)
+   */
+  readonly messages: readonly string[];
+  /**
+   * Nonce included in the proof for the un-revealed attributes (OPTIONAL)
+   */
+  readonly nonce: string;
+}

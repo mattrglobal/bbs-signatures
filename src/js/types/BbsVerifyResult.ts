@@ -11,22 +11,16 @@
  * limitations under the License.
  */
 
-import { benchmark, report } from "@stablelib/benchmark";
-import { generateBls12381KeyPair, bls12381toBbs } from "../lib";
-
-const keyPair = generateBls12381KeyPair();
-
-report(
-  "BLS 12-381 Key Generation",
-  benchmark(() => generateBls12381KeyPair())
-);
-
-report(
-  "BLS to BBS KeyPair Conversion: 10 messages",
-  benchmark(() =>
-    bls12381toBbs({
-      keyPair,
-      messageCount: 10,
-    })
-  )
-);
+/**
+ * The result returned from a verify operation
+ */
+export interface BbsVerifyResult {
+  /**
+   * Indicates whether the verification was successful
+   */
+  readonly verified: boolean;
+  /**
+   * Messages to sign
+   */
+  readonly error?: string;
+}

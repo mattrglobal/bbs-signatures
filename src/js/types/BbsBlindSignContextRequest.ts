@@ -11,22 +11,24 @@
  * limitations under the License.
  */
 
-import { benchmark, report } from "@stablelib/benchmark";
-import { generateBls12381KeyPair, bls12381toBbs } from "../lib";
-
-const keyPair = generateBls12381KeyPair();
-
-report(
-  "BLS 12-381 Key Generation",
-  benchmark(() => generateBls12381KeyPair())
-);
-
-report(
-  "BLS to BBS KeyPair Conversion: 10 messages",
-  benchmark(() =>
-    bls12381toBbs({
-      keyPair,
-      messageCount: 10,
-    })
-  )
-);
+/**
+ * A request to create a BBS signature that features blinded/committed messages
+ */
+export interface BbsBlindSignContextRequest {
+  /**
+   * The resulting commitment of the blinded messages to sign
+   */
+  readonly publicKey: Uint8Array;
+  /**
+   * The zero based indices of which messages to hide
+   */
+  readonly hidden: readonly number[];
+  /**
+   * A nonce for the resulting proof
+   */
+  readonly nonce: string;
+  /**
+   * The known messages to sign
+   */
+  readonly messages: readonly string[];
+}
