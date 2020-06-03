@@ -14,15 +14,11 @@ use crate::{
     BbsVerifyResponse,
     PoKOfSignatureProofWrapper,
     bls12381::BbsKeyPair,
-    revealed_to_bitvector,
-    bitvector_to_revealed
 };
 use bbs::prelude::*;
 use serde::{
-    de::{Error as DError, Visitor},
-    Deserialize, Deserializer, Serialize, Serializer,
+    Deserialize, Serialize,
 };
-use std::convert::TryFrom;
 use std::{
     collections::{BTreeMap, BTreeSet},
     convert::TryInto,

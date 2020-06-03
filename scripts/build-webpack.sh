@@ -8,4 +8,4 @@ cp src/js/index.web.js index.web.js
 webpack
 
 # Remove the temporary generated directory
-# rm -rf pkg index.web.js
+rm -rf pkg index.web.js

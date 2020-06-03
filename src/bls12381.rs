@@ -13,8 +13,6 @@
 use crate::{
     BbsVerifyResponse,
     PoKOfSignatureProofWrapper,
-    revealed_to_bitvector,
-    bitvector_to_revealed
 };
 use bbs::prelude::*;
 use serde::{

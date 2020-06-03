@@ -103,7 +103,7 @@ describe("bbsSignature", () => {
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
-    it.only("should throw error if secret key not present", () => {
+    it("should throw error if secret key not present", () => {
       const blsKey: BlsKeyPair = {
         publicKey: blsKeyPair.publicKey,
       };
