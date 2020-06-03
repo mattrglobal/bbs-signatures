@@ -1,6 +1,6 @@
 ![Mattr logo](./docs/assets/mattr-black.svg)
 
-# wasm-bbs-signatures
+# bbs-signatures
 
 This repository is the home to a performant multi-message digital signature algorithm implementation which supports
 deriving zero knowledge proofs that enable selective disclosure from the originally signed message set.
@@ -26,13 +26,13 @@ For more details on the signature algorithm please refer to [here](https://githu
 To use this package within your project simply run
 
 ```
-npm install @mattrglobal/node-bbs-signatures
+npm install @mattrglobal/bbs-signatures
 ```
 
 Or with [Yarn](https://yarnpkg.com/)
 
 ```
-yarn add @mattrglobal/node-bbs-signatures
+yarn add @mattrglobal/bbs-signatures
 ```
 
 ### Using CDN Distribution
