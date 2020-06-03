@@ -98,18 +98,30 @@ yarn build
 
 #### Test
 
-To run the test in the project run:
+To run the all test in the project run:
 
 ```
 yarn test
 ```
 
-#### Benchmark
-
-To benchmark the implementation locally run:
+To run just the tests for a node environment run:
 
 ```
-yarn benchmark
+yarn test:node
+```
+
+To run just the tests for a browser environment run:
+
+```
+yarn test:browser
+```
+
+#### Benchmark
+
+To benchmark the implementation locally in a node environment run:
+
+```
+yarn benchmark:node
 ```
 
 ## Dependencies
