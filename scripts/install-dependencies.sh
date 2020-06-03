@@ -14,7 +14,3 @@ if ! [ -x "$(command -v wasm-pack)" ]; then
     echo ">>> Installing wasm-pack"
     curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 fi
-
-echo ">>> Installing nightly toolchain"
-
-rustup toolchain install nightly
