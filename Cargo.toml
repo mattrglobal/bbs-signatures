@@ -4,7 +4,7 @@ description = "WASM binding to bbs rust crate"
 edition = "2018"
 license = "Apache-2.0"
 name = "wasm"
-repository = "https://github.com/mattrglobal/wasm-bbs-signatures"
+repository = "https://github.com/mattrglobal/bbs-signatures"
 version = "0.1.0"
 
 [lib]

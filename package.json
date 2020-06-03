@@ -1,14 +1,14 @@
 {
-  "name": "@mattrglobal/wasm-bbs-signatures",
+  "name": "@mattrglobal/bbs-signatures",
   "version": "0.0.1",
   "author": "MATTR",
   "license": "Apache-2.0",
   "private": false,
   "description": "An implementation of BBS+ signatures using rust compiled to wasm",
-  "homepage": "https://github.com/mattrglobal/wasm-bbs-signatures",
+  "homepage": "https://github.com/mattrglobal/bbs-signatures",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": "https://github.com/mattrglobal/wasm-bbs-signatures",
+  "repository": "https://github.com/mattrglobal/bbs-signatures",
   "files": [
     "dist/*.js",
     "dist/*.wasm",
