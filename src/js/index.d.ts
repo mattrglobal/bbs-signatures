@@ -45,3 +45,5 @@ export function createProof(request: BbsCreateProofRequest): Uint8Array;
 export function verifyProof(request: BbsVerifyProofRequest): BbsVerifyResult;
 
 export function blsCreateProof(request: BbsCreateProofRequest): Uint8Array;
+
+export function blsVerifyProof(request: BbsVerifyProofRequest): BbsVerifyResult;

@@ -10,12 +10,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-use crate::BbsVerifyResponse;
+use crate::{
+    BbsVerifyResponse,
+    PoKOfSignatureProofWrapper,
+    revealed_to_bitvector,
+    bitvector_to_revealed
+};
 use bbs::prelude::*;
 use serde::{
     Deserialize, Serialize,
 };
-use std::convert::TryInto;
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    convert::TryInto,
+    iter::FromIterator
+};
 use wasm_bindgen::prelude::*;
 
 wasm_impl!(
@@ -53,6 +62,23 @@ wasm_impl!(
     publicKey: DeterministicPublicKey,
     signature: Signature,
     messages: Vec<String>
+);
+
+wasm_impl!(
+    BlsCreateProofRequest,
+    signature: Signature,
+    publicKey: DeterministicPublicKey,
+    messages: Vec<String>,
+    revealed: Vec<usize>,
+    nonce: String
+);
+
+wasm_impl!(
+    BlsVerifyProofContext,
+    proof: PoKOfSignatureProofWrapper,
+    publicKey: DeterministicPublicKey,
+    messages: Vec<String>,
+    nonce: String
 );
 
 /// Generate a BLS 12-381 key pair.
@@ -139,4 +165,94 @@ pub fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
             error: None
         }).unwrap())
     }
+}
+
+/// Creates a BBS+ PoK
+#[wasm_bindgen(js_name = blsCreateProof)]
+pub fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
+    let request: BlsCreateProofRequest = request.try_into()?;
+    if request
+        .revealed
+        .iter()
+        .any(|r| *r > request.messages.len())
+    {
+        return Err(JsValue::from("revealed value is out of bounds"));
+    }
+    let pk = request.publicKey.to_public_key(request.messages.len())?;
+    let revealed: BTreeSet<usize> = BTreeSet::from_iter(request.revealed.into_iter());
+    let mut messages = Vec::new();
+    for i in 0..request.messages.len() {
+        if revealed.contains(&i) {
+            messages.push(ProofMessage::Revealed(SignatureMessage::hash(
+                &request.messages[i],
+            )));
+        } else {
+            messages.push(ProofMessage::Hidden(HiddenMessage::ProofSpecificBlinding(
+                SignatureMessage::hash(&request.messages[i]),
+            )));
+        }
+    }
+    match PoKOfSignature::init(&request.signature, &pk, messages.as_slice()) {
+        Err(e) => return Err(JsValue::from(&format!("{:?}", e))),
+        Ok(pok) => {
+            let mut challenge_bytes = pok.to_bytes();
+            if request.nonce.is_empty() {
+                challenge_bytes.extend_from_slice(&[0u8; FR_COMPRESSED_SIZE]);
+            } else {
+                let nonce = ProofNonce::hash(&request.nonce);
+                challenge_bytes.extend_from_slice(nonce.to_bytes_uncompressed_form().as_ref());
+            }
+            let challenge_hash = ProofChallenge::hash(&challenge_bytes);
+            match pok.gen_proof(&challenge_hash) {
+                Ok(proof) => {
+                    let out = PoKOfSignatureProofWrapper::new(request.messages.len(), &revealed, proof);
+                    Ok(serde_wasm_bindgen::to_value(&out).unwrap())
+                }
+                Err(e) => Err(JsValue::from(&format!("{:?}", e))),
+            }
+        }
+    }
+}
+
+/// Verify a BBS+ PoK
+#[wasm_bindgen(js_name = blsVerifyProof)]
+pub fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
+    let res = serde_wasm_bindgen::from_value::<BlsVerifyProofContext>(request);
+    let request: BlsVerifyProofContext;
+    match res {
+        Ok(r) => request = r,
+        Err(e)  => return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
+            verified: false,
+            error: Some(format!("{:?}", e))
+        }).unwrap())
+    };
+
+    let nonce = if request.nonce.is_empty() {
+        ProofNonce::default()
+    } else {
+        ProofNonce::hash(&request.nonce)
+    };
+    let message_count = u16::from_be_bytes(*array_ref![request.proof.bit_vector, 0, 2]) as usize;
+    let pk = request.publicKey.to_public_key(message_count)?;
+    let messages = request.messages.clone();
+    let (revealed, proof) = request.proof.unwrap();
+    let proof_request = ProofRequest {
+        revealed_messages: revealed,
+        verification_key: pk
+    };
+
+    let mut revealed_messages = BTreeMap::new();
+    for i in &proof_request.revealed_messages {
+        revealed_messages.insert(*i, SignatureMessage::hash(&messages[*i]));
+    }
+
+    let signature_proof = SignatureProof {
+        revealed_messages,
+        proof
+    };
+
+    Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
+        verified: Verifier::verify_signature_pok(&proof_request, &signature_proof, &nonce).is_ok(),
+        error: None
+    }).unwrap())
 }
