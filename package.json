@@ -26,7 +26,7 @@
     "test:node": "yarn jest",
     "test:browser": "./scripts/test-browser.sh",
     "benchmark:node": "ts-node ./bench/index.ts",
-    "publish:unstable": "./scripts/publish_unstable.sh",
+    "publish:unstable": "./scripts/publish-unstable.sh",
     "publish:release": "./scripts/publish.sh",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "version:release": "yarn version --minor --message \"chore(release): publish [skip ci]\""
