@@ -26,13 +26,13 @@ For more details on the signature algorithm please refer to [here](https://githu
 To use this package within your project simply run
 
 ```
-npm install @mattrglobal/bbs-signatures
+npm install @mattrglobal/node-bbs-signatures
 ```
 
 Or with [Yarn](https://yarnpkg.com/)
 
 ```
-yarn add @mattrglobal/bbs-signatures
+yarn add @mattrglobal/node-bbs-signatures
 ```
 
 ### Using CDN Distribution
