@@ -2,6 +2,12 @@
 
 # bbs-signatures
 
+![npm-version](https://badgen.net/npm/v/@mattrglobal/bbs-signatures)
+![npm-unstable-version](https://badgen.net/npm/v/@mattrglobal/bbs-signatures/unstable)
+![Master](https://github.com/mattrglobal/bbs-signatures/workflows/push-master/badge.svg)
+![Release](https://github.com/mattrglobal/bbs-signatures/workflows/push-release/badge.svg)
+![codecov](https://codecov.io/gh/mattrglobal/bbs-signatures/branch/master/graph/badge.svg)
+
 This repository is the home to a performant multi-message digital signature algorithm implementation which supports
 deriving zero knowledge proofs that enable selective disclosure from the originally signed message set.
 
@@ -21,6 +27,8 @@ the originally signed messages are revealed at the discretion of the prover.
 
 For more details on the signature algorithm please refer to [here](https://github.com/mattrglobal/node-bbs-signatures/blob/master/docs/ALGORITHM.md)
 
+**Note** the performance of this library in node environments is significantly different than with a native node module, for those requiring the highest level of performance we recommend using [node-bbs-signatures](https://github.com/mattrglobal/node-bbs-signatures).
+
 ## Getting started
 
 To use this package within your project simply run
@@ -35,9 +43,25 @@ Or with [Yarn](https://yarnpkg.com/)
 yarn add @mattrglobal/bbs-signatures
 ```
 
-### Using CDN Distribution
+### Using via CDN in browser
 
-//TODO
+To use this library in browser via the [unpkg](https://unpkg.com) CDN, include the following script element in your HTML
+
+```HTML
+<script type="text/javascript" src="https://unpkg.com/@mattrglobal/bbs-signatures/dist/bbs-signatures.min.js"></script></body>
+```
+
+### React Native Support
+
+**Support is still in-progress**
+
+Currently WASM support in react native is [not official](https://react-native.canny.io/feature-requests/p/support-wasmwebassembly) although there are experimentations underway.
+
+There are several different ways in which support can be accomplished
+
+1. Injecting a polyfill of the Web Assembly tool chain such as [WebAssemblyJS](https://github.com/xtuc/webassemblyjs), however experimentation with this library yielded the same issue as seen in [here](https://github.com/xtuc/webassemblyjs/issues/606).
+2. A shim that trees down on to the native WebAssembly implementation provided by the OS, an example of the approach is captured [here](https://github.com/ExodusMovement/react-native-wasm)
+3. Compiling the wasm back into [asm.js](http://asmjs.org/) using the [wasm2js](https://github.com/WebAssembly/binaryen/blob/master/src/wasm2js.h) from [binaryen](https://github.com/WebAssembly/binaryen), note this is currently the preferred option and will be pursued for this library in the short term.
 
 ## Element Size
 
