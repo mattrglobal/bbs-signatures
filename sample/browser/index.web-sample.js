@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-const module = import("./pkg");
+const module = import("../../pkg");
 
 module.then((m) => {
   //Generate a new key pair
