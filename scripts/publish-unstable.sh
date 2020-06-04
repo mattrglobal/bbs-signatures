@@ -9,6 +9,9 @@
 # Add dev dependencies to current path
 export PATH="$PATH:node_modules/.bin"
 
+# Remove the post install script from the package.json
+node scripts/remove-install-script.js
+
 # Minor version the current package
 yarn version --no-git-tag-version --patch
 
