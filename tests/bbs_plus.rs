@@ -2,6 +2,7 @@
 
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
+use wasm::BbsVerifyResponse;
 use bbs::prelude::*;
 use std::{
     collections::BTreeSet,
@@ -84,7 +85,8 @@ pub fn bbs_verify_tests() {
     let result = bbs_verify(js_value);
     assert!(result.is_ok());
     let result = result.unwrap();
-    assert!(result.is_falsy());
+    let r: BbsVerifyResponse = serde_wasm_bindgen::from_value(result).unwrap();
+    assert!(!r.verified);
 }
 
 #[allow(non_snake_case)]
