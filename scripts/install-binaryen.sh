@@ -21,7 +21,7 @@ unamestr=`uname`
 if [ "$unamestr" == 'Darwin' ]
 then
     echo ">>>> Downloading MacOS version"
-    curl -L https://api.github.com/repos/WebAssembly/binaryen/releases/latest \
+    curl -L https://api.github.com/repos/WebAssembly/binaryen/releases \
         | grep "browser_download_url.*macos.tar.gz\"" \
         | cut -d : -f 2,3 \
         | tr -d '"' \
@@ -29,7 +29,7 @@ then
 elif [ "$unamestr" == 'Linux' ]
 then
     echo ">>>> Downloading Linux version"
-    curl -L https://api.github.com/repos/WebAssembly/binaryen/releases/latest \
+    curl -L https://api.github.com/repos/WebAssembly/binaryen/releases \
         | grep "browser_download_url.*linux.tar.gz\"" \
         | cut -d : -f 2,3 \
         | tr -d '"' \
