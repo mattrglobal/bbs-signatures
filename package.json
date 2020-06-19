@@ -33,9 +33,6 @@
     "version:release": "yarn version --minor --message \"chore(release): publish [skip ci]\""
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.1",
-    "@babel/core": "^7.10.2",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
     "@stablelib/base64": "1.0.0",

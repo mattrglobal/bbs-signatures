@@ -27,7 +27,6 @@ function runAll(): void {
   Object.keys(tests).forEach((name: string) => {
     count++;
     try {
-      // Ignore initialization functions used to set global variables (e.g. in sign.js)
       console.time("\t" + name);
       console.log(name);
 
