@@ -11,9 +11,18 @@
  * limitations under the License.
  */
 
-import { generateBls12381KeyPair, bls12381toBbs, BlsKeyPair } from "../lib";
+import {
+  waitReady,
+  generateBls12381KeyPair,
+  bls12381toBbs,
+  BlsKeyPair,
+} from "../lib";
 
 describe("bls12381toBbs", () => {
+  beforeAll(async () => {
+    await waitReady();
+  });
+
   it("should be able to convert bls12381 key pair to bbs key", () => {
     const blsKeyPair = generateBls12381KeyPair();
     expect(blsKeyPair).toBeDefined();

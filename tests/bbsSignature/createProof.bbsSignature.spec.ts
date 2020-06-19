@@ -11,7 +11,12 @@
  * limitations under the License.
  */
 
-import { BbsCreateProofRequest, createProof, blsCreateProof } from "../../lib";
+import {
+  waitReady,
+  BbsCreateProofRequest,
+  createProof,
+  blsCreateProof,
+} from "../../lib";
 import { Coder } from "@stablelib/base64";
 import { randomBytes } from "@stablelib/random";
 
@@ -26,6 +31,10 @@ const base64Decode = (string: string): Uint8Array => {
 };
 
 describe("bbsSignature", () => {
+  beforeAll(async () => {
+    await waitReady();
+  });
+
   describe("createProof", () => {
     it("should create proof revealing single message from single message signature", () => {
       const messages = ["RmtnDBJHso5iSg=="];

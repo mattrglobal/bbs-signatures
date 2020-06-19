@@ -12,6 +12,7 @@
  */
 
 import {
+  waitReady,
   BbsVerifyProofRequest,
   verifyProof,
   BbsCreateProofRequest,
@@ -26,6 +27,10 @@ const base64Decode = (string: string): Uint8Array => {
 };
 
 describe("bbsSignature", () => {
+  beforeAll(async () => {
+    await waitReady();
+  });
+
   describe("verifyProof", () => {
     it("should verify proof with all messages revealed from single message signature", () => {
       const messages = ["KNK0ITRAF+NrGg=="];
