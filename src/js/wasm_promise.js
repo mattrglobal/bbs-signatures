@@ -1,4 +1,4 @@
-const asm = require("./wasm_asm_stub");
+const asm = require("./wasm_asm");
 const bytes = require("./wasm_wasm");
 const imports = require("./wasm");
 
@@ -10,6 +10,7 @@ module.exports = async function createExportPromise() {
 
     return instance.exports;
   } catch (error) {
+    console.log("WebAssembly not found. Attempting to use ASM fallback.");
     // if we have a valid supplied asm.js, return that
     if (asm && asm.generateBls12381KeyPair) {
       return asm;

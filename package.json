@@ -57,9 +57,6 @@
     "webpack": "4.29.4",
     "webpack-cli": "3.1.1"
   },
-  "react-native": {
-    "./wasm_asm_stub.js": "./wasm_asm.js"
-  },
   "husky": {
     "hooks": {
       "commit-msg": "[[ -n $HUSKY_BYPASS ]] || commitlint -E HUSKY_GIT_PARAMS",
