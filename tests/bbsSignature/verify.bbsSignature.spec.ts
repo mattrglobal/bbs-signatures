@@ -22,6 +22,7 @@ import {
   blsVerify,
   sign,
   generateBls12381KeyPair,
+  BlsKeyPair,
 } from "../../lib";
 import { Coder } from "@stablelib/base64";
 
@@ -31,8 +32,12 @@ const base64Decode = (string: string): Uint8Array => {
 };
 
 describe("bbsSignature", () => {
+  let blsKeyPair: BlsKeyPair;
+  beforeAll(async () => {
+    blsKeyPair = generateBls12381KeyPair();
+  });
+
   describe("verify", () => {
-    const blsKeyPair = generateBls12381KeyPair();
     it("should verify valid signature with a single message", () => {
       const BbsPublicKey = bls12381toBbs({
         keyPair: blsKeyPair,
@@ -129,7 +134,6 @@ describe("bbsSignature", () => {
     });
   });
   describe("blsVerify", () => {
-    const blsKeyPair = generateBls12381KeyPair();
     it("should verify valid signature with a single message", () => {
       const request: BlsBbsSignRequest = {
         keyPair: blsKeyPair,

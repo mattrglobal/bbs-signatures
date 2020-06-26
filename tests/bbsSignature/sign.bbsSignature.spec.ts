@@ -24,10 +24,14 @@ import {
 } from "../../lib";
 
 describe("bbsSignature", () => {
-  const blsKeyPair = generateBls12381KeyPair();
-  describe("sign", () => {
-    const bbsKeyPair = bls12381toBbs({ keyPair: blsKeyPair, messageCount: 3 });
+  let blsKeyPair: BlsKeyPair;
+  let bbsKeyPair: BbsKeyPair;
+  beforeAll(async () => {
+    blsKeyPair = generateBls12381KeyPair();
+    bbsKeyPair = bls12381toBbs({ keyPair: blsKeyPair, messageCount: 3 });
+  });
 
+  describe("sign", () => {
     it("should sign a single message", () => {
       const bbsKeyPair = bls12381toBbs({
         keyPair: blsKeyPair,
