@@ -40,13 +40,6 @@ sed -i -e 's/export var /module\.exports\./g' $ASM
 # Copy over package sources
 cp -r src/js/* lib/
 
-# swap to async interface for webpack support
-sed -i -e 's/wasm = require/\/\/ wasm = require/g' $SRC_WASM
-
-# We don't want inline requires
-sed -i -e 's/var wasm;/const crypto = require('\''crypto'\''); let wasm; const requires = { crypto };/g' $SRC_WASM
-sed -i -e 's/return addHeapObject(require(varg0));/return addHeapObject(requires[varg0]);/g' $SRC_WASM
-
 # Polyfill TextDecoder as it causes issues in environments like react native
 sed -i -e 's/const { TextDecoder } = require(String.raw`util`);/const { u8aToString } = require('\''\.\/util'\'');/g' $SRC_WASM
 sed -i -e 's/let cachedTextDecoder = new /\/\/ let cachedTextDecoder = new /g' $SRC_WASM
