@@ -11,7 +11,7 @@
 This repository is the home to a performant multi-message digital signature algorithm implementation which supports
 deriving zero knowledge proofs that enable selective disclosure from the originally signed message set.
 
-BBS+ Signatures are a digital signature algorithm originally born from the work on
+[BBS+ Signatures](https://github.com/mattrglobal/bbs-signatures-spec) are a digital signature algorithm originally born from the work on
 [Short group signatures](https://crypto.stanford.edu/~xb/crypto04a/groupsigs.pdf) by Boneh, Boyen, and Shachum which was
 later improved on in [Constant-Size Dynamic k-TAA](http://web.cs.iastate.edu/~wzhang/teach-552/ReadingList/552-14.pdf)
 as BBS+ and touched on again in section 4.3 in
@@ -25,7 +25,7 @@ BBS+ Signatures allow for multi-message signing whilst producing a single output
 [proof of knowledge](https://en.wikipedia.org/wiki/Proof_of_knowledge) based proof can be produced where only some of
 the originally signed messages are revealed at the discretion of the prover.
 
-For more details on the signature algorithm please refer to [here](https://github.com/mattrglobal/node-bbs-signatures/blob/master/docs/ALGORITHM.md)
+For more details on the signature algorithm please refer to [here](https://github.com/mattrglobal/bbs-signatures-spec).
 
 **Note** the performance of this library in node environments is significantly different than with a native node module, for those requiring the highest level of performance we recommend using [node-bbs-signatures](https://github.com/mattrglobal/node-bbs-signatures).
 
@@ -51,17 +51,13 @@ To use this library in browser via the [unpkg](https://unpkg.com) CDN, include t
 <script type="text/javascript" src="https://unpkg.com/@mattrglobal/bbs-signatures/dist/bbs-signatures.min.js"></script></body>
 ```
 
-### React Native Support
+### Non-WASM Environment Support
 
-**Support is still in-progress**
+Currently [Web Assembly](https://webassembly.org/) support in javascript environments like react native is [not official](https://react-native.canny.io/feature-requests/p/support-wasmwebassembly).
 
-Currently WASM support in react native is [not official](https://react-native.canny.io/feature-requests/p/support-wasmwebassembly) although there are experimentations underway.
+To enable support, this library features an [asm.js](http://asmjs.org/) version of the library that is complied from the [Web Assembly](https://webassembly.org/) module using [wasm2js](https://github.com/WebAssembly/binaryen/blob/master/src/wasm2js.h) from the [binaryen project](https://github.com/WebAssembly/binaryen). When this library is being used in an environment where [Web Assembly](https://webassembly.org/) is not detected this asm.js fall back is used.
 
-There are several different ways in which support can be accomplished
-
-1. Injecting a polyfill of the Web Assembly tool chain such as [WebAssemblyJS](https://github.com/xtuc/webassemblyjs), however experimentation with this library yielded the same issue as seen in [here](https://github.com/xtuc/webassemblyjs/issues/606).
-2. A shim that trees down on to the native WebAssembly implementation provided by the OS, an example of the approach is captured [here](https://github.com/ExodusMovement/react-native-wasm)
-3. Compiling the wasm back into [asm.js](http://asmjs.org/) using the [wasm2js](https://github.com/WebAssembly/binaryen/blob/master/src/wasm2js.h) from [binaryen](https://github.com/WebAssembly/binaryen), note this is currently the preferred option and will be pursued for this library in the short term.
+**Note** the performance of the [asm.js](http://asmjs.org/) is notably slower than its [Web Assembly](https://webassembly.org/) counter part.
 
 ## Element Size
 
