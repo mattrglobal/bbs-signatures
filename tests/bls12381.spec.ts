@@ -12,17 +12,12 @@
  */
 
 import {
-  waitReady,
   generateBls12381KeyPair,
   DEFAULT_BLS12381_PUBLIC_KEY_LENGTH,
   DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
 } from "../lib";
 
 describe("bls12381", () => {
-  beforeAll(async () => {
-    await waitReady();
-  });
-
   it("should be able to generate a key pair", () => {
     const result = generateBls12381KeyPair();
     expect(result).toBeDefined();

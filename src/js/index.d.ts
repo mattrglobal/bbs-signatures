@@ -47,6 +47,3 @@ export function verifyProof(request: BbsVerifyProofRequest): BbsVerifyResult;
 export function blsCreateProof(request: BbsCreateProofRequest): Uint8Array;
 
 export function blsVerifyProof(request: BbsVerifyProofRequest): BbsVerifyResult;
-
-export function isReady(): boolean;
-export function waitReady(): Promise<boolean>;

@@ -12,7 +12,6 @@
  */
 
 import {
-  waitReady,
   generateBls12381KeyPair,
   BbsSignRequest,
   sign,
@@ -28,7 +27,6 @@ describe("bbsSignature", () => {
   let blsKeyPair: BlsKeyPair;
   let bbsKeyPair: BbsKeyPair;
   beforeAll(async () => {
-    await waitReady();
     blsKeyPair = generateBls12381KeyPair();
     bbsKeyPair = bls12381toBbs({ keyPair: blsKeyPair, messageCount: 3 });
   });

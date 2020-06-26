@@ -12,7 +12,6 @@
  */
 
 import {
-  waitReady,
   verify,
   BbsVerifyRequest,
   bls12381toBbs,
@@ -35,7 +34,6 @@ const base64Decode = (string: string): Uint8Array => {
 describe("bbsSignature", () => {
   let blsKeyPair: BlsKeyPair;
   beforeAll(async () => {
-    await waitReady();
     blsKeyPair = generateBls12381KeyPair();
   });
 

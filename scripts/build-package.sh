@@ -29,7 +29,9 @@ node ./scripts/pack-wasm-base64.js
 echo "Building asm.js version"
 $WASM_2_JS $OPT --output $ASM 
 
-# cleanup generated output
+# WASM2JS only supports generation of es6
+# Whereas node environments require es5
+# Hence the folloing converts the import and export syntax
 sed -i -e 's/import {/\/\/ import {/g' $ASM
 sed -i -e 's/function asmFunc/var bbs = require('\''\.\/wasm'\''); function asmFunc/g' $ASM
 sed -i -e 's/{abort.*},memasmFunc/bbs, memasmFunc/g' $ASM
@@ -45,36 +47,23 @@ sed -i -e 's/wasm = require/\/\/ wasm = require/g' $SRC_WASM
 sed -i -e 's/var wasm;/const crypto = require('\''crypto'\''); let wasm; const requires = { crypto };/g' $SRC_WASM
 sed -i -e 's/return addHeapObject(require(varg0));/return addHeapObject(requires[varg0]);/g' $SRC_WASM
 
-# Polyfill TextDecoder as it causes issues in RN
+# Polyfill TextDecoder as it causes issues in environments like react native
 sed -i -e 's/const { TextDecoder } = require(String.raw`util`);/const { u8aToString } = require('\''\.\/util'\'');/g' $SRC_WASM
 sed -i -e 's/let cachedTextDecoder = new /\/\/ let cachedTextDecoder = new /g' $SRC_WASM
 sed -i -e 's/cachedTextDecoder\.decode/u8aToString/g' $SRC_WASM
 
-# this is where we get the actual bg file
+# Remove generated statements that handling the loading of the WASM module
 sed -i -e 's/const path = require/\/\/ const path = require/g' $SRC_WASM
 sed -i -e 's/const bytes = require/\/\/ const bytes = require/g' $SRC_WASM
 sed -i -e 's/const wasmModule =/\/\/ const wasmModule =/g' $SRC_WASM
 sed -i -e 's/const wasmInstance =/\/\/ const wasmInstance =/g' $SRC_WASM
 sed -i -e 's/wasm = wasmInstance/\/\/ wasm = wasmInstance/g' $SRC_WASM
 
-# construct our promise and add ready helpers (WASM)
+# Replace with a helper function that support loading the asm.js
+# version as a fall back
 echo "
-module.exports.abort = function () { throw new Error('abort'); };
-
-const createPromise = require('./wasm_promise');
-const wasmPromise = createPromise().catch(() => null);
-
-module.exports.isReady = function () { return !!wasm; }
-module.exports.waitReady = function () { return wasmPromise.then(() => !!wasm); }
-
-wasmPromise.then((_wasm) => { wasm = _wasm });
+wasm = require('./wasm_helper')();
 " >> $SRC_WASM
-
-# add extra methods to type definitions
-echo "
-export function isReady(): boolean;
-export function waitReady(): Promise<boolean>;
-" >> $DEF
 
 # Delete the gitignore and readme automatically created by wasm-pack
 rm lib/package.json lib/.gitignore lib/README.md

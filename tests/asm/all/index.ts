@@ -16,10 +16,6 @@ const tests: TestType = {
   ...verifyProof,
 };
 
-function beforeAll(): Promise<boolean> {
-  return wasm.waitReady();
-}
-
 function runAll(): void {
   const failed: string[] = [];
   let count = 0;
@@ -50,8 +46,6 @@ function runAll(): void {
 
 function run(): void {
   (async () => {
-    await beforeAll();
-
     runAll();
   })().catch((error) => {
     console.error(error);
@@ -59,4 +53,4 @@ function run(): void {
   });
 }
 
-export { beforeAll, runAll, run, tests, wasm };
+export { runAll, run, tests, wasm };
