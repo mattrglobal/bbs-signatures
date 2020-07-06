@@ -19,9 +19,22 @@ module.exports.DEFAULT_BLS12381_PUBLIC_KEY_LENGTH = 96;
 
 module.exports.BBS_SIGNATURE_LENGTH = 112;
 
-module.exports.generateBls12381KeyPair = wasm.generateBls12381KeyPair;
+module.exports.generateBls12381KeyPair = (seed) => {
+  var result = wasm.generateBls12381KeyPair(seed);
+  return {
+    secretKey: result.secretKey ? new Uint8Array(result.secretKey) : undefined,
+    publicKey: new Uint8Array(result.publicKey),
+  };
+};
 
-module.exports.bls12381toBbs = wasm.bls12381toBbs;
+module.exports.bls12381toBbs = (request) => {
+  var result = wasm.bls12381toBbs(request);
+  return {
+    publicKey: new Uint8Array(result.publicKey),
+    secretKey: result.secretKey ? new Uint8Array(result.secretKey) : undefined,
+    messageCount: result.messageCount,
+  };
+};
 
 module.exports.Bls12381ToBbsRequest = wasm.Bls12381ToBbsRequest;
 
