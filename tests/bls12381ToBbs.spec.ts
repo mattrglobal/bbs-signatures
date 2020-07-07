@@ -25,6 +25,8 @@ describe("bls12381toBbs", () => {
     expect(bbsKeyPair.messageCount).toEqual(10);
     expect(bbsKeyPair.secretKey).toBeDefined();
     expect(bbsKeyPair.publicKey).toBeDefined();
+    expect(bbsKeyPair.publicKey).toBeInstanceOf(Uint8Array);
+    expect(bbsKeyPair.secretKey).toBeInstanceOf(Uint8Array);
   });
 
   it("should be able to convert bls12381 public key to bbs key", () => {
@@ -42,6 +44,7 @@ describe("bls12381toBbs", () => {
     expect(bbsKeyPair.messageCount).toEqual(10);
     expect(bbsKeyPair.secretKey).toBeUndefined();
     expect(bbsKeyPair.publicKey).toBeDefined();
+    expect(bbsKeyPair.publicKey).toBeInstanceOf(Uint8Array);
   });
 
   it("should throw error when message count 0", () => {

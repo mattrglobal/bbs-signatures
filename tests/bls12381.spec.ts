@@ -50,8 +50,10 @@ describe("bls12381", () => {
         "base64"
       )
     );
-    expect(new Buffer(result.secretKey as Uint8Array)).toEqual(
-      new Buffer("YoASulEi3WV7yfJ+yWctJRCbHfr7WjK7JjcMrRqbL6E=", "base64")
+    expect(result.secretKey as Uint8Array).toEqual(
+      new Uint8Array(
+        new Buffer("YoASulEi3WV7yfJ+yWctJRCbHfr7WjK7JjcMrRqbL6E=", "base64")
+      )
     );
   });
 });

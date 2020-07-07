@@ -42,6 +42,7 @@ describe("bbsSignature", () => {
         messages: ["ExampleMessage"],
       };
       const signature = sign(request);
+      expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
@@ -51,6 +52,7 @@ describe("bbsSignature", () => {
         messages: ["ExampleMessage", "ExampleMessage2", "ExampleMessage3"],
       };
       const signature = sign(request);
+      expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
@@ -60,6 +62,7 @@ describe("bbsSignature", () => {
         messages: ["ExampleMessage", "ExampleMessage"],
       };
       const signature = sign(request);
+      expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
@@ -95,6 +98,7 @@ describe("bbsSignature", () => {
         messages: ["ExampleMessage"],
       };
       const signature = blsSign(request);
+      expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
@@ -104,6 +108,7 @@ describe("bbsSignature", () => {
         messages: ["ExampleMessage", "ExampleMessage2", "ExampleMessage3"],
       };
       const signature = blsSign(request);
+      expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
