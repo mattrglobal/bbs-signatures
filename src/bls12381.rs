@@ -99,6 +99,9 @@ pub fn bls_generate_key(seed: Option<Vec<u8>>) -> JsValue {
 #[wasm_bindgen(js_name = bls12381toBbs)]
 pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
     let request: Bls12381ToBbsRequest = request.try_into()?;
+    if request.messageCount == 0 {
+        return Err(JsValue::from_str("Failed to convert key"))
+    }
     if let Some(dpk) = request.keyPair.publicKey {
         let pk = dpk.to_public_key(request.messageCount)?;
         let key_pair = BbsKeyPair {

@@ -99,7 +99,7 @@ pub fn bbs_sign(request: JsValue) -> Result<JsValue, JsValue> {
     let sk = request
         .keyPair
         .secretKey
-        .ok_or_else(|| JsValue::from("Secret Key must be set"))?;
+        .ok_or_else(|| JsValue::from("Failed to sign"))?;
     let messages: Vec<SignatureMessage> = request
         .messages
         .iter()

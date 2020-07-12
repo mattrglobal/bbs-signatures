@@ -71,5 +71,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "optionalDependencies": {
+    "@mattrglobal/node-bbs-signatures": "0.9.0"
   }
 }

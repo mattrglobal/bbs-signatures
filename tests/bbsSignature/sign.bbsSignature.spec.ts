@@ -75,7 +75,7 @@ describe("bbsSignature", () => {
         keyPair: bbsKey,
         messages: ["ExampleMessage"],
       };
-      expect(() => sign(request)).toThrowError("Secret Key must be set");
+      expect(() => sign(request)).toThrowError("Failed to sign");
     });
 
     it("should throw error if public key does not support message number", () => {
