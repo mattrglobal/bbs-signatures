@@ -11,8 +11,7 @@
  * limitations under the License.
  */
 
-const nodejs =
-  typeof process !== "undefined" && process.versions && process.versions.node;
+const nodejs = process && process.versions && process.versions.node;
 
 let useWasm = !nodejs || process.env.BBS_REQUIRE_WASM;
 
