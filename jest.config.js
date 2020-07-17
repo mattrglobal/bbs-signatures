@@ -21,6 +21,7 @@ module.exports = {
   testRegex: [".spec.ts$"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   coveragePathIgnorePatterns: ["<rootDir>/__tests__", "<rootDir>/lib"],
+  testTimeout: 20000,
   verbose: true,
   name: pack.name,
   displayName: pack.name,

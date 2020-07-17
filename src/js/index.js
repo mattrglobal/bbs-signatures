@@ -11,15 +11,24 @@
  * limitations under the License.
  */
 
+const { BBS_SIGNATURES_MODES, FAILED_TO_LOAD_NODE_MODULE } = require("./util");
+
 const nodejs = process && process.versions && process.versions.node;
 
-let useWasm = !nodejs || process.env.BBS_REQUIRE_WASM;
+let useWasm = !(
+  nodejs &&
+  (!process.env.BBS_SIGNATURES_MODE ||
+    process.env.BBS_SIGNATURES_MODE === BBS_SIGNATURES_MODES.nodejs)
+);
 
 try {
   if (!useWasm) {
     module.exports = require("@mattrglobal/node-bbs-signatures");
   }
 } catch {
+  if (process.env.BBS_SIGNATURES_MODE === BBS_SIGNATURES_MODES.nodejs) {
+    throw new Error(FAILED_TO_LOAD_NODE_MODULE);
+  }
   useWasm = true;
 }
 

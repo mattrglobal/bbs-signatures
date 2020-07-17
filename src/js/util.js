@@ -36,3 +36,21 @@ function u8aToString(value) {
 }
 
 exports.u8aToString = u8aToString;
+
+/**
+ * Enumeration of possible values for setting the
+ * BBS_SIGNATURES_MODE environment variable
+ */
+exports.BBS_SIGNATURES_MODES = {
+  nodejs: "NODE_JS_MODULE",
+  wasm: "WASM",
+  asmjs: "ASM_JS",
+};
+
+/**
+ * Global errors
+ */
+exports.WEB_ASSEMBLY_NOT_FOUND_ERROR = "WebAssembly support not detected";
+exports.FAILED_INITIALIZE_ERROR = "ERROR: Unable to initialize bbs signatures";
+exports.FAILED_TO_LOAD_NODE_MODULE =
+  "ERROR: Unable to initialize bbs signatures with node module that was requested with the `BBS_SIGNATURES_MODE` environment variable";
