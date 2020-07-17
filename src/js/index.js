@@ -11,45 +11,72 @@
  * limitations under the License.
  */
 
-const wasm = require("./wasm");
+const { BBS_SIGNATURES_MODES, FAILED_TO_LOAD_NODE_MODULE } = require("./util");
 
-module.exports.DEFAULT_BLS12381_PRIVATE_KEY_LENGTH = 32;
+const nodejs = process && process.versions && process.versions.node;
 
-module.exports.DEFAULT_BLS12381_PUBLIC_KEY_LENGTH = 96;
+let useWasm = !(
+  nodejs &&
+  (!process.env.BBS_SIGNATURES_MODE ||
+    process.env.BBS_SIGNATURES_MODE === BBS_SIGNATURES_MODES.nodejs)
+);
 
-module.exports.BBS_SIGNATURE_LENGTH = 112;
+try {
+  if (!useWasm) {
+    module.exports = require("@mattrglobal/node-bbs-signatures");
+  }
+} catch {
+  if (process.env.BBS_SIGNATURES_MODE === BBS_SIGNATURES_MODES.nodejs) {
+    throw new Error(FAILED_TO_LOAD_NODE_MODULE);
+  }
+  useWasm = true;
+}
 
-module.exports.generateBls12381KeyPair = (seed) => {
-  var result = wasm.generateBls12381KeyPair(seed);
-  return {
-    secretKey: result.secretKey ? new Uint8Array(result.secretKey) : undefined,
-    publicKey: new Uint8Array(result.publicKey),
+if (useWasm) {
+  const wasm = require("./wasm");
+
+  module.exports.DEFAULT_BLS12381_PRIVATE_KEY_LENGTH = 32;
+
+  module.exports.DEFAULT_BLS12381_PUBLIC_KEY_LENGTH = 96;
+
+  module.exports.BBS_SIGNATURE_LENGTH = 112;
+
+  module.exports.generateBls12381KeyPair = (seed) => {
+    var result = wasm.generateBls12381KeyPair(seed ? seed : null);
+    return {
+      secretKey: result.secretKey
+        ? new Uint8Array(result.secretKey)
+        : undefined,
+      publicKey: new Uint8Array(result.publicKey),
+    };
   };
-};
 
-module.exports.bls12381toBbs = (request) => {
-  var result = wasm.bls12381toBbs(request);
-  return {
-    publicKey: new Uint8Array(result.publicKey),
-    secretKey: result.secretKey ? new Uint8Array(result.secretKey) : undefined,
-    messageCount: result.messageCount,
+  module.exports.bls12381toBbs = (request) => {
+    var result = wasm.bls12381toBbs(request);
+    return {
+      publicKey: new Uint8Array(result.publicKey),
+      secretKey: result.secretKey
+        ? new Uint8Array(result.secretKey)
+        : undefined,
+      messageCount: result.messageCount,
+    };
   };
-};
 
-module.exports.Bls12381ToBbsRequest = wasm.Bls12381ToBbsRequest;
+  module.exports.Bls12381ToBbsRequest = wasm.Bls12381ToBbsRequest;
 
-module.exports.sign = wasm.sign;
+  module.exports.sign = wasm.sign;
 
-module.exports.blsSign = wasm.blsSign;
+  module.exports.blsSign = wasm.blsSign;
 
-module.exports.verify = wasm.verify;
+  module.exports.verify = wasm.verify;
 
-module.exports.blsVerify = wasm.blsVerify;
+  module.exports.blsVerify = wasm.blsVerify;
 
-module.exports.createProof = wasm.createProof;
+  module.exports.createProof = wasm.createProof;
 
-module.exports.blsCreateProof = wasm.blsCreateProof;
+  module.exports.blsCreateProof = wasm.blsCreateProof;
 
-module.exports.verifyProof = wasm.verifyProof;
+  module.exports.verifyProof = wasm.verifyProof;
 
-module.exports.blsVerifyProof = wasm.blsVerifyProof;
+  module.exports.blsVerifyProof = wasm.blsVerifyProof;
+}
