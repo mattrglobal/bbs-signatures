@@ -56,7 +56,7 @@ fn bls_secret_key_to_bbs_key_test() {
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
 fn bls_generate_key_from_seed_test() {
-    let key = bls_generate_key(Some(vec![0u8; 16]));
+    let key = bls_generate_g2_key(Some(vec![0u8; 16]));
 
     assert!(key.is_object());
     let obj = js_sys::Object::try_from(&key);
@@ -99,7 +99,7 @@ fn bls_generate_key_from_seed_test() {
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
 fn bls_generate_key_test() {
-    let key = bls_generate_key(None);
+    let key = bls_generate_g2_key(None);
 
     assert!(key.is_object());
     let obj = js_sys::Object::try_from(&key);

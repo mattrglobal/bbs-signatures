@@ -26,21 +26,21 @@ use std::{
 };
 use wasm_bindgen::prelude::*;
 
-wasm_impl!(BbsSignRequest, keyPair: BbsKeyPair, messages: Vec<String>);
+wasm_impl!(BbsSignRequest, keyPair: BbsKeyPair, messages: Vec<Vec<u8>>);
 
 wasm_impl!(
     BbsVerifyRequest,
     publicKey: PublicKey,
     signature: Signature,
-    messages: Vec<String>
+    messages: Vec<Vec<u8>>
 );
 
 wasm_impl!(
     BlindSignatureContextRequest,
     publicKey: PublicKey,
-    messages: Vec<String>,
+    messages: Vec<Vec<u8>>,
     blinded: Vec<usize>,
-    nonce: String
+    nonce: Vec<u8>
 );
 
 wasm_impl!(
@@ -58,7 +58,7 @@ wasm_impl!(
     challengeHash: ProofChallenge,
     publicKey: PublicKey,
     blinded: BTreeSet<usize>,
-    nonce: String
+    nonce: Vec<u8>
 );
 
 wasm_impl!(
@@ -66,7 +66,7 @@ wasm_impl!(
     commitment: Commitment,
     publicKey: PublicKey,
     secretKey: SecretKey,
-    messages: Vec<String>,
+    messages: Vec<Vec<u8>>,
     known: Vec<usize>
 );
 
@@ -80,17 +80,17 @@ wasm_impl!(
     CreateProofRequest,
     signature: Signature,
     publicKey: PublicKey,
-    messages: Vec<String>,
+    messages: Vec<Vec<u8>>,
     revealed: Vec<usize>,
-    nonce: String
+    nonce: Vec<u8>
 );
 
 wasm_impl!(
     VerifyProofContext,
     proof: PoKOfSignatureProofWrapper,
     publicKey: PublicKey,
-    messages: Vec<String>,
-    nonce: String
+    messages: Vec<Vec<u8>>,
+    nonce: Vec<u8>
 );
 
 #[wasm_bindgen(js_name = sign)]

@@ -18,6 +18,8 @@ use bbs::prelude::*;
 use serde::{
     Deserialize, Serialize,
 };
+use pairing_plus::{bls12_381::{Fr, G1, G2, Bls12}, serdes::SerDes, hash_to_field::BaseFromRO, CurveProjective};
+use rand::{thread_rng, RngCore};
 use std::{
     collections::{BTreeMap, BTreeSet},
     convert::TryInto,
@@ -52,31 +54,31 @@ wasm_impl!(
 wasm_impl!(
     BlsBbsSignRequest,
     keyPair: BlsKeyPair,
-    messages: Vec<String>
+    messages: Vec<Vec<u8>>
 );
 
 wasm_impl!(
     BlsBbsVerifyRequest,
     publicKey: DeterministicPublicKey,
     signature: Signature,
-    messages: Vec<String>
+    messages: Vec<Vec<u8>>
 );
 
 wasm_impl!(
     BlsCreateProofRequest,
     signature: Signature,
     publicKey: DeterministicPublicKey,
-    messages: Vec<String>,
+    messages: Vec<Vec<u8>>,
     revealed: Vec<usize>,
-    nonce: String
+    nonce: Vec<u8>
 );
 
 wasm_impl!(
     BlsVerifyProofContext,
     proof: PoKOfSignatureProofWrapper,
     publicKey: DeterministicPublicKey,
-    messages: Vec<String>,
-    nonce: String
+    messages: Vec<Vec<u8>>,
+    nonce: Vec<u8>
 );
 
 /// Generate a BLS 12-381 key pair.
@@ -85,14 +87,20 @@ wasm_impl!(
 ///
 /// returned vector is the concatenation of first the private key (32 bytes)
 /// followed by the public key (96) bytes.
-#[wasm_bindgen(js_name = generateBls12381KeyPair)]
-pub fn bls_generate_key(seed: Option<Vec<u8>>) -> JsValue {
-    let (pk, sk) = DeterministicPublicKey::new(seed.map(|s| KeyGenOption::UseSeed(s)));
-    let keypair = BlsKeyPair {
-        publicKey: Some(pk),
-        secretKey: Some(sk),
-    };
-    serde_wasm_bindgen::to_value(&keypair).unwrap()
+#[wasm_bindgen(js_name = generateG2KeyPair)]
+pub fn bls_generate_g2_key(seed: Option<Vec<u8>>) -> JsValue {
+    bls_generate_keypair::<G2>(seed)
+}
+
+/// Generate a BLS 12-381 key pair.
+///
+/// * seed: UIntArray with 32 element
+///
+/// returned vector is the concatenation of first the private key (32 bytes)
+/// followed by the public key (48) bytes.
+#[wasm_bindgen(js_name = generateG1KeyPair)]
+pub fn bls_generate_g1_key(seed: Option<Vec<u8>>) -> JsValue {
+    bls_generate_keypair::<G1>(seed)
 }
 
 /// Get the BBS public key associated with the private key
@@ -264,4 +272,45 @@ pub fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
         verified: Verifier::verify_signature_pok(&proof_request, &signature_proof, &nonce).is_ok(),
         error: None
     }).unwrap())
+}
+
+fn bls_generate_keypair<G: CurveProjective<Engine = Bls12, Scalar = Fr> + SerDes>(seed: Option<Vec<u8>>) -> JsValue {
+    let seed_data = match seed {
+        Some(s) => s.to_vec(),
+        None => {
+            let mut rng = thread_rng();
+            let mut s = vec![0u8, 32];
+            rng.fill_bytes(s.as_mut_slice());
+            s
+        }
+    };
+
+    let sk = gen_sk(seed_data.as_slice());
+    let mut pk = G::one();
+    pk.mul_assign(sk);
+
+    let mut sk_bytes = Vec::new();
+    let mut pk_bytes = Vec::new();
+    sk.serialize(&mut sk_bytes, true).unwrap();
+    pk.serialize(&mut pk_bytes, true).unwrap();
+
+    let mut map = BTreeMap::new();
+    map.insert("publicKey", pk_bytes);
+    map.insert("secretKey", sk_bytes);
+    serde_wasm_bindgen::to_value(&map).unwrap()
+}
+
+fn gen_sk(msg: &[u8]) -> Fr {
+    use sha2::digest::generic_array::{GenericArray, typenum::U48};
+    const SALT: &[u8] = b"BLS-SIG-KEYGEN-SALT-";
+    // copy of `msg` with appended zero byte
+    let mut msg_prime = Vec::<u8>::with_capacity(msg.as_ref().len() + 1);
+    msg_prime.extend_from_slice(msg.as_ref());
+    msg_prime.extend_from_slice(&[0]);
+    // `result` has enough length to hold the output from HKDF expansion
+    let mut result = GenericArray::<u8, U48>::default();
+    assert!(hkdf::Hkdf::<sha2::Sha256>::new(Some(SALT), &msg_prime[..])
+        .expand(&[0, 48], &mut result)
+        .is_ok());
+    Fr::from_okm(&result)
 }
