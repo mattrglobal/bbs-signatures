@@ -101,7 +101,7 @@ pub fn bbs_sign(request: JsValue) -> Result<JsValue, JsValue> {
         .collect();
     match Signature::new(messages.as_slice(), &sk, &request.keyPair.publicKey) {
         Ok(sig) => Ok(serde_wasm_bindgen::to_value(&sig).unwrap()),
-        Err(e) => Err(JsValue::from(&format!("{:?}", e))),
+        Err(e) => Err(JsValue::from("Failed to sign")),
     }
 }
 

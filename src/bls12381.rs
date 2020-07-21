@@ -87,7 +87,7 @@ wasm_impl!(
 ///
 /// returned vector is the concatenation of first the private key (32 bytes)
 /// followed by the public key (96) bytes.
-#[wasm_bindgen(js_name = generateG2KeyPair)]
+#[wasm_bindgen(js_name = generateBls12381G2KeyPair)]
 pub fn bls_generate_g2_key(seed: Option<Vec<u8>>) -> JsValue {
     bls_generate_keypair::<G2>(seed)
 }
@@ -98,7 +98,7 @@ pub fn bls_generate_g2_key(seed: Option<Vec<u8>>) -> JsValue {
 ///
 /// returned vector is the concatenation of first the private key (32 bytes)
 /// followed by the public key (48) bytes.
-#[wasm_bindgen(js_name = generateG1KeyPair)]
+#[wasm_bindgen(js_name = generateBls12381G1KeyPair)]
 pub fn bls_generate_g1_key(seed: Option<Vec<u8>>) -> JsValue {
     bls_generate_keypair::<G1>(seed)
 }

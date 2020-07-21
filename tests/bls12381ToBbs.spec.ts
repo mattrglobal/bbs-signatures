@@ -11,11 +11,11 @@
  * limitations under the License.
  */
 
-import { generateBls12381KeyPair, bls12381toBbs, BlsKeyPair } from "../lib";
+import { generateBls12381G2KeyPair, bls12381toBbs, BlsKeyPair } from "../lib";
 
 describe("bls12381toBbs", () => {
   it("should be able to convert bls12381 key pair to bbs key", () => {
-    const blsKeyPair = generateBls12381KeyPair();
+    const blsKeyPair = generateBls12381G2KeyPair();
     expect(blsKeyPair).toBeDefined();
     const bbsKeyPair = bls12381toBbs({
       keyPair: blsKeyPair,
@@ -30,7 +30,7 @@ describe("bls12381toBbs", () => {
   });
 
   it("should be able to convert bls12381 public key to bbs key", () => {
-    const blsKeyPair = generateBls12381KeyPair();
+    const blsKeyPair = generateBls12381G2KeyPair();
     expect(blsKeyPair).toBeDefined();
     const blsPublicKey: BlsKeyPair = {
       publicKey: blsKeyPair.publicKey,
@@ -48,7 +48,7 @@ describe("bls12381toBbs", () => {
   });
 
   it("should throw error when message count 0", () => {
-    const blsKeyPair = generateBls12381KeyPair();
+    const blsKeyPair = generateBls12381G2KeyPair();
     expect(blsKeyPair).toBeDefined();
 
     expect(() =>

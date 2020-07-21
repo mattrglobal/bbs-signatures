@@ -12,48 +12,117 @@
  */
 
 import {
-  generateBls12381KeyPair,
-  DEFAULT_BLS12381_PUBLIC_KEY_LENGTH,
+  generateBls12381G1KeyPair,
+  generateBls12381G2KeyPair,
+  DEFAULT_BLS12381_G1_PUBLIC_KEY_LENGTH,
+  DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH,
   DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
 } from "../lib";
 
 describe("bls12381", () => {
-  it("should be able to generate a key pair", () => {
-    const result = generateBls12381KeyPair();
-    expect(result).toBeDefined();
-    expect(result.publicKey).toBeDefined();
-    expect(result.secretKey).toBeDefined();
-    expect(result.secretKey?.length as number).toEqual(
-      DEFAULT_BLS12381_PRIVATE_KEY_LENGTH
-    );
-    expect(result.publicKey.length).toEqual(DEFAULT_BLS12381_PUBLIC_KEY_LENGTH);
+  [
+    {
+      field: "G1",
+      generateKeyFn: generateBls12381G1KeyPair,
+      secretKeyLength: DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
+      publicKeyLength: DEFAULT_BLS12381_G1_PUBLIC_KEY_LENGTH,
+    },
+    {
+      field: "G2",
+      generateKeyFn: generateBls12381G2KeyPair,
+      secretKeyLength: DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
+      publicKeyLength: DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH,
+    },
+  ].forEach((value) => {
+    it(`should be able to generate a key pair in ${value.field} field`, () => {
+      const result = value.generateKeyFn();
+      expect(result).toBeDefined();
+      expect(result.publicKey).toBeDefined();
+      expect(result.secretKey).toBeDefined();
+      expect(result.secretKey?.length as number).toEqual(value.secretKeyLength);
+      expect(result.publicKey.length).toEqual(value.publicKeyLength);
+    });
   });
 
-  it("should be able to generate a key pair with a seed", () => {
-    const result = generateBls12381KeyPair(
-      new Uint8Array(
-        new Buffer(
+  [
+    {
+      field: "G1",
+      generateKeyFn: generateBls12381G1KeyPair,
+      secretKeyLength: DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
+      publicKeyLength: DEFAULT_BLS12381_G1_PUBLIC_KEY_LENGTH,
+    },
+    {
+      field: "G2",
+      generateKeyFn: generateBls12381G2KeyPair,
+      secretKeyLength: DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
+      publicKeyLength: DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH,
+    },
+  ].forEach((value) => {
+    it(`should be able to generate a key pairs in ${value.field} field without seed which are random`, () => {
+      const keyPair1 = value.generateKeyFn();
+      const keyPair2 = value.generateKeyFn();
+      expect(keyPair1).toBeDefined();
+      expect(keyPair2).toBeDefined();
+      expect(
+        (keyPair1.secretKey as Uint8Array) ===
+          (keyPair2.secretKey as Uint8Array)
+      ).toBeFalsy();
+      expect(keyPair1.publicKey === keyPair2.publicKey).toBeFalsy();
+    });
+  });
+
+  [
+    {
+      field: "G1",
+      generateKeyFn: generateBls12381G1KeyPair,
+      secretKeyLength: DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
+      publicKeyLength: DEFAULT_BLS12381_G1_PUBLIC_KEY_LENGTH,
+      seed: new Uint8Array(
+        Buffer.from(
           "H297BpoOgkfpXcxr1fJyQRiNx1+ZekeQ+OU/AYV/lVxaPXXhFBIbxeIU8kIAAX68cwQ=",
           "base64"
         )
-      )
-    );
-    expect(result.publicKey).toBeDefined();
-    expect(result.secretKey).toBeDefined();
-    expect(result.secretKey?.length as number).toEqual(
-      DEFAULT_BLS12381_PRIVATE_KEY_LENGTH
-    );
-    expect(result.publicKey.length).toEqual(DEFAULT_BLS12381_PUBLIC_KEY_LENGTH);
-    expect(new Buffer(result.publicKey)).toEqual(
-      new Buffer(
-        "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pb",
-        "base64"
-      )
-    );
-    expect(result.secretKey as Uint8Array).toEqual(
-      new Uint8Array(
-        new Buffer("YoASulEi3WV7yfJ+yWctJRCbHfr7WjK7JjcMrRqbL6E=", "base64")
-      )
-    );
+      ),
+      secretKey: new Uint8Array(
+        Buffer.from("Cm550dHeqo5I/dVC/bXD9s5Cx8vnyhV/gm7KO5UuviE=", "base64")
+      ),
+      publicKey: new Uint8Array(
+        Buffer.from(
+          "ufHHJwY9/xjrtHgGyQD1F9zNRJqiB4zhSXDEBC/MJrNuXJFwI+ILxu2uPASyd5Vf",
+          "base64"
+        )
+      ),
+    },
+    {
+      field: "G2",
+      generateKeyFn: generateBls12381G2KeyPair,
+      secretKeyLength: DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
+      publicKeyLength: DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH,
+      seed: new Uint8Array(
+        Buffer.from(
+          "H297BpoOgkfpXcxr1fJyQRiNx1+ZekeQ+OU/AYV/lVxaPXXhFBIbxeIU8kIAAX68cwQ=",
+          "base64"
+        )
+      ),
+      secretKey: new Uint8Array(
+        Buffer.from("Cm550dHeqo5I/dVC/bXD9s5Cx8vnyhV/gm7KO5UuviE=", "base64")
+      ),
+      publicKey: new Uint8Array(
+        Buffer.from(
+          "pQro1uqpvUPM31sr+jHffz7+KJIpA3kFen4SoKATURRgo7pk582aaqIxSinWsgHDB9j9dwxYRbC3q2ZmICR2OVMX3FHW9LZV2QAauTYFn7gEra1BSeKhdKDpzBxPjI36",
+          "base64"
+        )
+      ),
+    },
+  ].forEach((value) => {
+    it(`should be able to generate a key pair with a seed in ${value.field} field`, () => {
+      const result = value.generateKeyFn(value.seed);
+      expect(result.publicKey).toBeDefined();
+      expect(result.secretKey).toBeDefined();
+      expect(result.secretKey?.length as number).toEqual(value.secretKeyLength);
+      expect(result.publicKey.length).toEqual(value.publicKeyLength);
+      expect(result.secretKey as Uint8Array).toEqual(value.secretKey);
+      expect(result.publicKey).toEqual(value.publicKey);
+    });
   });
 });

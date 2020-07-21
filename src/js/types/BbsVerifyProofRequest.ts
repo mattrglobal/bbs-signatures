@@ -26,9 +26,9 @@ export interface BbsVerifyProofRequest {
   /**
    * Revealed messages to verify (TODO maybe rename this field??)
    */
-  readonly messages: readonly string[];
+  readonly messages: readonly Uint8Array[];
   /**
    * Nonce included in the proof for the un-revealed attributes (OPTIONAL)
    */
-  readonly nonce: string;
+  readonly nonce: Uint8Array;
 }

@@ -26,7 +26,7 @@ export interface BbsCreateProofRequest {
   /**
    * The messages that were originally signed
    */
-  readonly messages: readonly string[];
+  readonly messages: readonly Uint8Array[];
   /**
    * The zero based indicies of which messages to reveal
    */
@@ -34,5 +34,5 @@ export interface BbsCreateProofRequest {
   /**
    * A nonce for the resulting proof
    */
-  readonly nonce: string;
+  readonly nonce: Uint8Array;
 }

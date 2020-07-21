@@ -38,5 +38,5 @@ export interface BbsVerifyBlindSignContextRequest {
   /**
    * A nonce for the resulting proof
    */
-  readonly nonce: string;
+  readonly nonce: Uint8Array;
 }
