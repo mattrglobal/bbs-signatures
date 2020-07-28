@@ -71,6 +71,58 @@ Currently [Web Assembly](https://webassembly.org/) support in javascript environ
 
 To enable support, this library features an [asm.js](http://asmjs.org/) version of the library that is complied from the [Web Assembly](https://webassembly.org/) module using [wasm2js](https://github.com/WebAssembly/binaryen/blob/master/src/wasm2js.h) from the [binaryen project](https://github.com/WebAssembly/binaryen). When this library is being used in an environment where [Web Assembly](https://webassembly.org/) is not detected this asm.js fall back is used.
 
+## Usage
+
+See the [sample](./sample) directory for a runnable demo's.
+
+The following is a short sample on how to use the API
+
+```typescript
+import {
+  generateBls12381KeyPair,
+  blsSign,
+  blsVerify,
+  blsCreateProof,
+  blsVerifyProof,
+} from "@mattrglobal/bbs-signatures";
+
+//Generate a new key pair
+const keyPair = generateBls12381KeyPair();
+
+//Set of messages we wish to sign
+const messages = ["message1", "message2"];
+
+//Create the signature
+const signature = blsSign({
+  keyPair,
+  messages: messages,
+});
+
+//Verify the signature
+const isVerified = blsVerify({
+  publicKey: keyPair.publicKey,
+  messages: messages,
+  signature,
+});
+
+//Derive a proof from the signature revealing the first message
+const proof = blsCreateProof({
+  signature,
+  publicKey: keyPair.publicKey,
+  messages,
+  nonce: "nonce",
+  revealed: [0],
+});
+
+//Verify the created proof
+const isProofVerified = blsVerifyProof({
+  proof,
+  publicKey: keyPair.publicKey,
+  messages: messages.slice(0, 1),
+  nonce: "nonce",
+});
+```
+
 ## Element Size
 
 Within a digital signature there are several elements for which it is useful to know the size, the following table
