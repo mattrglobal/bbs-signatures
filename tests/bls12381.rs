@@ -15,7 +15,7 @@ fn bls_public_key_to_bbs_key_test() {
     let (dpk, _) = DeterministicPublicKey::new(None);
     let request = Bls12381ToBbsRequest {
         keyPair: BlsKeyPair {
-            publicKey: Some(dpk),
+            publicKey: Some(dpk.to_bytes_compressed_form().to_vec()),
             secretKey: None,
         },
         messageCount: 5,

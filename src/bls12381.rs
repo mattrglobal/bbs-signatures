@@ -34,7 +34,7 @@ wasm_impl!(
     #[allow(non_snake_case)]
     #[derive(Debug, Deserialize, Serialize)]
     BlsKeyPair,
-    publicKey: Option<DeterministicPublicKey>,
+    publicKey: Option<Vec<u8>>,
     secretKey: Option<SecretKey>
 );
 
@@ -110,7 +110,8 @@ pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
     if request.messageCount == 0 {
         return Err(JsValue::from_str("Failed to convert key"))
     }
-    if let Some(dpk) = request.keyPair.publicKey {
+    if let Some(dpk_bytes) = request.keyPair.publicKey {
+        let dpk = DeterministicPublicKey::from(array_ref![dpk_bytes, 0, G2_COMPRESSED_SIZE]);
         let pk = dpk.to_public_key(request.messageCount)?;
         let key_pair = BbsKeyPair {
             publicKey: pk,
@@ -136,7 +137,9 @@ pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
 #[wasm_bindgen(js_name = blsSign)]
 pub fn bls_sign(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BlsBbsSignRequest = request.try_into()?;
-    let pk_res = request.keyPair.publicKey.unwrap().to_public_key(request.messages.len());
+    let dpk_bytes = request.keyPair.publicKey.unwrap();
+    let dpk = DeterministicPublicKey::from(array_ref![dpk_bytes, 0, G2_COMPRESSED_SIZE]);
+    let pk_res = dpk.to_public_key(request.messages.len());
     let pk;
     match pk_res {
         Err(_) => return Err(JsValue::from_str("Failed to convert key")),
@@ -289,15 +292,14 @@ fn bls_generate_keypair<G: CurveProjective<Engine = Bls12, Scalar = Fr> + SerDes
     let mut pk = G::one();
     pk.mul_assign(sk);
 
-    let mut sk_bytes = Vec::new();
     let mut pk_bytes = Vec::new();
-    sk.serialize(&mut sk_bytes, true).unwrap();
     pk.serialize(&mut pk_bytes, true).unwrap();
 
-    let mut map = BTreeMap::new();
-    map.insert("publicKey", pk_bytes);
-    map.insert("secretKey", sk_bytes);
-    serde_wasm_bindgen::to_value(&map).unwrap()
+    let keypair = BlsKeyPair {
+        publicKey: Some(pk_bytes),
+        secretKey: Some(SecretKey::from(sk))
+    };
+    serde_wasm_bindgen::to_value(&keypair).unwrap()
 }
 
 fn gen_sk(msg: &[u8]) -> Fr {
