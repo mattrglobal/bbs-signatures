@@ -10,15 +10,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-use crate::{
-    BbsVerifyResponse,
-    PoKOfSignatureProofWrapper,
-    bls12381::BbsKeyPair,
-};
+use crate::{bls12381::BbsKeyPair, BbsVerifyResponse, PoKOfSignatureProofWrapper};
 use bbs::prelude::*;
-use serde::{
-    Deserialize, Serialize,
-};
+use serde::{Deserialize, Serialize};
 use std::{
     collections::{BTreeMap, BTreeSet},
     convert::TryInto,
@@ -113,15 +107,18 @@ pub fn bbs_sign(request: JsValue) -> Result<JsValue, JsValue> {
 
 #[wasm_bindgen(js_name = verify)]
 pub fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
-    let res  = request.try_into();
+    let res = request.try_into();
 
     let request: BbsVerifyRequest;
     match res {
         Ok(r) => request = r,
-        Err(e) => return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
-            verified: false,
-            error: Some(format!("{:?}", e))
-        }).unwrap())
+        Err(e) => {
+            return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+                verified: false,
+                error: Some(format!("{:?}", e)),
+            })
+            .unwrap())
+        }
     };
 
     let messages: Vec<SignatureMessage> = request
@@ -278,7 +275,11 @@ pub fn bbs_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
             let challenge_hash = ProofChallenge::hash(&challenge_bytes);
             match pok.gen_proof(&challenge_hash) {
                 Ok(proof) => {
-                    let out = PoKOfSignatureProofWrapper::new(request.publicKey.message_count(), &revealed, proof);
+                    let out = PoKOfSignatureProofWrapper::new(
+                        request.publicKey.message_count(),
+                        &revealed,
+                        proof,
+                    );
                     Ok(serde_wasm_bindgen::to_value(&out).unwrap())
                 }
                 Err(e) => Err(JsValue::from(&format!("{:?}", e))),
@@ -293,10 +294,13 @@ pub fn bbs_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let request: VerifyProofContext;
     match res {
         Ok(r) => request = r,
-        Err(e)  => return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
-            verified: false,
-            error: Some(format!("{:?}", e))
-        }).unwrap())
+        Err(e) => {
+            return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+                verified: false,
+                error: Some(format!("{:?}", e)),
+            })
+            .unwrap())
+        }
     };
 
     let nonce = if request.nonce.is_empty() {
@@ -318,11 +322,12 @@ pub fn bbs_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
 
     let signature_proof = SignatureProof {
         revealed_messages,
-        proof
+        proof,
     };
 
-    Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
+    Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
         verified: Verifier::verify_signature_pok(&proof_request, &signature_proof, &nonce).is_ok(),
-        error: None
-    }).unwrap())
+        error: None,
+    })
+    .unwrap())
 }

@@ -10,20 +10,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-use crate::{
-    BbsVerifyResponse,
-    PoKOfSignatureProofWrapper,
-};
+use crate::{BbsVerifyResponse, PoKOfSignatureProofWrapper};
 use bbs::prelude::*;
-use serde::{
-    Deserialize, Serialize,
+use pairing_plus::{
+    bls12_381::{Bls12, Fr, G1, G2},
+    hash_to_field::BaseFromRO,
+    serdes::SerDes,
+    CurveProjective,
 };
-use pairing_plus::{bls12_381::{Fr, G1, G2, Bls12}, serdes::SerDes, hash_to_field::BaseFromRO, CurveProjective};
 use rand::{thread_rng, RngCore};
+use serde::{Deserialize, Serialize};
 use std::{
     collections::{BTreeMap, BTreeSet},
     convert::TryInto,
-    iter::FromIterator
+    iter::FromIterator,
 };
 use wasm_bindgen::prelude::*;
 
@@ -108,7 +108,7 @@ pub fn bls_generate_g1_key(seed: Option<Vec<u8>>) -> JsValue {
 pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
     let request: Bls12381ToBbsRequest = request.try_into()?;
     if request.messageCount == 0 {
-        return Err(JsValue::from_str("Failed to convert key"))
+        return Err(JsValue::from_str("Failed to convert key"));
     }
     if let Some(dpk_bytes) = request.keyPair.publicKey {
         let dpk = DeterministicPublicKey::from(array_ref![dpk_bytes, 0, G2_COMPRESSED_SIZE]);
@@ -116,7 +116,7 @@ pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
         let key_pair = BbsKeyPair {
             publicKey: pk,
             secretKey: request.keyPair.secretKey,
-            messageCount: request.messageCount
+            messageCount: request.messageCount,
         };
         Ok(serde_wasm_bindgen::to_value(&key_pair).unwrap())
     } else if let Some(s) = request.keyPair.secretKey {
@@ -125,7 +125,7 @@ pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
         let key_pair = BbsKeyPair {
             publicKey: pk,
             secretKey: Some(sk),
-            messageCount: request.messageCount
+            messageCount: request.messageCount,
         };
         Ok(serde_wasm_bindgen::to_value(&key_pair).unwrap())
     } else {
@@ -148,8 +148,16 @@ pub fn bls_sign(request: JsValue) -> Result<JsValue, JsValue> {
     if request.keyPair.secretKey.is_none() {
         return Err(JsValue::from_str("Failed to sign"));
     }
-    let messages: Vec<SignatureMessage> = request.messages.iter().map(|m| SignatureMessage::hash(m)).collect();
-    match Signature::new(messages.as_slice(), &request.keyPair.secretKey.unwrap(), &pk) {
+    let messages: Vec<SignatureMessage> = request
+        .messages
+        .iter()
+        .map(|m| SignatureMessage::hash(m))
+        .collect();
+    match Signature::new(
+        messages.as_slice(),
+        &request.keyPair.secretKey.unwrap(),
+        &pk,
+    ) {
         Ok(sig) => Ok(serde_wasm_bindgen::to_value(&sig).unwrap()),
         Err(e) => Err(JsValue::from(&format!("{:?}", e))),
     }
@@ -162,28 +170,38 @@ pub fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
     let result: BlsBbsVerifyRequest;
     match res {
         Ok(r) => result = r,
-        Err(e) => return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
-            verified: false,
-            error: Some(format!("{:?}", e))
-        }).unwrap())
+        Err(e) => {
+            return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+                verified: false,
+                error: Some(format!("{:?}", e)),
+            })
+            .unwrap())
+        }
     };
     if result.messages.is_empty() {
         return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
             verified: false,
-            error: Some("Messages cannot be empty".to_string())
-        }).unwrap());
+            error: Some("Messages cannot be empty".to_string()),
+        })
+        .unwrap());
     }
     let pk = result.publicKey.to_public_key(result.messages.len())?;
-    let messages: Vec<SignatureMessage> = result.messages.iter().map(|m| SignatureMessage::hash(m)).collect();
+    let messages: Vec<SignatureMessage> = result
+        .messages
+        .iter()
+        .map(|m| SignatureMessage::hash(m))
+        .collect();
     match result.signature.verify(messages.as_slice(), &pk) {
         Err(e) => Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
             verified: false,
-            error: Some(format!("{:?}", e))
-        }).unwrap()),
+            error: Some(format!("{:?}", e)),
+        })
+        .unwrap()),
         Ok(b) => Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
             verified: b,
-            error: None
-        }).unwrap())
+            error: None,
+        })
+        .unwrap()),
     }
 }
 
@@ -191,11 +209,7 @@ pub fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
 #[wasm_bindgen(js_name = blsCreateProof)]
 pub fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BlsCreateProofRequest = request.try_into()?;
-    if request
-        .revealed
-        .iter()
-        .any(|r| *r > request.messages.len())
-    {
+    if request.revealed.iter().any(|r| *r > request.messages.len()) {
         return Err(JsValue::from("revealed value is out of bounds"));
     }
     let pk = request.publicKey.to_public_key(request.messages.len())?;
@@ -225,7 +239,8 @@ pub fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
             let challenge_hash = ProofChallenge::hash(&challenge_bytes);
             match pok.gen_proof(&challenge_hash) {
                 Ok(proof) => {
-                    let out = PoKOfSignatureProofWrapper::new(request.messages.len(), &revealed, proof);
+                    let out =
+                        PoKOfSignatureProofWrapper::new(request.messages.len(), &revealed, proof);
                     Ok(serde_wasm_bindgen::to_value(&out).unwrap())
                 }
                 Err(e) => Err(JsValue::from(&format!("{:?}", e))),
@@ -241,10 +256,13 @@ pub fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BlsVerifyProofContext;
     match res {
         Ok(r) => request = r,
-        Err(e)  => return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
-            verified: false,
-            error: Some(format!("{:?}", e))
-        }).unwrap())
+        Err(e) => {
+            return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+                verified: false,
+                error: Some(format!("{:?}", e)),
+            })
+            .unwrap())
+        }
     };
 
     let nonce = if request.nonce.is_empty() {
@@ -258,7 +276,7 @@ pub fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let (revealed, proof) = request.proof.unwrap();
     let proof_request = ProofRequest {
         revealed_messages: revealed,
-        verification_key: pk
+        verification_key: pk,
     };
 
     let mut revealed_messages = BTreeMap::new();
@@ -268,16 +286,19 @@ pub fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
 
     let signature_proof = SignatureProof {
         revealed_messages,
-        proof
+        proof,
     };
 
-    Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse{
+    Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
         verified: Verifier::verify_signature_pok(&proof_request, &signature_proof, &nonce).is_ok(),
-        error: None
-    }).unwrap())
+        error: None,
+    })
+    .unwrap())
 }
 
-fn bls_generate_keypair<G: CurveProjective<Engine = Bls12, Scalar = Fr> + SerDes>(seed: Option<Vec<u8>>) -> JsValue {
+fn bls_generate_keypair<G: CurveProjective<Engine = Bls12, Scalar = Fr> + SerDes>(
+    seed: Option<Vec<u8>>,
+) -> JsValue {
     let seed_data = match seed {
         Some(s) => s.to_vec(),
         None => {
@@ -297,13 +318,13 @@ fn bls_generate_keypair<G: CurveProjective<Engine = Bls12, Scalar = Fr> + SerDes
 
     let keypair = BlsKeyPair {
         publicKey: Some(pk_bytes),
-        secretKey: Some(SecretKey::from(sk))
+        secretKey: Some(SecretKey::from(sk)),
     };
     serde_wasm_bindgen::to_value(&keypair).unwrap()
 }
 
 fn gen_sk(msg: &[u8]) -> Fr {
-    use sha2::digest::generic_array::{GenericArray, typenum::U48};
+    use sha2::digest::generic_array::{typenum::U48, GenericArray};
     const SALT: &[u8] = b"BLS-SIG-KEYGEN-SALT-";
     // copy of `msg` with appended zero byte
     let mut msg_prime = Vec::<u8>::with_capacity(msg.as_ref().len() + 1);

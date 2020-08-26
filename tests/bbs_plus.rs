@@ -2,13 +2,10 @@
 
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
-use wasm::BbsVerifyResponse;
 use bbs::prelude::*;
-use std::{
-    collections::BTreeSet,
-    convert::TryInto,
-};
+use std::{collections::BTreeSet, convert::TryInto};
 use wasm::prelude::*;
+use wasm::BbsVerifyResponse;
 use wasm_bindgen_test::*;
 
 wasm_bindgen_test_configure!(run_in_browser);
@@ -22,7 +19,7 @@ pub fn bbs_sign_tests() {
         keyPair: BbsKeyPair {
             publicKey: pk,
             secretKey: Some(sk),
-            messageCount: 1
+            messageCount: 1,
         },
         messages,
     };
@@ -46,7 +43,7 @@ pub fn bbs_sign_tests() {
         keyPair: BbsKeyPair {
             publicKey: pk,
             secretKey: Some(sk),
-            messageCount: 5
+            messageCount: 5,
         },
         messages,
     };
