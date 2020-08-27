@@ -15,7 +15,7 @@ fn bls_public_key_to_bbs_key_test() {
     let (dpk, _) = DeterministicPublicKey::new(None);
     let request = Bls12381ToBbsRequest {
         keyPair: BlsKeyPair {
-            publicKey: Some(dpk),
+            publicKey: Some(dpk.to_bytes_compressed_form().to_vec()),
             secretKey: None,
         },
         messageCount: 5,
@@ -56,7 +56,7 @@ fn bls_secret_key_to_bbs_key_test() {
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
 fn bls_generate_key_from_seed_test() {
-    let key = bls_generate_key(Some(vec![0u8; 16]));
+    let key = bls_generate_g2_key(Some(vec![0u8; 16]));
 
     assert!(key.is_object());
     let obj = js_sys::Object::try_from(&key);
@@ -78,20 +78,20 @@ fn bls_generate_key_from_seed_test() {
     assert_eq!(
         public_key,
         vec![
-            149, 24, 232, 64, 238, 67, 137, 51, 92, 227, 233, 238, 58, 35, 223, 100, 195, 189, 17,
-            242, 44, 153, 122, 144, 111, 191, 114, 124, 139, 70, 100, 94, 44, 208, 180, 7, 166,
-            249, 39, 2, 13, 122, 33, 79, 243, 88, 21, 131, 22, 190, 29, 71, 249, 100, 255, 84, 14,
-            119, 216, 41, 28, 16, 141, 143, 252, 125, 76, 186, 53, 50, 194, 103, 53, 66, 249, 172,
-            78, 75, 126, 29, 72, 215, 10, 15, 221, 120, 205, 169, 86, 111, 74, 240, 31, 87, 160,
-            155
+            180, 23, 7, 111, 46, 125, 2, 98, 246, 216, 152, 143, 211, 97, 181, 151, 222, 57, 210,
+            214, 209, 232, 161, 117, 141, 179, 142, 31, 100, 177, 61, 56, 98, 188, 127, 59, 155,
+            155, 24, 28, 202, 70, 141, 93, 26, 221, 216, 189, 7, 70, 49, 66, 223, 161, 28, 147,
+            230, 62, 217, 165, 119, 187, 51, 233, 42, 249, 219, 62, 242, 24, 74, 67, 114, 156, 32,
+            51, 212, 205, 110, 172, 195, 102, 121, 11, 192, 96, 85, 205, 226, 139, 248, 208, 202,
+            85, 9, 145
         ]
     );
     assert_eq!(secret_key.len(), 32);
     assert_eq!(
         secret_key,
         vec![
-            79, 39, 150, 177, 236, 152, 132, 139, 85, 146, 82, 139, 146, 192, 245, 41, 220, 2, 193,
-            129, 84, 175, 137, 116, 174, 202, 242, 90, 167, 29, 75, 1
+            18, 252, 35, 29, 203, 163, 152, 132, 177, 59, 46, 170, 55, 231, 184, 150, 20, 44, 51,
+            147, 188, 46, 118, 36, 66, 145, 240, 37, 56, 41, 65, 3
         ]
     );
 }
@@ -99,7 +99,7 @@ fn bls_generate_key_from_seed_test() {
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
 fn bls_generate_key_test() {
-    let key = bls_generate_key(None);
+    let key = bls_generate_g2_key(None);
 
     assert!(key.is_object());
     let obj = js_sys::Object::try_from(&key);

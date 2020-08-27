@@ -21,20 +21,18 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 extern crate arrayref;
 
 use bbs::prelude::*;
-use serde::{Deserialize, Deserializer, Serialize, Serializer,
-    de::{Visitor, Error as DError}
+use serde::{
+    de::{Error as DError, Visitor},
+    Deserialize, Deserializer, Serialize, Serializer,
 };
-use std::{
-    collections::BTreeSet,
-    convert::TryFrom
-};
+use std::{collections::BTreeSet, convert::TryFrom};
 use wasm_bindgen::prelude::*;
 
 #[macro_use]
 mod macros;
-mod utils;
 pub mod bbs_plus;
 pub mod bls12381;
+mod utils;
 
 wasm_impl!(BbsVerifyResponse, verified: bool, error: Option<String>);
 
@@ -83,8 +81,8 @@ impl TryFrom<&[u8]> for PoKOfSignatureProofWrapper {
 
 impl Serialize for PoKOfSignatureProofWrapper {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: Serializer,
+    where
+        S: Serializer,
     {
         serializer.serialize_bytes(&self.to_bytes().as_slice())
     }
@@ -92,8 +90,8 @@ impl Serialize for PoKOfSignatureProofWrapper {
 
 impl<'a> Deserialize<'a> for PoKOfSignatureProofWrapper {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'a>,
+    where
+        D: Deserializer<'a>,
     {
         struct DeserializeVisitor;
 
@@ -105,8 +103,8 @@ impl<'a> Deserialize<'a> for PoKOfSignatureProofWrapper {
             }
 
             fn visit_bytes<E>(self, value: &[u8]) -> Result<PoKOfSignatureProofWrapper, E>
-                where
-                    E: DError,
+            where
+                E: DError,
             {
                 PoKOfSignatureProofWrapper::try_from(value)
                     .map_err(|_| DError::invalid_value(serde::de::Unexpected::Bytes(value), &self))

@@ -26,5 +26,5 @@ export interface BbsVerifyRequest {
   /**
    * Messages that were signed to produce the signature
    */
-  readonly messages: readonly string[];
+  readonly messages: readonly Uint8Array[];
 }

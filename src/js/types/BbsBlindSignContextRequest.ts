@@ -26,9 +26,9 @@ export interface BbsBlindSignContextRequest {
   /**
    * A nonce for the resulting proof
    */
-  readonly nonce: string;
+  readonly nonce: Uint8Array;
   /**
    * The known messages to sign
    */
-  readonly messages: readonly string[];
+  readonly messages: readonly Uint8Array[];
 }

@@ -37,16 +37,24 @@ if (useWasm) {
 
   module.exports.DEFAULT_BLS12381_PRIVATE_KEY_LENGTH = 32;
 
-  module.exports.DEFAULT_BLS12381_PUBLIC_KEY_LENGTH = 96;
+  module.exports.DEFAULT_BLS12381_G1_PUBLIC_KEY_LENGTH = 48;
+
+  module.exports.DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH = 96;
 
   module.exports.BBS_SIGNATURE_LENGTH = 112;
 
-  module.exports.generateBls12381KeyPair = (seed) => {
-    var result = wasm.generateBls12381KeyPair(seed ? seed : null);
+  module.exports.generateBls12381G1KeyPair = (seed) => {
+    var result = wasm.generateBls12381G1KeyPair(seed ? seed : null);
     return {
-      secretKey: result.secretKey
-        ? new Uint8Array(result.secretKey)
-        : undefined,
+      secretKey: new Uint8Array(result.secretKey),
+      publicKey: new Uint8Array(result.publicKey),
+    };
+  };
+
+  module.exports.generateBls12381G2KeyPair = (seed) => {
+    var result = wasm.generateBls12381G2KeyPair(seed ? seed : null);
+    return {
+      secretKey: new Uint8Array(result.secretKey),
       publicKey: new Uint8Array(result.publicKey),
     };
   };

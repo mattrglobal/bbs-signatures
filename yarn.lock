@@ -494,10 +494,10 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
-"@mattrglobal/node-bbs-signatures@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@mattrglobal/node-bbs-signatures/-/node-bbs-signatures-0.9.0.tgz#e581988babfa06ab50f2ba4e068877420e84bf11"
-  integrity sha512-FGy5kucFie3g6sTGFTjp6e91VicDncRFIbpvgIqGDyySJZtgPCL1es6yhEPrWfTnbX3zcXQfdm1OWhFlBLWP9w==
+"@mattrglobal/node-bbs-signatures@0.9.1-unstable.4cb57b7":
+  version "0.9.1-unstable.4cb57b7"
+  resolved "https://registry.yarnpkg.com/@mattrglobal/node-bbs-signatures/-/node-bbs-signatures-0.9.1-unstable.4cb57b7.tgz#b210dc4871de7fa813b7b9755dc7bde9ef29091f"
+  integrity sha512-9EpQ0u0hXeD5RcYxs7kgHXBZAsKeWBQFLSR5B7OLvO46OnuLXfcjKwDG04JypJuMm6bjFz2Z/4qUeZpysAgR6w==
   dependencies:
     neon-cli "0.4.0"
     node-pre-gyp "0.14.0"
