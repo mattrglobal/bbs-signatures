@@ -34,9 +34,13 @@ export const DEFAULT_BLS12381_G1_PUBLIC_KEY_LENGTH = 48;
 
 export const DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH = 96;
 
-export function generateBls12381G1KeyPair(seed?: Uint8Array): BlsKeyPair;
+export function generateBls12381G1KeyPair(
+  seed?: Uint8Array
+): Required<BlsKeyPair>;
 
-export function generateBls12381G2KeyPair(seed?: Uint8Array): BlsKeyPair;
+export function generateBls12381G2KeyPair(
+  seed?: Uint8Array
+): Required<BlsKeyPair>;
 
 export function bls12381toBbs(request: Bls12381ToBbsRequest): BbsKeyPair;
 
