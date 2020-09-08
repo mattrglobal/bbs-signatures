@@ -15,7 +15,7 @@ const module = import("../../pkg");
 
 module.then((m) => {
   //Generate a new key pair
-  const keyPair = m.generateBls12381KeyPair();
+  const keyPair = m.generateBls12381G2KeyPair();
 
   console.log("Key pair generated");
   console.log(

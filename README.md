@@ -79,7 +79,7 @@ The following is a short sample on how to use the API
 
 ```typescript
 import {
-  generateBls12381KeyPair,
+  generateBls12381G2KeyPair,
   blsSign,
   blsVerify,
   blsCreateProof,
@@ -87,7 +87,7 @@ import {
 } from "@mattrglobal/bbs-signatures";
 
 //Generate a new key pair
-const keyPair = generateBls12381KeyPair();
+const keyPair = generateBls12381G2KeyPair();
 
 //Set of messages we wish to sign
 const messages = ["message1", "message2"];
