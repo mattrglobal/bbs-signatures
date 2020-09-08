@@ -12,7 +12,7 @@
  */
 
 import {
-  generateBls12381KeyPair,
+  generateBls12381G2KeyPair,
   blsSign,
   blsVerify,
   blsCreateProof,
@@ -21,7 +21,7 @@ import {
 
 const main = (): void => {
   //Generate a new key pair
-  const keyPair = generateBls12381KeyPair();
+  const keyPair = generateBls12381G2KeyPair();
 
   console.log("Key pair generated");
   console.log(

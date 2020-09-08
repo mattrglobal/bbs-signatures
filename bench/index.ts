@@ -22,7 +22,7 @@ import {
   blsVerify,
   blsSign,
   blsVerifyProof,
-  generateBls12381KeyPair,
+  generateBls12381G2KeyPair,
   bls12381toBbs,
 } from "../lib";
 import { generateBbsSignRequest, generateBlsSignRequest } from "./helper";
@@ -31,7 +31,7 @@ const nonce = "mynonce";
 
 report(
   "BLS 12-381 Key Generation",
-  benchmark(() => generateBls12381KeyPair())
+  benchmark(() => generateBls12381G2KeyPair())
 );
 
 // main benchmark routine
@@ -40,7 +40,7 @@ const runBbsBenchmark = (
   messageSizeInBytes: number,
   numberRevealed: number
 ): void => {
-  const blsKeyPair = generateBls12381KeyPair();
+  const blsKeyPair = generateBls12381G2KeyPair();
   const bbsKeyPair = bls12381toBbs({
     keyPair: blsKeyPair,
     messageCount: numberOfMessages,
@@ -105,7 +105,7 @@ const runBlsBenchmark = (
   messageSizeInBytes: number,
   numberRevealed: number
 ): void => {
-  const blsKeyPair = generateBls12381KeyPair();
+  const blsKeyPair = generateBls12381G2KeyPair();
   const MessageSignRequest = generateBlsSignRequest(
     blsKeyPair,
     numberOfMessages,
