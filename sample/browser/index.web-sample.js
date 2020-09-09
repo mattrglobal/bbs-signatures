@@ -11,6 +11,8 @@
  * limitations under the License.
  */
 
+const stringToBytes = (str) => Uint8Array.from(Buffer.from(str, "utf-8"));
+
 const module = import("../../pkg");
 
 module.then((m) => {
@@ -23,7 +25,7 @@ module.then((m) => {
   );
 
   //Set of messages we wish to sign
-  const messages = ["message1", "message2"];
+  const messages = [stringToBytes("message1"), stringToBytes("message2")];
 
   console.log("Signing a message set of " + messages);
 
@@ -39,7 +41,7 @@ module.then((m) => {
 
   //Verify the signature
   const isVerified = m.blsVerify({
-    publicKey: keyPair.publicKey,
+    publicKey: Uint8Array.from(keyPair.publicKey),
     messages: messages,
     signature,
   });
@@ -50,9 +52,9 @@ module.then((m) => {
   //Derive a proof from the signature revealing the first message
   const proof = m.blsCreateProof({
     signature,
-    publicKey: keyPair.publicKey,
+    publicKey: Uint8Array.from(keyPair.publicKey),
     messages,
-    nonce: "nonce",
+    nonce: stringToBytes("nonce"),
     revealed: [0],
   });
 
@@ -61,9 +63,9 @@ module.then((m) => {
   //Verify the created proof
   const isProofVerified = m.blsVerifyProof({
     proof,
-    publicKey: keyPair.publicKey,
+    publicKey: Uint8Array.from(keyPair.publicKey),
     messages: messages.slice(0, 1),
-    nonce: "nonce",
+    nonce: stringToBytes("nonce"),
   });
 
   const isProofVerifiedString = JSON.stringify(isProofVerified);
