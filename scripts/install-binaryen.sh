@@ -15,6 +15,12 @@ echo ">>> Downloading binaryen"
 # wasm2js for wasm -> asm.js
 BINARYEN=( "wasm-opt" "wasm2js" )
 
+if ! [ -x "$(command -V wget)" ]; then
+    echo "Installing wget"
+    curl -O https://ftp.gnu.org/gnu/wget/wget-latest.tar.gz
+    tar -xvzf wget-latest.tar.gz
+    rm -r wget*
+fi
 
 unamestr=`uname`
 
