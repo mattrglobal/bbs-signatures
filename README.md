@@ -90,7 +90,10 @@ import {
 const keyPair = generateBls12381G2KeyPair();
 
 //Set of messages we wish to sign
-const messages = ["message1", "message2"];
+const messages = [
+  Uint8Array.from(Buffer.from("message1", "utf-8")),
+  Uint8Array.from(Buffer.from("message2", "utf-8")),
+];
 
 //Create the signature
 const signature = blsSign({
@@ -110,7 +113,7 @@ const proof = blsCreateProof({
   signature,
   publicKey: keyPair.publicKey,
   messages,
-  nonce: "nonce",
+  nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
   revealed: [0],
 });
 
@@ -119,7 +122,7 @@ const isProofVerified = blsVerifyProof({
   proof,
   publicKey: keyPair.publicKey,
   messages: messages.slice(0, 1),
-  nonce: "nonce",
+  nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
 });
 ```
 
