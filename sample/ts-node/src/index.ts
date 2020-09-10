@@ -29,7 +29,10 @@ const main = (): void => {
   );
 
   //Set of messages we wish to sign
-  const messages = ["message1", "message2"];
+  const messages = [
+    Uint8Array.from(Buffer.from("message1", "utf8")),
+    Uint8Array.from(Buffer.from("message2", "utf8")),
+  ];
 
   console.log("Signing a message set of " + messages);
 
@@ -58,7 +61,7 @@ const main = (): void => {
     signature,
     publicKey: keyPair.publicKey,
     messages,
-    nonce: "nonce",
+    nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
     revealed: [0],
   });
 
@@ -69,7 +72,7 @@ const main = (): void => {
     proof,
     publicKey: keyPair.publicKey,
     messages: messages.slice(0, 1),
-    nonce: "nonce",
+    nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
   });
 
   const isProofVerifiedString = JSON.stringify(isProofVerified);
