@@ -53,6 +53,6 @@ tar xvzf binaryen-download.tar.gz -C binaryen/bin
 
 rm binaryen-download.tar.gz
 
-cp -a `find ./binaryen/bin/* -maxdepth 1 -type d`/* binaryen/bin
+cp -a `find ./binaryen/bin/* -maxdepth 1 -type d`/* binaryen
 
 rm -rf `find ./binaryen/bin/* -maxdepth 1 -type d`
