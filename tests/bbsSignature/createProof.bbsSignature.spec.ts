@@ -17,7 +17,7 @@ import { base64Decode, stringToBytes } from "../utilities";
 
 describe("bbsSignature", () => {
   describe("createProof", () => {
-    it("should create proof revealing single message from single message signature", () => {
+    it("should create proof revealing single message from single message signature", async () => {
       const messages = [stringToBytes("RmtnDBJHso5iSg==")];
       const bbsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pboZyjM38YgjaUBcjftZi5gb58Qz13XeRJpiuUHH06I7/1Eb8oVtIW5SGMNfKaqKhBAAAAAYPPztgxfWWw01/0SSug1oLfVuI4XUqhgyZ3rS6eTkOLjnyR3ObXb0XCD2Mfcxiv6w=="
@@ -34,12 +34,12 @@ describe("bbsSignature", () => {
         revealed: [0],
       };
 
-      const proof = createProof(request);
+      const proof = await createProof(request);
       expect(proof).toBeInstanceOf(Uint8Array);
       expect(proof.length).toEqual(383);
     });
 
-    it("should create proof revealing all messages from multi-message signature", () => {
+    it("should create proof revealing all messages from multi-message signature", async () => {
       const messages = [
         stringToBytes("J42AxhciOVkE9w=="),
         stringToBytes("PNMnARWIHP+s2g=="),
@@ -61,12 +61,12 @@ describe("bbsSignature", () => {
         revealed: [0, 1, 2],
       };
 
-      const proof = createProof(request);
+      const proof = await createProof(request);
       expect(proof).toBeInstanceOf(Uint8Array);
       expect(proof.length).toEqual(383); //TODO add a reason for this and some constants?
     });
 
-    it("should create proof revealing single message from multi-message signature", () => {
+    it("should create proof revealing single message from multi-message signature", async () => {
       const messages = [
         stringToBytes("J42AxhciOVkE9w=="),
         stringToBytes("PNMnARWIHP+s2g=="),
@@ -88,12 +88,12 @@ describe("bbsSignature", () => {
         revealed: [0],
       };
 
-      const proof = createProof(request);
+      const proof = await createProof(request);
       expect(proof).toBeInstanceOf(Uint8Array);
       expect(proof.length).toEqual(447); //TODO add a reason for this and some constants?
     });
 
-    it("should create proof revealing multiple messages from multi-message signature", () => {
+    it("should create proof revealing multiple messages from multi-message signature", async () => {
       const messages = [
         stringToBytes("J42AxhciOVkE9w=="),
         stringToBytes("PNMnARWIHP+s2g=="),
@@ -115,14 +115,14 @@ describe("bbsSignature", () => {
         revealed: [0, 2],
       };
 
-      const proof = createProof(request);
+      const proof = await createProof(request);
       expect(proof).toBeInstanceOf(Uint8Array);
       expect(proof.length).toEqual(415); //TODO evaluate this length properly add a reason for this and some constants?
     });
   });
 
   describe("blsCreateProof", () => {
-    it("should create proof revealing single message from single message signature", () => {
+    it("should create proof revealing single message from single message signature", async () => {
       const messages = [stringToBytes("uzAoQFqLgReidw==")];
       const blsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pb"
@@ -139,12 +139,12 @@ describe("bbsSignature", () => {
         revealed: [0],
       };
 
-      const proof = blsCreateProof(request);
+      const proof = await blsCreateProof(request);
       expect(proof).toBeInstanceOf(Uint8Array);
       expect(proof.length).toEqual(383);
     });
 
-    it("should create proof revealing all messages from multi-message signature", () => {
+    it("should create proof revealing all messages from multi-message signature", async () => {
       const messages = [
         stringToBytes("C+n1rPz1/tVzPg=="),
         stringToBytes("h3x8cbySqC4rLA=="),
@@ -166,12 +166,12 @@ describe("bbsSignature", () => {
         revealed: [0, 1, 2],
       };
 
-      const proof = blsCreateProof(request);
+      const proof = await blsCreateProof(request);
       expect(proof).toBeInstanceOf(Uint8Array);
       expect(proof.length).toEqual(383); //TODO add a reason for this and some constants?
     });
 
-    it("should create proof revealing single message from multi-message signature", () => {
+    it("should create proof revealing single message from multi-message signature", async () => {
       const messages = [
         stringToBytes("uiSKIfNoO2rMrA=="),
         stringToBytes("lMoHHrFx0LxwAw=="),
@@ -193,12 +193,12 @@ describe("bbsSignature", () => {
         revealed: [0],
       };
 
-      const proof = blsCreateProof(request);
+      const proof = await blsCreateProof(request);
       expect(proof).toBeInstanceOf(Uint8Array);
       expect(proof.length).toEqual(447); //TODO add a reason for this and some constants?
     });
 
-    it("should create proof revealing multiple messages from multi-message signature", () => {
+    it("should create proof revealing multiple messages from multi-message signature", async () => {
       const messages = [
         stringToBytes("uiSKIfNoO2rMrA=="),
         stringToBytes("lMoHHrFx0LxwAw=="),
@@ -220,7 +220,7 @@ describe("bbsSignature", () => {
         revealed: [0, 2],
       };
 
-      const proof = blsCreateProof(request);
+      const proof = await blsCreateProof(request);
       expect(proof).toBeInstanceOf(Uint8Array);
       expect(proof.length).toEqual(415); //TODO evaluate this length properly add a reason for this and some constants?
     });

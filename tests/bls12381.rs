@@ -1,3 +1,16 @@
+/*
+ * Copyright 2020 - MATTR Limited
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 //! Test suite for the Web and headless browsers.
 
 #![cfg(target_arch = "wasm32")]
@@ -11,7 +24,7 @@ wasm_bindgen_test_configure!(run_in_browser);
 
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
-fn bls_public_key_to_bbs_key_test() {
+async fn bls_public_key_to_bbs_key_test() {
     let (dpk, _) = DeterministicPublicKey::new(None);
     let request = Bls12381ToBbsRequest {
         keyPair: BlsKeyPair {
@@ -21,7 +34,7 @@ fn bls_public_key_to_bbs_key_test() {
         messageCount: 5,
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
-    let bbs_res = bls_to_bbs_key(js_value);
+    let bbs_res = bls_to_bbs_key(js_value).await;
     assert!(bbs_res.is_ok());
     let bbs = bbs_res.unwrap();
     assert!(bbs.is_object());
@@ -33,7 +46,7 @@ fn bls_public_key_to_bbs_key_test() {
 
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
-fn bls_secret_key_to_bbs_key_test() {
+async fn bls_secret_key_to_bbs_key_test() {
     let (_, sk) = DeterministicPublicKey::new(None);
     let request = Bls12381ToBbsRequest {
         keyPair: BlsKeyPair {
@@ -43,7 +56,7 @@ fn bls_secret_key_to_bbs_key_test() {
         messageCount: 5,
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
-    let bbs_res = bls_to_bbs_key(js_value);
+    let bbs_res = bls_to_bbs_key(js_value).await;
     assert!(bbs_res.is_ok());
     let bbs = bbs_res.unwrap();
     assert!(bbs.is_object());
@@ -55,8 +68,8 @@ fn bls_secret_key_to_bbs_key_test() {
 
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
-fn bls_generate_key_from_seed_test() {
-    let key = bls_generate_g2_key(Some(vec![0u8; 16]));
+async fn bls_generate_key_from_seed_test() {
+    let key = bls_generate_g2_key(Some(vec![0u8; 16])).await.unwrap();
 
     assert!(key.is_object());
     let obj = js_sys::Object::try_from(&key);
@@ -98,8 +111,8 @@ fn bls_generate_key_from_seed_test() {
 
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
-fn bls_generate_key_test() {
-    let key = bls_generate_g2_key(None);
+async fn bls_generate_key_test() {
+    let key = bls_generate_g2_key(None).await.unwrap();
 
     assert!(key.is_object());
     let obj = js_sys::Object::try_from(&key);

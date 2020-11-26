@@ -25,12 +25,24 @@ import {
 import { stringToBytes } from "../utilities";
 
 describe("bbsSignature", () => {
-  const blsKeyPair = generateBls12381G2KeyPair();
-  describe("sign", () => {
-    const bbsKeyPair = bls12381toBbs({ keyPair: blsKeyPair, messageCount: 3 });
+  let blsKeyPair: BlsKeyPair;
 
-    it("should sign a single message", () => {
-      const bbsKeyPair = bls12381toBbs({
+  beforeAll(async () => {
+    blsKeyPair = await generateBls12381G2KeyPair();
+  });
+
+  describe("sign", () => {
+    let bbsKeyPair: BbsKeyPair;
+
+    beforeAll(async () => {
+      bbsKeyPair = await bls12381toBbs({
+        keyPair: blsKeyPair,
+        messageCount: 3,
+      });
+    });
+
+    it("should sign a single message", async () => {
+      const bbsKeyPair = await bls12381toBbs({
         keyPair: blsKeyPair,
         messageCount: 1,
       });
@@ -38,12 +50,12 @@ describe("bbsSignature", () => {
         keyPair: bbsKeyPair,
         messages: [stringToBytes("ExampleMessage")],
       };
-      const signature = sign(request);
+      const signature = await sign(request);
       expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
-    it("should sign multiple messages", () => {
+    it("should sign multiple messages", async () => {
       const request: BbsSignRequest = {
         keyPair: bbsKeyPair,
         messages: [
@@ -52,12 +64,12 @@ describe("bbsSignature", () => {
           stringToBytes("ExampleMessage3"),
         ],
       };
-      const signature = sign(request);
+      const signature = await sign(request);
       expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
-    it("should sign multiple messages when public key supports more", () => {
+    it("should sign multiple messages when public key supports more", async () => {
       const request: BbsSignRequest = {
         keyPair: bbsKeyPair,
         messages: [
@@ -65,12 +77,12 @@ describe("bbsSignature", () => {
           stringToBytes("ExampleMessage"),
         ],
       };
-      const signature = sign(request);
+      const signature = await sign(request);
       expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
-    it("should throw error if secret key not present", () => {
+    it("should throw error if secret key not present", async () => {
       const bbsKey: BbsKeyPair = {
         publicKey: bbsKeyPair.publicKey,
         messageCount: bbsKeyPair.messageCount,
@@ -79,11 +91,11 @@ describe("bbsSignature", () => {
         keyPair: bbsKey,
         messages: [stringToBytes("ExampleMessage")],
       };
-      expect(() => sign(request)).toThrowError("Failed to sign");
+      await expect(sign(request)).rejects.toThrowError("Failed to sign");
     });
 
-    it("should throw error if public key does not support message number", () => {
-      const bbsKeyPair = bls12381toBbs({
+    it("should throw error if public key does not support message number", async () => {
+      const bbsKeyPair = await bls12381toBbs({
         keyPair: blsKeyPair,
         messageCount: 1,
       });
@@ -95,22 +107,22 @@ describe("bbsSignature", () => {
           stringToBytes("ExampleMessage"),
         ],
       };
-      expect(() => sign(request)).toThrowError("Failed to sign");
+      await expect(sign(request)).rejects.toThrowError("Failed to sign");
     });
   });
 
   describe("blsSign", () => {
-    it("should sign a single message", () => {
+    it("should sign a single message", async () => {
       const request: BlsBbsSignRequest = {
         keyPair: blsKeyPair,
         messages: [stringToBytes("ExampleMessage")],
       };
-      const signature = blsSign(request);
+      const signature = await blsSign(request);
       expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
-    it("should sign multiple messages", () => {
+    it("should sign multiple messages", async () => {
       const request: BlsBbsSignRequest = {
         keyPair: blsKeyPair,
         messages: [
@@ -119,12 +131,12 @@ describe("bbsSignature", () => {
           stringToBytes("ExampleMessage3"),
         ],
       };
-      const signature = blsSign(request);
+      const signature = await blsSign(request);
       expect(signature).toBeInstanceOf(Uint8Array);
       expect(signature.length).toEqual(BBS_SIGNATURE_LENGTH);
     });
 
-    it("should throw error if secret key not present", () => {
+    it("should throw error if secret key not present", async () => {
       const blsKey: BlsKeyPair = {
         publicKey: blsKeyPair.publicKey,
       };
@@ -136,15 +148,17 @@ describe("bbsSignature", () => {
           stringToBytes("ExampleMessage3"),
         ],
       };
-      expect(() => blsSign(request)).toThrowError("Failed to sign");
+      await expect(blsSign(request)).rejects.toThrowError("Failed to sign");
     });
 
-    it("should throw error when messages empty", () => {
+    it("should throw error when messages empty", async () => {
       const request: BlsBbsSignRequest = {
         keyPair: blsKeyPair,
         messages: [],
       };
-      expect(() => blsSign(request)).toThrowError("Failed to convert key");
+      await expect(blsSign(request)).rejects.toThrowError(
+        "Failed to convert key"
+      );
     });
   });
 });

@@ -1,3 +1,16 @@
+/*
+ * Copyright 2020 - MATTR Limited
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 //! Test suite for the Web and headless browsers.
 
 #![cfg(target_arch = "wasm32")]
@@ -12,7 +25,7 @@ wasm_bindgen_test_configure!(run_in_browser);
 
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
-pub fn bbs_sign_tests() {
+pub async fn bbs_sign_tests() {
     let (pk, sk) = generate(1).unwrap();
     let messages = vec![b"Message1".to_vec()];
     let request = BbsSignRequest {
@@ -24,7 +37,7 @@ pub fn bbs_sign_tests() {
         messages,
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
-    let s_res = bbs_sign(js_value);
+    let s_res = bbs_sign(js_value).await;
     assert!(s_res.is_ok());
     let s = s_res.unwrap();
     assert!(s.is_object());
@@ -48,7 +61,7 @@ pub fn bbs_sign_tests() {
         messages,
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
-    let s_res = bbs_sign(js_value);
+    let s_res = bbs_sign(js_value).await;
     assert!(s_res.is_ok());
     let s = s_res.unwrap();
     assert!(s.is_object());
@@ -58,7 +71,7 @@ pub fn bbs_sign_tests() {
 
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
-pub fn bbs_verify_tests() {
+pub async fn bbs_verify_tests() {
     let (pk, sk) = generate(1).unwrap();
     let messages = vec![SignatureMessage::hash(b"Message1")];
     let signature = Signature::new(messages.as_slice(), &sk, &pk).unwrap();
@@ -69,7 +82,7 @@ pub fn bbs_verify_tests() {
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
 
-    let result = bbs_verify(js_value);
+    let result = bbs_verify(js_value).await;
     assert!(result.is_ok());
     let result = result.unwrap();
     assert!(result.is_truthy());
@@ -79,7 +92,7 @@ pub fn bbs_verify_tests() {
         messages: vec![b"BadMessage".to_vec()],
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
-    let result = bbs_verify(js_value);
+    let result = bbs_verify(js_value).await;
     assert!(result.is_ok());
     let result = result.unwrap();
     let r: BbsVerifyResponse = serde_wasm_bindgen::from_value(result).unwrap();
@@ -88,7 +101,7 @@ pub fn bbs_verify_tests() {
 
 #[allow(non_snake_case)]
 #[wasm_bindgen_test]
-pub fn bbs_blind_sign_tests() {
+pub async fn bbs_blind_sign_tests() {
     let (pk, _) = generate(3).unwrap();
     let messages = vec![b"Message1".to_vec()];
     let request = BlindSignatureContextRequest {
@@ -98,7 +111,7 @@ pub fn bbs_blind_sign_tests() {
         nonce: b"dummy nonce".to_vec(),
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
-    let result = bbs_blind_signature_commitment(js_value);
+    let result = bbs_blind_signature_commitment(js_value).await;
     assert!(result.is_ok());
     let result: BlindSignatureContextResponse = result.unwrap().try_into().unwrap();
 
@@ -114,7 +127,7 @@ pub fn bbs_blind_sign_tests() {
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
 
-    let res = bbs_verify_blind_signature_proof(js_value);
+    let res = bbs_verify_blind_signature_proof(js_value).await;
     assert!(res.is_ok());
     let res = res.unwrap();
     assert!(res.is_truthy());
@@ -129,7 +142,7 @@ pub fn bbs_blind_sign_tests() {
     };
     let js_value = serde_wasm_bindgen::to_value(&request).unwrap();
 
-    let res = bbs_verify_blind_signature_proof(js_value);
+    let res = bbs_verify_blind_signature_proof(js_value).await;
     assert!(res.is_ok());
     let res = res.unwrap();
     assert!(res.is_falsy());

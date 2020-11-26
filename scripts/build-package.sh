@@ -30,12 +30,12 @@ echo "Building asm.js version"
 $WASM_2_JS $OPT --output $ASM 
 
 # WASM2JS only supports generation of es6
-# Whereas node environments require es5
+# Whereas node environments require es5 or cjs
 # Hence the folloing converts the import and export syntax
-sed -i -e 's/import {/\/\/ import {/g' $ASM
-sed -i -e 's/function asmFunc/var bbs = require('\''\.\/wasm'\''); function asmFunc/g' $ASM
-sed -i -e 's/{abort.*},memasmFunc/bbs, memasmFunc/g' $ASM
-sed -i -e 's/export var /module\.exports\./g' $ASM
+sed -i -e '/import {/d' $ASM
+sed -i -e '/export var /d' $ASM
+sed -i -e 's/{abort.*},memasmFunc/wbg, memasmFunc/g' $ASM
+sed -i -e 's/var retasmFunc = /module.exports = (wbg) => /' $ASM
 
 # Copy over package sources
 cp -r src/js/* lib/
