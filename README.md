@@ -1,4 +1,4 @@
-![Mattr logo](./docs/assets/mattr-black.svg)
+[![MATTR](./docs/assets/mattr-logo-square.svg)](https://github.com/mattrglobal)
 
 # bbs-signatures
 
@@ -255,3 +255,7 @@ For those interested in more details, you might find the following resources hel
 - [Anonymous Attestation Using the Strong Diffie Hellman Assumption Revisited](https://www.researchgate.net/publication/306347781_Anonymous_Attestation_Using_the_Strong_Diffie_Hellman_Assumption_Revisited)
 - [Pairing Friendly Curves](https://tools.ietf.org/html/draft-irtf-cfrg-pairing-friendly-curves-01)
 - [BLS Signatures](https://tools.ietf.org/html/draft-irtf-cfrg-bls-signature-02)
+
+---
+
+<p align="center"><a href="https://mattr.global" target="_blank"><img height="40px" src ="./docs/assets/mattr-logo-tm.svg"></a></p><p align="center">Copyright © MATTR Limited. <a href="./LICENSE">Some rights reserved.</a><br/>“MATTR” is a trademark of MATTR Limited, registered in New Zealand and other countries.</p>
