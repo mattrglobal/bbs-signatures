@@ -2,17 +2,14 @@
 
 set -e
 
+# Pins the installed version of binaryen
+BINARYEN_VERSION="version_99"
+
 echo ">>> Deleting old version of binaryen"
 
 rm -rf binaryen
 
 echo ">>> Creating output directory"
-
-mkdir -p binaryen
-echo ">>> Downloading binaryen"
-
-# wasm2js for wasm -> asm.js
-BINARYEN=( "wasm-opt" "wasm2js" )
 
 if ! [ -x "$(command -V wget)" ]; then
     echo "Installing wget"
@@ -21,13 +18,16 @@ if ! [ -x "$(command -V wget)" ]; then
     rm -r wget*
 fi
 
+mkdir -p binaryen
+echo ">>> Downloading binaryen" $BINARYEN_VERSION
+
 unamestr=`uname`
 
 if [ "$unamestr" == 'Darwin' ]
 then
     echo ">>>> Downloading MacOS version"
     curl -L https://api.github.com/repos/WebAssembly/binaryen/releases \
-        | grep "browser_download_url.*macos.tar.gz\"" \
+        | grep "browser_download_url.*${BINARYEN_VERSION}.*macos.tar.gz\"" \
         | cut -d : -f 2,3 \
         | tr -d '"' \
         | wget -O binaryen-download.tar.gz -qi -
@@ -35,7 +35,7 @@ elif [ "$unamestr" == 'Linux' ]
 then
     echo ">>>> Downloading Linux version"
     curl -L https://api.github.com/repos/WebAssembly/binaryen/releases \
-        | grep "browser_download_url.*linux.tar.gz\"" \
+        | grep "browser_download_url.*${BINARYEN_VERSION}.*linux.tar.gz\"" \
         | cut -d : -f 2,3 \
         | tr -d '"' \
         | wget -O binaryen-download.tar.gz -qi -
