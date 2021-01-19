@@ -3,13 +3,12 @@
 set -e
 
 # Pins the installed version of binaryen
-BINARYEN_VERSION="version_99"
+BINARYEN_VERSION="version_97"
 
 echo ">>> Deleting old version of binaryen"
 
 rm -rf binaryen
 
-echo ">>> Creating output directory"
 
 if ! [ -x "$(command -V wget)" ]; then
     echo "Installing wget"
@@ -18,7 +17,10 @@ if ! [ -x "$(command -V wget)" ]; then
     rm -r wget*
 fi
 
+echo ">>> Creating output directory"
+
 mkdir -p binaryen
+
 echo ">>> Downloading binaryen" $BINARYEN_VERSION
 
 unamestr=`uname`
