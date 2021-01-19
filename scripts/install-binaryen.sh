@@ -8,8 +8,7 @@ rm -rf binaryen
 
 echo ">>> Creating output directory"
 
-mkdir -p binaryen/bin
-
+mkdir -p binaryen
 echo ">>> Downloading binaryen"
 
 # wasm2js for wasm -> asm.js
@@ -49,10 +48,8 @@ fi
 
 echo ">>> Extracting result"
 
-tar xvzf binaryen-download.tar.gz -C binaryen/bin
+tar xvzf binaryen-download.tar.gz -C binaryen
 
 rm binaryen-download.tar.gz
 
-cp -a `find ./binaryen/bin/* -maxdepth 1 -type d`/* binaryen
-
-rm -rf `find ./binaryen/bin/* -maxdepth 1 -type d`
+mv `find ./binaryen/* -maxdepth 1 -mindepth 1 -type d` binaryen
