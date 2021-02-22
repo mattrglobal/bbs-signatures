@@ -56,4 +56,4 @@ rm binaryen-download.tar.gz
 
 echo ">>> Transfering extracted result to execution directory"
 
-mv `find ./binaryen/* -maxdepth 1 -mindepth 1 -type d` binaryen
+mv `find binaryen/* -maxdepth 1 -mindepth 1 -type d` binaryen
