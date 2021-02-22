@@ -22,7 +22,7 @@
     "uninstall": "rm -rf node_modules && yarn clean",
     "clean": "rm -rf target && rm -rf dist",
     "build": "./scripts/build.sh",
-    "test": "yarn test:browser && yarn test:asm && yarn test:node && yarn test:wasm",
+    "test": "yarn test:browser && yarn test:node && yarn test:wasm",
     "test:browser": "./scripts/test-browser.sh",
     "test:node": "BBS_SIGNATURES_MODE=\"NODE_JS_MODULE\" yarn jest",
     "test:asm": "BBS_SIGNATURES_MODE=\"ASM_JS\" yarn jest",
