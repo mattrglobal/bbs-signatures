@@ -54,6 +54,7 @@ if (useWasm) {
   module.exports.BBS_SIGNATURE_LENGTH = 112;
 
   module.exports.generateBls12381G1KeyPair = async (seed) => {
+    await wasm.waitReady();
     var result = await throwErrorOnRejectedPromise(
       wasm.generateBls12381G1KeyPair(seed ? seed : null)
     );
@@ -64,6 +65,7 @@ if (useWasm) {
   };
 
   module.exports.generateBls12381G2KeyPair = async (seed) => {
+    await wasm.waitReady();
     var result = await throwErrorOnRejectedPromise(
       wasm.generateBls12381G2KeyPair(seed ? seed : null)
     );
@@ -74,6 +76,7 @@ if (useWasm) {
   };
 
   module.exports.bls12381toBbs = async (request) => {
+    await wasm.waitReady();
     var result = await throwErrorOnRejectedPromise(wasm.bls12381toBbs(request));
     return {
       publicKey: new Uint8Array(result.publicKey),
@@ -84,27 +87,43 @@ if (useWasm) {
     };
   };
 
-  module.exports.sign = (request) =>
-    throwErrorOnRejectedPromise(wasm.sign(request));
+  module.exports.sign = async (request) => {
+    await wasm.waitReady();
+    return await throwErrorOnRejectedPromise(wasm.sign(request));
+  };
 
-  module.exports.blsSign = (request) =>
-    throwErrorOnRejectedPromise(wasm.blsSign(request));
+  module.exports.blsSign = async (request) => {
+    await wasm.waitReady();
+    return await throwErrorOnRejectedPromise(wasm.blsSign(request));
+  };
 
-  module.exports.verify = (request) =>
-    throwErrorOnRejectedPromise(wasm.verify(request));
+  module.exports.verify = async (request) => {
+    await wasm.waitReady();
+    return await throwErrorOnRejectedPromise(wasm.verify(request));
+  };
 
-  module.exports.blsVerify = (request) =>
-    throwErrorOnRejectedPromise(wasm.blsVerify(request));
+  module.exports.blsVerify = async (request) => {
+    await wasm.waitReady();
+    return await throwErrorOnRejectedPromise(wasm.blsVerify(request));
+  };
 
-  module.exports.createProof = (request) =>
-    throwErrorOnRejectedPromise(wasm.createProof(request));
+  module.exports.createProof = async (request) => {
+    await wasm.waitReady();
+    return await throwErrorOnRejectedPromise(wasm.createProof(request));
+  };
 
-  module.exports.blsCreateProof = (request) =>
-    throwErrorOnRejectedPromise(wasm.blsCreateProof(request));
+  module.exports.blsCreateProof = async (request) => {
+    await wasm.waitReady();
+    return await throwErrorOnRejectedPromise(wasm.blsCreateProof(request));
+  };
 
-  module.exports.verifyProof = (request) =>
-    throwErrorOnRejectedPromise(wasm.verifyProof(request));
+  module.exports.verifyProof = async (request) => {
+    await wasm.waitReady();
+    return await throwErrorOnRejectedPromise(wasm.verifyProof(request));
+  };
 
-  module.exports.blsVerifyProof = (request) =>
-    throwErrorOnRejectedPromise(wasm.blsVerifyProof(request));
+  module.exports.blsVerifyProof = async (request) => {
+    await wasm.waitReady();
+    return await throwErrorOnRejectedPromise(wasm.blsVerifyProof(request));
+  };
 }
