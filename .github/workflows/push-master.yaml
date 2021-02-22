@@ -9,7 +9,7 @@ jobs:
   build_test_publish:
     name: Build, test, and publish unstable release
     if: "! contains(github.event.head_commit.message, '[skip ci]')"
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [10.x]
