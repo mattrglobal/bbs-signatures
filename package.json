@@ -76,6 +76,6 @@
     }
   },
   "optionalDependencies": {
-    "@mattrglobal/node-bbs-signatures": "0.10.0"
+    "@mattrglobal/node-bbs-signatures": "0.11.0"
   }
 }

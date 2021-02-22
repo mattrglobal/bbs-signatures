@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 use crate::{bls12381::BbsKeyPair, BbsVerifyResponse, PoKOfSignatureProofWrapper};
 use bbs::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -88,7 +89,7 @@ wasm_impl!(
 );
 
 #[wasm_bindgen(js_name = sign)]
-pub fn bbs_sign(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bbs_sign(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BbsSignRequest = request.try_into()?;
     let sk = request
         .keyPair
@@ -106,7 +107,7 @@ pub fn bbs_sign(request: JsValue) -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen(js_name = verify)]
-pub fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
     let res = request.try_into();
 
     let request: BbsVerifyRequest;
@@ -144,7 +145,7 @@ pub fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen(js_name = blindSignCommitment)]
-pub fn bbs_blind_signature_commitment(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bbs_blind_signature_commitment(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BlindSignatureContextRequest = serde_wasm_bindgen::from_value(request)?;
     if request.messages.len() != request.blinded.len() {
         return Err(JsValue::from("messages.len() != blinded.len()"));
@@ -179,7 +180,7 @@ pub fn bbs_blind_signature_commitment(request: JsValue) -> Result<JsValue, JsVal
 }
 
 #[wasm_bindgen(js_name = verifyBlind)]
-pub fn bbs_verify_blind_signature_proof(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bbs_verify_blind_signature_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BlindSignatureVerifyContextRequest = request.try_into()?;
     let total = request.publicKey.message_count();
     if request.blinded.iter().any(|b| *b > total) {
@@ -201,7 +202,7 @@ pub fn bbs_verify_blind_signature_proof(request: JsValue) -> Result<JsValue, JsV
 }
 
 #[wasm_bindgen(js_name = blindSign)]
-pub fn bbs_blind_sign(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bbs_blind_sign(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BlindSignContextRequest = request.try_into()?;
     if request.messages.len() != request.known.len() {
         return Err(JsValue::from("messages.len() != known.len()"));
@@ -231,7 +232,7 @@ pub fn bbs_blind_sign(request: JsValue) -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen(js_name = unBlind)]
-pub fn bbs_get_unblinded_signature(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bbs_get_unblinded_signature(request: JsValue) -> Result<JsValue, JsValue> {
     let request: UnblindSignatureRequest = request.try_into()?;
     Ok(
         serde_wasm_bindgen::to_value(&request.signature.to_unblinded(&request.blindingFactor))
@@ -240,7 +241,7 @@ pub fn bbs_get_unblinded_signature(request: JsValue) -> Result<JsValue, JsValue>
 }
 
 #[wasm_bindgen(js_name = createProof)]
-pub fn bbs_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bbs_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let request: CreateProofRequest = request.try_into()?;
     if request
         .revealed
@@ -289,7 +290,7 @@ pub fn bbs_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen(js_name = verifyProof)]
-pub fn bbs_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bbs_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let res = serde_wasm_bindgen::from_value::<VerifyProofContext>(request);
     let request: VerifyProofContext;
     match res {

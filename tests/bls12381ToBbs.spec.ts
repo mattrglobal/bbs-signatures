@@ -14,10 +14,10 @@
 import { generateBls12381G2KeyPair, bls12381toBbs, BlsKeyPair } from "../lib";
 
 describe("bls12381toBbs", () => {
-  it("should be able to convert bls12381 key pair to bbs key", () => {
-    const blsKeyPair = generateBls12381G2KeyPair();
+  it("should be able to convert bls12381 key pair to bbs key", async () => {
+    const blsKeyPair = await generateBls12381G2KeyPair();
     expect(blsKeyPair).toBeDefined();
-    const bbsKeyPair = bls12381toBbs({
+    const bbsKeyPair = await bls12381toBbs({
       keyPair: blsKeyPair,
       messageCount: 10,
     });
@@ -29,13 +29,13 @@ describe("bls12381toBbs", () => {
     expect(bbsKeyPair.secretKey).toBeInstanceOf(Uint8Array);
   });
 
-  it("should be able to convert bls12381 public key to bbs key", () => {
-    const blsKeyPair = generateBls12381G2KeyPair();
+  it("should be able to convert bls12381 public key to bbs key", async () => {
+    const blsKeyPair = await generateBls12381G2KeyPair();
     expect(blsKeyPair).toBeDefined();
     const blsPublicKey: BlsKeyPair = {
       publicKey: blsKeyPair.publicKey,
     };
-    const bbsKeyPair = bls12381toBbs({
+    const bbsKeyPair = await bls12381toBbs({
       keyPair: blsPublicKey,
       messageCount: 10,
     });
@@ -47,15 +47,15 @@ describe("bls12381toBbs", () => {
     expect(bbsKeyPair.publicKey).toBeInstanceOf(Uint8Array);
   });
 
-  it("should throw error when message count 0", () => {
-    const blsKeyPair = generateBls12381G2KeyPair();
+  it("should throw error when message count 0", async () => {
+    const blsKeyPair = await generateBls12381G2KeyPair();
     expect(blsKeyPair).toBeDefined();
 
-    expect(() =>
+    await expect(
       bls12381toBbs({
         keyPair: blsKeyPair,
         messageCount: 0,
       })
-    ).toThrowError("Failed to convert key");
+    ).rejects.toThrowError("Failed to convert key");
   });
 });

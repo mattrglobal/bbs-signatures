@@ -34,8 +34,8 @@ describe("bls12381", () => {
       publicKeyLength: DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH,
     },
   ].forEach((value) => {
-    it(`should be able to generate a key pair in ${value.field} field`, () => {
-      const result = value.generateKeyFn();
+    it(`should be able to generate a key pair in ${value.field} field`, async () => {
+      const result = await value.generateKeyFn();
       expect(result).toBeDefined();
       expect(result.publicKey).toBeDefined();
       expect(result.secretKey).toBeDefined();
@@ -58,9 +58,9 @@ describe("bls12381", () => {
       publicKeyLength: DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH,
     },
   ].forEach((value) => {
-    it(`should be able to generate a key pairs in ${value.field} field without seed which are random`, () => {
-      const keyPair1 = value.generateKeyFn();
-      const keyPair2 = value.generateKeyFn();
+    it(`should be able to generate a key pairs in ${value.field} field without seed which are random`, async () => {
+      const keyPair1 = await value.generateKeyFn();
+      const keyPair2 = await value.generateKeyFn();
       expect(keyPair1).toBeDefined();
       expect(keyPair2).toBeDefined();
       expect(
@@ -115,8 +115,8 @@ describe("bls12381", () => {
       ),
     },
   ].forEach((value) => {
-    it(`should be able to generate a key pair with a seed in ${value.field} field`, () => {
-      const result = value.generateKeyFn(value.seed);
+    it(`should be able to generate a key pair with a seed in ${value.field} field`, async () => {
+      const result = await value.generateKeyFn(value.seed);
       expect(result.publicKey).toBeDefined();
       expect(result.secretKey).toBeDefined();
       expect(result.secretKey?.length as number).toEqual(value.secretKeyLength);

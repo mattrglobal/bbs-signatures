@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 use crate::{BbsVerifyResponse, PoKOfSignatureProofWrapper};
 use bbs::prelude::*;
 use pairing_plus::{
@@ -88,8 +89,8 @@ wasm_impl!(
 /// returned vector is the concatenation of first the private key (32 bytes)
 /// followed by the public key (96) bytes.
 #[wasm_bindgen(js_name = generateBls12381G2KeyPair)]
-pub fn bls_generate_g2_key(seed: Option<Vec<u8>>) -> JsValue {
-    bls_generate_keypair::<G2>(seed)
+pub async fn bls_generate_g2_key(seed: Option<Vec<u8>>) -> Result<JsValue, JsValue> {
+    Ok(bls_generate_keypair::<G2>(seed))
 }
 
 /// Generate a BLS 12-381 key pair.
@@ -99,13 +100,13 @@ pub fn bls_generate_g2_key(seed: Option<Vec<u8>>) -> JsValue {
 /// returned vector is the concatenation of first the private key (32 bytes)
 /// followed by the public key (48) bytes.
 #[wasm_bindgen(js_name = generateBls12381G1KeyPair)]
-pub fn bls_generate_g1_key(seed: Option<Vec<u8>>) -> JsValue {
-    bls_generate_keypair::<G1>(seed)
+pub async fn bls_generate_g1_key(seed: Option<Vec<u8>>) -> Result<JsValue, JsValue> {
+    Ok(bls_generate_keypair::<G1>(seed))
 }
 
 /// Get the BBS public key associated with the private key
 #[wasm_bindgen(js_name = bls12381toBbs)]
-pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
     let request: Bls12381ToBbsRequest = request.try_into()?;
     if request.messageCount == 0 {
         return Err(JsValue::from_str("Failed to convert key"));
@@ -135,7 +136,7 @@ pub fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
 
 /// Signs a set of messages with a BLS 12-381 key pair and produces a BBS signature
 #[wasm_bindgen(js_name = blsSign)]
-pub fn bls_sign(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bls_sign(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BlsBbsSignRequest = request.try_into()?;
     let dpk_bytes = request.keyPair.publicKey.unwrap();
     let dpk = DeterministicPublicKey::from(array_ref![dpk_bytes, 0, G2_COMPRESSED_SIZE]);
@@ -165,7 +166,7 @@ pub fn bls_sign(request: JsValue) -> Result<JsValue, JsValue> {
 
 /// Verifies a BBS+ signature for a set of messages with a with a BLS 12-381 public key
 #[wasm_bindgen(js_name = blsVerify)]
-pub fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
     let res = request.try_into();
     let result: BlsBbsVerifyRequest;
     match res {
@@ -207,7 +208,7 @@ pub fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
 
 /// Creates a BBS+ PoK
 #[wasm_bindgen(js_name = blsCreateProof)]
-pub fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let request: BlsCreateProofRequest = request.try_into()?;
     if request.revealed.iter().any(|r| *r > request.messages.len()) {
         return Err(JsValue::from("revealed value is out of bounds"));
@@ -251,7 +252,7 @@ pub fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
 
 /// Verify a BBS+ PoK
 #[wasm_bindgen(js_name = blsVerifyProof)]
-pub fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
+pub async fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let res = serde_wasm_bindgen::from_value::<BlsVerifyProofContext>(request);
     let request: BlsVerifyProofContext;
     match res {

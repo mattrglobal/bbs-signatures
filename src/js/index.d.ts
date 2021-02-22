@@ -36,26 +36,38 @@ export const DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH = 96;
 
 export function generateBls12381G1KeyPair(
   seed?: Uint8Array
-): Required<BlsKeyPair>;
+): Promise<Required<BlsKeyPair>>;
 
 export function generateBls12381G2KeyPair(
   seed?: Uint8Array
-): Required<BlsKeyPair>;
+): Promise<Required<BlsKeyPair>>;
 
-export function bls12381toBbs(request: Bls12381ToBbsRequest): BbsKeyPair;
+export function bls12381toBbs(
+  request: Bls12381ToBbsRequest
+): Promise<BbsKeyPair>;
 
-export function sign(request: BbsSignRequest): Uint8Array;
+export function sign(request: BbsSignRequest): Promise<Uint8Array>;
 
-export function blsSign(request: BlsBbsSignRequest): Uint8Array;
+export function blsSign(request: BlsBbsSignRequest): Promise<Uint8Array>;
 
-export function verify(request: BbsVerifyRequest): BbsVerifyResult;
+export function verify(request: BbsVerifyRequest): Promise<BbsVerifyResult>;
 
-export function blsVerify(request: BlsBbsVerifyRequest): BbsVerifyResult;
+export function blsVerify(
+  request: BlsBbsVerifyRequest
+): Promise<BbsVerifyResult>;
 
-export function createProof(request: BbsCreateProofRequest): Uint8Array;
+export function createProof(
+  request: BbsCreateProofRequest
+): Promise<Uint8Array>;
 
-export function verifyProof(request: BbsVerifyProofRequest): BbsVerifyResult;
+export function verifyProof(
+  request: BbsVerifyProofRequest
+): Promise<BbsVerifyResult>;
 
-export function blsCreateProof(request: BbsCreateProofRequest): Uint8Array;
+export function blsCreateProof(
+  request: BbsCreateProofRequest
+): Promise<Uint8Array>;
 
-export function blsVerifyProof(request: BbsVerifyProofRequest): BbsVerifyResult;
+export function blsVerifyProof(
+  request: BbsVerifyProofRequest
+): Promise<BbsVerifyResult>;

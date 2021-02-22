@@ -22,7 +22,7 @@ import { base64Decode, stringToBytes } from "../utilities";
 
 describe("bbsSignature", () => {
   describe("verifyProof", () => {
-    it("should verify proof with all messages revealed from single message signature", () => {
+    it("should verify proof with all messages revealed from single message signature", async () => {
       const messages = [stringToBytes("KNK0ITRAF+NrGg==")];
       const bbsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pboZyjM38YgjaUBcjftZi5gb58Qz13XeRJpiuUHH06I7/1Eb8oVtIW5SGMNfKaqKhBAAAAAYPPztgxfWWw01/0SSug1oLfVuI4XUqhgyZ3rS6eTkOLjnyR3ObXb0XCD2Mfcxiv6w=="
@@ -38,10 +38,10 @@ describe("bbsSignature", () => {
         nonce: stringToBytes("v3bb/Mz+JajUdiM2URfZYcPuqxw="),
       };
 
-      expect(verifyProof(request).verified).toBeTruthy();
+      expect((await verifyProof(request)).verified).toBeTruthy();
     });
 
-    it("should verify proof with all messages revealed from multi message signature", () => {
+    it("should verify proof with all messages revealed from multi message signature", async () => {
       const messages = [
         stringToBytes("BVB6lAn912sz9Q=="),
         stringToBytes("b45VqRkIo5R5Zw=="),
@@ -61,10 +61,10 @@ describe("bbsSignature", () => {
         nonce: stringToBytes("dVPpzuQtJVAZzAw73beWiXLtoT4="),
       };
 
-      expect(verifyProof(request).verified).toBeTruthy();
+      expect((await verifyProof(request)).verified).toBeTruthy();
     });
 
-    it("should verify proof with one message revealed from multi-message signature", () => {
+    it("should verify proof with one message revealed from multi-message signature", async () => {
       const messages = [
         stringToBytes("+FxEv3VLcNZ8sA=="),
         stringToBytes("eI2RcRExnbP8hw=="),
@@ -86,10 +86,10 @@ describe("bbsSignature", () => {
         nonce: stringToBytes("NoWZhtX+u1wWLtUfPMmku1FtU2I="),
       };
 
-      expect(verifyProof(request).verified).toBeTruthy();
+      expect((await verifyProof(request)).verified).toBeTruthy();
     });
 
-    it("should not verify with bad nonce", () => {
+    it("should not verify with bad nonce", async () => {
       const messages = [stringToBytes("KNK0ITRAF+NrGg==")];
       const bbsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pboZyjM38YgjaUBcjftZi5gb58Qz13XeRJpiuUHH06I7/1Eb8oVtIW5SGMNfKaqKhBAAAAAYPPztgxfWWw01/0SSug1oLfVuI4XUqhgyZ3rS6eTkOLjnyR3ObXb0XCD2Mfcxiv6w=="
@@ -105,10 +105,10 @@ describe("bbsSignature", () => {
         nonce: stringToBytes("bad"),
       };
 
-      expect(verifyProof(request).verified).toBeFalsy();
+      expect((await verifyProof(request)).verified).toBeFalsy();
     });
 
-    it("should not verify with a message that wasn't signed", () => {
+    it("should not verify with a message that wasn't signed", async () => {
       // Expects messages to be ["Message1", "Message2", "Message3", "Message4"];
       const messages = [
         stringToBytes("BadMessage1"),
@@ -129,11 +129,11 @@ describe("bbsSignature", () => {
         messages,
         nonce: stringToBytes("0123456789"),
       };
-      expect(verifyProof(request).verified).toBeFalsy();
+      expect((await verifyProof(request)).verified).toBeFalsy();
     });
   });
 
-  it("should not verify with revealed message that was supposed to be hidden", () => {
+  it("should not verify with revealed message that was supposed to be hidden", async () => {
     const messages = [
       stringToBytes("Message1"),
       stringToBytes("Message2"),
@@ -155,7 +155,7 @@ describe("bbsSignature", () => {
       revealed: [0],
       nonce,
     };
-    const proof = createProof(proofRequest);
+    const proof = await createProof(proofRequest);
 
     let proofMessages = [stringToBytes("BadMessage9")];
     let request = {
@@ -167,7 +167,7 @@ describe("bbsSignature", () => {
       revealed: [0],
     };
 
-    expect(verifyProof(request).verified).toBeFalsy();
+    expect((await verifyProof(request)).verified).toBeFalsy();
 
     proofMessages = [stringToBytes("Message1")];
     request = {
@@ -178,11 +178,11 @@ describe("bbsSignature", () => {
       nonce,
       revealed: [0],
     };
-    expect(verifyProof(request).verified).toBeTruthy();
+    expect((await verifyProof(request)).verified).toBeTruthy();
   });
 
   describe("blsVerifyProof", () => {
-    it("should verify proof with all messages revealed from single message signature", () => {
+    it("should verify proof with all messages revealed from single message signature", async () => {
       const messages = [stringToBytes("KnYAbm0fw3mlUA==")];
       const blsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pb"
@@ -198,10 +198,10 @@ describe("bbsSignature", () => {
         nonce: stringToBytes("4OS3nji2HNReo3QPHrdlxjOf8gc="),
       };
 
-      expect(blsVerifyProof(request).verified).toBeTruthy();
+      expect((await blsVerifyProof(request)).verified).toBeTruthy();
     });
 
-    it("should verify proof with all messages revealed from multi message signature", () => {
+    it("should verify proof with all messages revealed from multi message signature", async () => {
       const messages = [
         stringToBytes("ODLpUKee6nyz7g=="),
         stringToBytes("v2zteJajIyIh5Q=="),
@@ -221,10 +221,10 @@ describe("bbsSignature", () => {
         nonce: stringToBytes("ujMevaaq2n7Cg3ZLzXktqT/WRgM="),
       };
 
-      expect(blsVerifyProof(request).verified).toBeTruthy();
+      expect((await blsVerifyProof(request)).verified).toBeTruthy();
     });
 
-    it("should verify proof with one message revealed from multi-message signature", () => {
+    it("should verify proof with one message revealed from multi-message signature", async () => {
       const messages = [
         stringToBytes("8NhsJO/MKxO74A=="),
         stringToBytes("0noLBcl29ASJ2w=="),
@@ -246,10 +246,10 @@ describe("bbsSignature", () => {
         nonce: stringToBytes("I03DvFXcpVdOPuOiyXgcBf4voAA="),
       };
 
-      expect(blsVerifyProof(request).verified).toBeTruthy();
+      expect((await blsVerifyProof(request)).verified).toBeTruthy();
     });
 
-    it("should not verify with bad nonce", () => {
+    it("should not verify with bad nonce", async () => {
       const messages = [stringToBytes("KnYAbm0fw3mlUA==")];
       const blsPublicKey = base64Decode(
         "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pb"
@@ -265,7 +265,7 @@ describe("bbsSignature", () => {
         nonce: stringToBytes("bad"),
       };
 
-      expect(blsVerifyProof(request).verified).toBeFalsy();
+      expect((await blsVerifyProof(request)).verified).toBeFalsy();
     });
   });
 });
