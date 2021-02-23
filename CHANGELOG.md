@@ -1,3 +1,19 @@
+# [0.5.0](https://github.com/mattrglobal/bbs-signatures/compare/v0.3.0...v0.5.0) (2021-02-23)
+
+BREAKING CHANGES: The API exposed by this library is now promise based see [#61](https://github.com/mattrglobal/bbs-signatures/issues/61) for more details.
+
+### Bug Fixes
+
+- set private key as defined on generate returntype ([#47](https://github.com/mattrglobal/bbs-signatures/issues/47)) ([5b29ec8](https://github.com/mattrglobal/bbs-signatures/commit/5b29ec86754e085f6db4dac4409f409da0990e1e))
+- **sample:** update references to generateBls12381G2KeyPair ([#48](https://github.com/mattrglobal/bbs-signatures/issues/48)) ([691fe74](https://github.com/mattrglobal/bbs-signatures/commit/691fe7491664e5a1196eab08f2066fbd8996cd16))
+- **sample:** use byte arrays instead of strings ([#51](https://github.com/mattrglobal/bbs-signatures/issues/51)) ([fcb06c9](https://github.com/mattrglobal/bbs-signatures/commit/fcb06c927d696f43453ec93aad11444d06d32cd3)), closes [#49](https://github.com/mattrglobal/bbs-signatures/issues/49)
+
+### Features
+
+- change to use byte arrays for messages and support generating g1 keys ([#40](https://github.com/mattrglobal/bbs-signatures/issues/40)) ([92238cf](https://github.com/mattrglobal/bbs-signatures/commit/92238cf0895cde7a88c2ce6a830bf07bf2a7d28d))
+- **sample:** update to the latest released version v0.4.0 ([f8fa318](https://github.com/mattrglobal/bbs-signatures/commit/f8fa3185787e2edb1484d942bd83a86d42f9a05f)), closes [#50](https://github.com/mattrglobal/bbs-signatures/issues/50) [#50](https://github.com/mattrglobal/bbs-signatures/issues/50) [#49](https://github.com/mattrglobal/bbs-signatures/issues/49)
+- migrate to async based api ([#61](https://github.com/mattrglobal/bbs-signatures/issues/61)) ([5dbd924](https://github.com/mattrglobal/bbs-signatures/commit/5dbd924fe601b8d085d80b68b0b69b1e7b892022))
+
 # [0.4.0](https://github.com/mattrglobal/bbs-signatures/compare/v0.3.0...v0.4.0) (2020-08-27)
 
 ### Bug Fixes
