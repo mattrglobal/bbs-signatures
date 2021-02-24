@@ -19,9 +19,9 @@ import {
   blsVerifyProof,
 } from "@mattrglobal/bbs-signatures";
 
-const main = (): void => {
+const main = async () => {
   //Generate a new key pair
-  const keyPair = generateBls12381G2KeyPair();
+  const keyPair = await generateBls12381G2KeyPair();
 
   console.log("Key pair generated");
   console.log(
@@ -37,7 +37,7 @@ const main = (): void => {
   console.log("Signing a message set of " + messages);
 
   //Create the signature
-  const signature = blsSign({
+  const signature = await blsSign({
     keyPair,
     messages: messages,
   });
@@ -47,7 +47,7 @@ const main = (): void => {
   );
 
   //Verify the signature
-  const isVerified = blsVerify({
+  const isVerified = await blsVerify({
     publicKey: keyPair.publicKey,
     messages: messages,
     signature,
@@ -57,7 +57,7 @@ const main = (): void => {
   console.log(`Signature verified ? ${isVerifiedString}`);
 
   //Derive a proof from the signature revealing the first message
-  const proof = blsCreateProof({
+  const proof = await blsCreateProof({
     signature,
     publicKey: keyPair.publicKey,
     messages,
@@ -68,7 +68,7 @@ const main = (): void => {
   console.log(`Output proof base64 = ${Buffer.from(proof).toString("base64")}`);
 
   //Verify the created proof
-  const isProofVerified = blsVerifyProof({
+  const isProofVerified = await blsVerifyProof({
     proof,
     publicKey: keyPair.publicKey,
     messages: messages.slice(0, 1),

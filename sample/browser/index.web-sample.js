@@ -21,57 +21,61 @@ import {
   blsVerifyProof,
 } from "@mattrglobal/bbs-signatures";
 
-//Generate a new key pair
-const keyPair = generateBls12381G2KeyPair();
+const main = async () => {
+  //Generate a new key pair
+  const keyPair = await generateBls12381G2KeyPair();
 
-console.log("Key pair generated");
-console.log(
-  `Public key base64 = ${Buffer.from(keyPair.publicKey).toString("base64")}`
-);
+  console.log("Key pair generated");
+  console.log(
+    `Public key base64 = ${Buffer.from(keyPair.publicKey).toString("base64")}`
+  );
 
-//Set of messages we wish to sign
-const messages = [stringToBytes("message1"), stringToBytes("message2")];
+  //Set of messages we wish to sign
+  const messages = [stringToBytes("message1"), stringToBytes("message2")];
 
-console.log("Signing a message set of " + messages);
+  console.log("Signing a message set of " + messages);
 
-//Create the signature
-const signature = blsSign({
-  keyPair,
-  messages: messages,
-});
+  //Create the signature
+  const signature = await blsSign({
+    keyPair,
+    messages: messages,
+  });
 
-console.log(
-  `Output signature base64 = ${Buffer.from(signature).toString("base64")}`
-);
+  console.log(
+    `Output signature base64 = ${Buffer.from(signature).toString("base64")}`
+  );
 
-//Verify the signature
-const isVerified = blsVerify({
-  publicKey: Uint8Array.from(keyPair.publicKey),
-  messages: messages,
-  signature,
-});
+  //Verify the signature
+  const isVerified = await blsVerify({
+    publicKey: Uint8Array.from(keyPair.publicKey),
+    messages: messages,
+    signature,
+  });
 
-const isVerifiedString = JSON.stringify(isVerified);
-console.log(`Signature verified ? ${isVerifiedString}`);
+  const isVerifiedString = JSON.stringify(isVerified);
+  console.log(`Signature verified ? ${isVerifiedString}`);
 
-//Derive a proof from the signature revealing the first message
-const proof = blsCreateProof({
-  signature,
-  publicKey: Uint8Array.from(keyPair.publicKey),
-  messages,
-  nonce: stringToBytes("nonce"),
-  revealed: [0],
-});
+  //Derive a proof from the signature revealing the first message
+  const proof = await blsCreateProof({
+    signature,
+    publicKey: Uint8Array.from(keyPair.publicKey),
+    messages,
+    nonce: stringToBytes("nonce"),
+    revealed: [0],
+  });
 
-console.log(`Output proof base64 = ${Buffer.from(proof).toString("base64")}`);
+  console.log(`Output proof base64 = ${Buffer.from(proof).toString("base64")}`);
 
-//Verify the created proof
-const isProofVerified = blsVerifyProof({
-  proof,
-  publicKey: Uint8Array.from(keyPair.publicKey),
-  messages: messages.slice(0, 1),
-  nonce: stringToBytes("nonce"),
-});
+  //Verify the created proof
+  const isProofVerified = await blsVerifyProof({
+    proof,
+    publicKey: Uint8Array.from(keyPair.publicKey),
+    messages: messages.slice(0, 1),
+    nonce: stringToBytes("nonce"),
+  });
 
-const isProofVerifiedString = JSON.stringify(isProofVerified);
-console.log(`Proof verified ? ${isProofVerifiedString}`);
+  const isProofVerifiedString = JSON.stringify(isProofVerified);
+  console.log(`Proof verified ? ${isProofVerifiedString}`);
+};
+
+main();

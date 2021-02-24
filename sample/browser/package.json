@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A sample for using bbs-signatures in browser",
   "repository": "https://github.com/mattrglobal/bbs-signatures",
-  "author": "Mattr Limited",
+  "author": "Mattr",
   "license": "Apache-2.0",
   "private": false,
   "scripts": {
@@ -15,6 +15,6 @@
     "webpack-dev-server": "3.11.0"
   },
   "dependencies": {
-    "@mattrglobal/bbs-signatures": "0.4.0"
+    "@mattrglobal/bbs-signatures": "0.5.0"
   }
 }
