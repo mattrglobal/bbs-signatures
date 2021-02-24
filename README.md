@@ -87,7 +87,7 @@ import {
 } from "@mattrglobal/bbs-signatures";
 
 //Generate a new key pair
-const keyPair = generateBls12381G2KeyPair();
+const keyPair = await generateBls12381G2KeyPair();
 
 //Set of messages we wish to sign
 const messages = [
@@ -96,20 +96,20 @@ const messages = [
 ];
 
 //Create the signature
-const signature = blsSign({
+const signature = await blsSign({
   keyPair,
   messages: messages,
 });
 
 //Verify the signature
-const isVerified = blsVerify({
+const isVerified = await blsVerify({
   publicKey: keyPair.publicKey,
   messages: messages,
   signature,
 });
 
 //Derive a proof from the signature revealing the first message
-const proof = blsCreateProof({
+const proof = await blsCreateProof({
   signature,
   publicKey: keyPair.publicKey,
   messages,
@@ -118,7 +118,7 @@ const proof = blsCreateProof({
 });
 
 //Verify the created proof
-const isProofVerified = blsVerifyProof({
+const isProofVerified = await blsVerifyProof({
   proof,
   publicKey: keyPair.publicKey,
   messages: messages.slice(0, 1),
