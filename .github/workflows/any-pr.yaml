@@ -5,10 +5,11 @@ on: [pull_request]
 jobs:
   build_test:
     name: Build test
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        node-version: [10.x]
+        node-version: [10.x, 11.x, 12.x, 13.x, 14.x]
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1

@@ -17,6 +17,9 @@
   "directories": {
     "lib": "lib"
   },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "scripts": {
     "install": "./scripts/install-dependencies.sh",
     "uninstall": "rm -rf node_modules && yarn clean",
