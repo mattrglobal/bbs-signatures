@@ -12,7 +12,7 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 console = ["console_error_panic_hook"]
-default = []
+default = ["wee_alloc"]
 
 [dependencies]
 arrayref = "0.3"
