@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright 2020 - MATTR Limited
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,16 +12,28 @@
  * limitations under the License.
  */
 
-import init from "./wasm.js";
-import * as wasm from "./wasm.js";
+// Inject the RNG source when in NodeJS environments
+const { randomBytes } = require("@stablelib/random");
 
-export const BBS_SIGNATURE_LENGTH = 112;
+// Translate `wasm.js` to CommonJS which is generated
+// as an ES module, syntax that is not supported by NodeJS
+const wasm = require("esm")(module)("./wasm.js");
 
-export const DEFAULT_BLS12381_PRIVATE_KEY_LENGTH = 32;
+// Fetch the wasm and load the module manually
+const path = require("path").join(__dirname, "wasm_bg.wasm");
+const bytes = require("fs").readFileSync(path);
+const wasmModule = new WebAssembly.Module(bytes);
 
-export const DEFAULT_BLS12381_G1_PUBLIC_KEY_LENGTH = 48;
+// TODO should be able to remove this duplicate definition syntax by using ESM over index.web.js
+// in future
 
-export const DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH = 96;
+module.exports.DEFAULT_BLS12381_PRIVATE_KEY_LENGTH = 32;
+
+module.exports.DEFAULT_BLS12381_G1_PUBLIC_KEY_LENGTH = 48;
+
+module.exports.DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH = 96;
+
+module.exports.BBS_SIGNATURE_LENGTH = 112;
 
 // Casts a rejected promise to an error rather than a
 // simple string result
@@ -35,14 +48,14 @@ const throwErrorOnRejectedPromise = async (promise) => {
 let initializedModule;
 const initialize = async () => {
   if (!initializedModule) {
-    initializedModule = await init();
+    initializedModule = await wasm.default(wasmModule);
   }
 };
 
-export const generateBls12381G1KeyPair = async (seed) => {
+module.exports.generateBls12381G1KeyPair = async (seed) => {
   await initialize();
   var result = await throwErrorOnRejectedPromise(
-    wasm.generateBls12381G1KeyPair(seed ? seed : null)
+    wasm.generateBls12381G1KeyPair(seed ? seed : await randomBytes(32))
   );
   return {
     secretKey: new Uint8Array(result.secretKey),
@@ -50,10 +63,10 @@ export const generateBls12381G1KeyPair = async (seed) => {
   };
 };
 
-export const generateBls12381G2KeyPair = async (seed) => {
+module.exports.generateBls12381G2KeyPair = async (seed) => {
   await initialize();
   var result = await throwErrorOnRejectedPromise(
-    wasm.generateBls12381G2KeyPair(seed ? seed : null)
+    wasm.generateBls12381G2KeyPair(seed ? seed : await randomBytes(32))
   );
   return {
     secretKey: new Uint8Array(result.secretKey),
@@ -61,7 +74,7 @@ export const generateBls12381G2KeyPair = async (seed) => {
   };
 };
 
-export const bls12381toBbs = async (request) => {
+module.exports.bls12381toBbs = async (request) => {
   await initialize();
   var result = await throwErrorOnRejectedPromise(wasm.bls12381toBbs(request));
   return {
@@ -71,42 +84,42 @@ export const bls12381toBbs = async (request) => {
   };
 };
 
-export const sign = async (request) => {
+module.exports.sign = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.sign(request));
 };
 
-export const blsSign = async (request) => {
+module.exports.blsSign = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.blsSign(request));
 };
 
-export const verify = async (request) => {
+module.exports.verify = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.verify(request));
 };
 
-export const blsVerify = async (request) => {
+module.exports.blsVerify = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.blsVerify(request));
 };
 
-export const createProof = async (request) => {
+module.exports.createProof = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.createProof(request));
 };
 
-export const blsCreateProof = async (request) => {
+module.exports.blsCreateProof = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.blsCreateProof(request));
 };
 
-export const verifyProof = async (request) => {
+module.exports.verifyProof = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.verifyProof(request));
 };
 
-export const blsVerifyProof = async (request) => {
+module.exports.blsVerifyProof = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.blsVerifyProof(request));
 };
