@@ -41,14 +41,6 @@ Or with [Yarn](https://yarnpkg.com/)
 yarn add @mattrglobal/bbs-signatures
 ```
 
-### Using via CDN in browser
-
-To use this library in browser via the [unpkg](https://unpkg.com) CDN, include the following script element in your HTML
-
-```HTML
-<script type="text/javascript" src="https://unpkg.com/@mattrglobal/bbs-signatures/dist/bbs-signatures.min.js"></script></body>
-```
-
 ### Environment Support
 
 This library includes a couple of features to ensure the most performant implementation of BBS is running in a execution environment. The order of selection is the following.
@@ -63,13 +55,6 @@ This library includes a couple of features to ensure the most performant impleme
 
 - `NODE_JS_MODULE` - Use native node module, ensure [@mattrglobal/node-bbs-signatures](https://github.com/mattrglobal/node-bbs-signatures) is installed
 - `WASM` - Use the wasm module
-- `ASM_JS` - Use the asm.js module
-
-#### React Native
-
-Currently [Web Assembly](https://webassembly.org/) support in javascript environments like react native is [not official](https://react-native.canny.io/feature-requests/p/support-wasmwebassembly).
-
-To enable support, this library features an [asm.js](http://asmjs.org/) version of the library that is complied from the [Web Assembly](https://webassembly.org/) module using [wasm2js](https://github.com/WebAssembly/binaryen/blob/master/src/wasm2js.h) from the [binaryen project](https://github.com/WebAssembly/binaryen). When this library is being used in an environment where [Web Assembly](https://webassembly.org/) is not detected this asm.js fall back is used.
 
 ## Usage
 
@@ -203,12 +188,6 @@ To run just the tests for a node environment using the wasm module run:
 yarn test:wasm
 ```
 
-To run just the tests for a node environment using the asm.js module run:
-
-```
-yarn test:asm
-```
-
 To run just the tests for a browser environment run:
 
 ```
@@ -227,12 +206,6 @@ To benchmark the implementation locally in a node environment using the wasm mod
 
 ```
 yarn benchmark:wasm
-```
-
-To benchmark the implementation locally in a node environment using the asm.js module run:
-
-```
-yarn benchmark:asm
 ```
 
 ## Dependencies

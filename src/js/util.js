@@ -1,41 +1,15 @@
-let decoder;
-
-function polyfilledDecode(value) {
-  return value.reduce((str, code) => {
-    return str + String.fromCharCode(code);
-  }, "");
-}
-
-try {
-  decoder = new TextDecoder("utf-8");
-} catch (error) {
-  decoder = {
-    decode: polyfilledDecode,
-  };
-}
-
-/**
- * @name u8aToString
- * @summary Creates a utf-8 string from a Uint8Array object.
- * @description
- * `UInt8Array` input values return the actual decoded utf-8 string. `null` or `undefined` values returns an empty string.
- * @example
- * <BR>
- *
- * ```javascript
- * const { u8aToString } = require('./util');
- *
- * u8aToString(new Uint8Array([0x68, 0x65, 0x6c, 0x6c, 0x6f])); // hello
- * ```
+/*
+ * Copyright 2020 - MATTR Limited
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-function u8aToString(value) {
-  if (!value || !value.length) {
-    return "";
-  }
-  return decoder.decode(value);
-}
-
-exports.u8aToString = u8aToString;
 
 /**
  * Enumeration of possible values for setting the
@@ -44,7 +18,6 @@ exports.u8aToString = u8aToString;
 exports.BBS_SIGNATURES_MODES = {
   nodejs: "NODE_JS_MODULE",
   wasm: "WASM",
-  asmjs: "ASM_JS",
 };
 
 /**
