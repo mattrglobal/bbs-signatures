@@ -224,6 +224,31 @@ describe("bbsSignature", () => {
       expect((await blsVerifyProof(request)).verified).toBeTruthy();
     });
 
+    it("should verify proof with multiple messages revealed from multi-message signature", async () => {
+      const messages = [
+        stringToBytes("uiSKIfNoO2rMrA=="),
+        stringToBytes("lMoHHrFx0LxwAw=="),
+        stringToBytes("wdwqLVm9chMMnA=="),
+      ];
+      const blsPublicKey = base64Decode(
+        "qJgttTOthlZHltz+c0PE07hx3worb/cy7QY5iwRegQ9BfwvGahdqCO9Q9xuOnF5nD/Tq6t8zm9z26EAFCiaEJnL5b50D1cHDgNxBUPEEae+4bUb3JRsHaxBdZWDOo3pb"
+      );
+      const proof = base64Decode(
+        "AAMFkCuKmSKVB4QeCczJx4gBEtGoYY2ChhcNMYTbVa1L/vpcWmFYwUQHNN+n9TetMJygkJETUL30Zv+iYqplSMkdTBDe36TZKlCi+2+MaIhh66HsJT7lWcvpkxI3uC8SyDEutqVSIaVdsb1czpiQbxbjfo+Cg5nPw3qKpeSb7kGY3dMRRMd/Ug0YnGEN9eUqsWt/AAAAdKeTj+pJJiAVX9FuWIv7c4GVYEfzwyD7WXGBIWdrKIZdRLOIn+NGUmIdutzRr9ISiQAAAAIR2WRLfTY/mnmo4oz9iOgQwpoELlkXpU5Gx0sLMMBbxgqjg9aktKyVy6HXuWLafe1YyoV7acXWRbvfwPMoI/dwuDBAJQ30CHN+GD/ZkGvEq5VfogWE1gttKmwzwDatvaYuc16aC4BkdJ6qu+H9Z4+rAAAAA12Q0JuR4V606bCaqYLw+JzSkoyGGIviZnBezqR4pINTUPXBQQQ57cm8l5ldBM0uM6220n40hrc6kVKgJpUcIC8N68lTkdo/RGTF4lYdwYz7L7lZwmaSSLuGi0J+n7mbUA=="
+      );
+
+      const revealedMessages = [messages[0], messages[2]];
+
+      const request: BbsVerifyProofRequest = {
+        proof,
+        publicKey: blsPublicKey,
+        messages: revealedMessages,
+        nonce: base64Decode("csBYAufrvE1zkg=="),
+      };
+      const result = await blsVerifyProof(request);
+      expect(result.verified).toBeTruthy();
+    });
+
     it("should verify proof with one message revealed from multi-message signature", async () => {
       const messages = [
         stringToBytes("8NhsJO/MKxO74A=="),

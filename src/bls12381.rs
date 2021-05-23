@@ -280,9 +280,16 @@ pub async fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
         verification_key: pk,
     };
 
+    let revealed_vec = proof_request
+        .revealed_messages
+        .iter()
+        .collect::<Vec<&usize>>();
     let mut revealed_messages = BTreeMap::new();
-    for i in &proof_request.revealed_messages {
-        revealed_messages.insert(*i, SignatureMessage::hash(&messages[*i]));
+    for i in 0..revealed_vec.len() {
+        revealed_messages.insert(
+            *revealed_vec[i],
+            SignatureMessage::hash(messages[i].clone()),
+        );
     }
 
     let signature_proof = SignatureProof {
