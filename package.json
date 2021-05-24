@@ -26,7 +26,7 @@
     "install": "./scripts/install-dependencies.sh",
     "uninstall": "rm -rf node_modules && yarn clean",
     "clean": "rm -rf target && rm -rf dist",
-    "build": "./scripts/build-package.sh",
+    "build": "./scripts/build-package.sh && yarn rollup &&rollup ./lib/wasm.js --file ./lib/wasm_cjs.js --format cjs",
     "test": "yarn test:browser && yarn test:node && yarn test:wasm",
     "test:browser": "./scripts/test-browser.sh",
     "test:node": "BBS_SIGNATURES_MODE=\"NODE_JS_MODULE\" yarn jest",
@@ -53,6 +53,7 @@
     "jest": "24.9.0",
     "prettier": "2.0.4",
     "pretty-quick": "2.0.1",
+    "rollup": "2.49.0",
     "text-encoding": "0.7.0",
     "ts-jest": "24.0.2",
     "ts-node": "8.4.1",
@@ -78,7 +79,6 @@
     "@mattrglobal/node-bbs-signatures": "0.12.0"
   },
   "dependencies": {
-    "@stablelib/random": "1.0.0",
-    "esm": "3.2.25"
+    "@stablelib/random": "1.0.0"
   }
 }
