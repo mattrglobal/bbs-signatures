@@ -27,3 +27,5 @@ exports.WEB_ASSEMBLY_NOT_FOUND_ERROR = "WebAssembly support not detected";
 exports.FAILED_INITIALIZE_ERROR = "ERROR: Unable to initialize bbs signatures";
 exports.FAILED_TO_LOAD_NODE_MODULE =
   "ERROR: Unable to initialize bbs signatures with node module that was requested with the `BBS_SIGNATURES_MODE` environment variable";
+
+exports.nodejs = process && process.versions && process.versions.node;

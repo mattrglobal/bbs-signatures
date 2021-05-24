@@ -24,10 +24,13 @@ export const DEFAULT_BLS12381_G2_PUBLIC_KEY_LENGTH = 96;
 
 // Casts a rejected promise to an error rather than a
 // simple string result
-const throwErrorOnRejectedPromise = async (promise) => {
+const throwErrorOnRejectedPromise = async (promise, errorMessage) => {
   try {
     return await promise;
   } catch (ex) {
+    if (errorMessage) {
+      throw new Error(errorMessage);
+    }
     throw new Error(ex);
   }
 };
@@ -93,12 +96,18 @@ export const blsVerify = async (request) => {
 
 export const createProof = async (request) => {
   await initialize();
-  return await throwErrorOnRejectedPromise(wasm.createProof(request));
+  return await throwErrorOnRejectedPromise(
+    wasm.createProof(request),
+    "Failed to create proof"
+  );
 };
 
 export const blsCreateProof = async (request) => {
   await initialize();
-  return await throwErrorOnRejectedPromise(wasm.blsCreateProof(request));
+  return await throwErrorOnRejectedPromise(
+    wasm.blsCreateProof(request),
+    "Failed to create proof"
+  );
 };
 
 export const verifyProof = async (request) => {

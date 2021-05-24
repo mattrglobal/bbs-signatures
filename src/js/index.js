@@ -12,9 +12,11 @@
  * limitations under the License.
  */
 
-const { BBS_SIGNATURES_MODES, FAILED_TO_LOAD_NODE_MODULE } = require("./util");
-
-const nodejs = process && process.versions && process.versions.node;
+const {
+  BBS_SIGNATURES_MODES,
+  FAILED_TO_LOAD_NODE_MODULE,
+  nodejs,
+} = require("./util");
 
 let useWasm = !(
   nodejs &&
