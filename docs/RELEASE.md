@@ -6,7 +6,7 @@ To create a stable release follow the following steps
 2. Create a new release branch from master e.g `release`
 3. Ensure the package is clean from previous branches/builds `yarn clean`
 4. Install the dependencies `yarn install --frozen-lockfile`
-5. Build the package `yarn build`
+5. Build the package for release `yarn build:release`
 6. Test the package `yarn test`
 7. Run `yarn version:release`, note by default this will do a minor package release as we are pre the `1.0.0` release
 8. Observe the correctly incremented change to the `package.json` and the new entry in `CHANGELOG.md` along with the
