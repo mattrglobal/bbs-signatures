@@ -71,6 +71,9 @@ impl TryFrom<&[u8]> for PoKOfSignatureProofWrapper {
         let message_count = u16::from_be_bytes(*array_ref![value, 0, 2]) as usize;
         let bitvector_length = (message_count / 8) + 1;
         let offset = bitvector_length + 2;
+        if offset > value.len() {
+            return Err(JsValue::FALSE);
+        }
         let proof = map_err!(PoKOfSignatureProof::try_from(&value[offset..]))?;
         Ok(Self {
             bit_vector: value[..offset].to_vec(),
