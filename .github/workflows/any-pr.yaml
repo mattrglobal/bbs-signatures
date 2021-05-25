@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
-      - run: yarn build
+      - run: yarn build:release
       - run: yarn test
   build_test_wasm_env_interop:
     name: Build and Test WASM running cross OS and NodeJS versions
@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
-      - run: yarn build
+      - run: yarn build:release
       - run: yarn test:wasm
   build_test_native_node_env_interop:
     name: Build and Test native module running cross OS and NodeJS versions
@@ -46,5 +46,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
-      - run: yarn build
+      - run: yarn build:release
       - run: yarn test:node
