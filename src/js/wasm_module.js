@@ -12,8 +12,6 @@
  * limitations under the License.
  */
 
-const { nodejs } = require("./util");
-
 // Inject the RNG source when in NodeJS environments
 const { randomBytes } = require("@stablelib/random");
 
@@ -48,15 +46,7 @@ const throwErrorOnRejectedPromise = async (promise, errorMessage) => {
 let initializedModule;
 const initialize = async () => {
   if (!initializedModule) {
-    if (nodejs) {
-      // Fetch the wasm and load the module manually
-      const path = require("path").join(__dirname, "wasm_bg.wasm");
-      const bytes = require("fs").readFileSync(path);
-      const wasmModule = new WebAssembly.Module(bytes);
-      initializedModule = await wasm.default(wasmModule);
-    } else {
-      initializedModule = await wasm.default();
-    }
+    initializedModule = await wasm.default();
   }
 };
 
