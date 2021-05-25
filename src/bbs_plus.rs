@@ -11,6 +11,8 @@
  * limitations under the License.
  */
 
+use crate::utils::set_panic_hook;
+
 use crate::{bls12381::BbsKeyPair, BbsVerifyResponse, PoKOfSignatureProofWrapper};
 use bbs::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -146,6 +148,7 @@ pub async fn bbs_verify(request: JsValue) -> Result<JsValue, JsValue> {
 
 #[wasm_bindgen(js_name = blindSignCommitment)]
 pub async fn bbs_blind_signature_commitment(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let request: BlindSignatureContextRequest = serde_wasm_bindgen::from_value(request)?;
     if request.messages.len() != request.blinded.len() {
         return Err(JsValue::from("messages.len() != blinded.len()"));
@@ -181,6 +184,7 @@ pub async fn bbs_blind_signature_commitment(request: JsValue) -> Result<JsValue,
 
 #[wasm_bindgen(js_name = verifyBlind)]
 pub async fn bbs_verify_blind_signature_proof(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let request: BlindSignatureVerifyContextRequest = request.try_into()?;
     let total = request.publicKey.message_count();
     if request.blinded.iter().any(|b| *b > total) {
@@ -203,6 +207,7 @@ pub async fn bbs_verify_blind_signature_proof(request: JsValue) -> Result<JsValu
 
 #[wasm_bindgen(js_name = blindSign)]
 pub async fn bbs_blind_sign(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let request: BlindSignContextRequest = request.try_into()?;
     if request.messages.len() != request.known.len() {
         return Err(JsValue::from("messages.len() != known.len()"));
@@ -233,6 +238,7 @@ pub async fn bbs_blind_sign(request: JsValue) -> Result<JsValue, JsValue> {
 
 #[wasm_bindgen(js_name = unBlind)]
 pub async fn bbs_get_unblinded_signature(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let request: UnblindSignatureRequest = request.try_into()?;
     Ok(
         serde_wasm_bindgen::to_value(&request.signature.to_unblinded(&request.blindingFactor))
@@ -242,6 +248,7 @@ pub async fn bbs_get_unblinded_signature(request: JsValue) -> Result<JsValue, Js
 
 #[wasm_bindgen(js_name = createProof)]
 pub async fn bbs_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let request: CreateProofRequest = request.try_into()?;
     if request
         .revealed
@@ -291,6 +298,7 @@ pub async fn bbs_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
 
 #[wasm_bindgen(js_name = verifyProof)]
 pub async fn bbs_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let res = serde_wasm_bindgen::from_value::<VerifyProofContext>(request);
     let request: VerifyProofContext;
     match res {

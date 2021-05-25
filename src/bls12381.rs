@@ -11,6 +11,8 @@
  * limitations under the License.
  */
 
+use crate::utils::set_panic_hook;
+
 use crate::{BbsVerifyResponse, PoKOfSignatureProofWrapper};
 use bbs::prelude::*;
 use pairing_plus::{
@@ -90,6 +92,7 @@ wasm_impl!(
 /// followed by the public key (96) bytes.
 #[wasm_bindgen(js_name = generateBls12381G2KeyPair)]
 pub async fn bls_generate_g2_key(seed: Option<Vec<u8>>) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     Ok(bls_generate_keypair::<G2>(seed))
 }
 
@@ -101,12 +104,14 @@ pub async fn bls_generate_g2_key(seed: Option<Vec<u8>>) -> Result<JsValue, JsVal
 /// followed by the public key (48) bytes.
 #[wasm_bindgen(js_name = generateBls12381G1KeyPair)]
 pub async fn bls_generate_g1_key(seed: Option<Vec<u8>>) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     Ok(bls_generate_keypair::<G1>(seed))
 }
 
 /// Get the BBS public key associated with the private key
 #[wasm_bindgen(js_name = bls12381toBbs)]
 pub async fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let request: Bls12381ToBbsRequest = request.try_into()?;
     if request.messageCount == 0 {
         return Err(JsValue::from_str("Failed to convert key"));
@@ -137,6 +142,7 @@ pub async fn bls_to_bbs_key(request: JsValue) -> Result<JsValue, JsValue> {
 /// Signs a set of messages with a BLS 12-381 key pair and produces a BBS signature
 #[wasm_bindgen(js_name = blsSign)]
 pub async fn bls_sign(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let request: BlsBbsSignRequest = request.try_into()?;
     let dpk_bytes = request.keyPair.publicKey.unwrap();
     let dpk = DeterministicPublicKey::from(array_ref![dpk_bytes, 0, G2_COMPRESSED_SIZE]);
@@ -167,6 +173,7 @@ pub async fn bls_sign(request: JsValue) -> Result<JsValue, JsValue> {
 /// Verifies a BBS+ signature for a set of messages with a with a BLS 12-381 public key
 #[wasm_bindgen(js_name = blsVerify)]
 pub async fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let res = request.try_into();
     let result: BlsBbsVerifyRequest;
     match res {
@@ -209,6 +216,7 @@ pub async fn bls_verify(request: JsValue) -> Result<JsValue, JsValue> {
 /// Creates a BBS+ PoK
 #[wasm_bindgen(js_name = blsCreateProof)]
 pub async fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let request: BlsCreateProofRequest = request.try_into()?;
     if request.revealed.iter().any(|r| *r > request.messages.len()) {
         return Err(JsValue::from("revealed value is out of bounds"));
@@ -253,6 +261,7 @@ pub async fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
 /// Verify a BBS+ PoK
 #[wasm_bindgen(js_name = blsVerifyProof)]
 pub async fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
     let res = serde_wasm_bindgen::from_value::<BlsVerifyProofContext>(request);
     let request: BlsVerifyProofContext;
     match res {
