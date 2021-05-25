@@ -2,13 +2,29 @@
 
 set -e
 
+BUILD_MODE=$1
+
 SRC_WASM=lib/wasm.js
 
-# TODO deal with when rustup not installed?
+if [ -z "$BUILD_MODE" ]
+then
+  echo "BUILD_MODE not specified defaulting to RELEASE"
+  BUILD_MODE="RELEASE"
+fi
 
-# Run wasm-pack
-echo "Building WASM Output"
-rustup run stable wasm-pack build --release --out-dir lib --target web
+# Build based on input parameter
+if [ "$BUILD_MODE" = "RELEASE" ]; 
+then
+    echo "Building WASM Output in RELEASE MODE"
+    rustup run stable wasm-pack build --release --out-dir lib --target web
+elif [ "$BUILD_MODE" = "DEBUG" ]; 
+then
+    echo "Building WASM Output in DEBUG MODE"
+    rustup run stable wasm-pack build --out-dir lib --target web -- --features="console"
+else
+    echo "Unrecognized value for parameter BUILD_MODE value must be either RELEASE or DEBUG"
+    exit 1
+fi
 
 # Copy over package sources
 cp -r src/js/* lib/
