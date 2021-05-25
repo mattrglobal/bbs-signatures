@@ -3,6 +3,12 @@
 We use several pieces of technology in this repository to streamline the release process whilst maintaining high code
 quality.
 
+## Debugging WASM
+
+By default if an error is un-handled (e.g a `panic!` in rust) when executing the WASM based module it will result in an
+un-helpful general error of `RuntimeError: unreachable`, which can be difficult to debug. To improve this experience, by
+default running `yarn build` in this library will compile the WASM from the rust with `console` feature enabled which provides a more insightful stacktrace for the error.
+
 ## Pre pull request checklist
 
 Below is a brief checklist prior to submitting or updating a pull request
