@@ -8,8 +8,10 @@
   "homepage": "https://github.com/mattrglobal/bbs-signatures",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "module": "lib/index.web.js",
   "repository": "https://github.com/mattrglobal/bbs-signatures",
+  "browser": {
+    "index.js": "lib/index.web.js"
+  },
   "files": [
     "lib/*"
   ],
