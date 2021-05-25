@@ -1,3 +1,14 @@
+# [0.6.0](https://github.com/mattrglobal/bbs-signatures/compare/v0.5.0...v0.6.0) (2021-05-25)
+
+### Bug Fixes
+
+- handle when no. of message out of bound ([c3375a4](https://github.com/mattrglobal/bbs-signatures/commit/c3375a40f634ee317e4d5910649c4d8cb372daf4))
+- verify proof bug ([#85](https://github.com/mattrglobal/bbs-signatures/issues/85)) ([ec016ef](https://github.com/mattrglobal/bbs-signatures/commit/ec016efdd5d412c4a9dea5470c4295297394f2b2))
+
+### Features
+
+- update approach to generating wasm ([#84](https://github.com/mattrglobal/bbs-signatures/issues/84)) ([f1afe8b](https://github.com/mattrglobal/bbs-signatures/commit/f1afe8be1fa69831f983d65908d132ef407d244b))
+
 # [0.5.0](https://github.com/mattrglobal/bbs-signatures/compare/v0.3.0...v0.5.0) (2021-02-23)
 
 BREAKING CHANGES: The API exposed by this library is now promise based see [#61](https://github.com/mattrglobal/bbs-signatures/issues/61) for more details.
