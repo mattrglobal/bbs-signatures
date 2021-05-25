@@ -162,7 +162,7 @@ yarn install --frozen-lockfile
 
 #### Build
 
-To build the project run:
+To build the project for debug run:
 
 ```
 yarn build
