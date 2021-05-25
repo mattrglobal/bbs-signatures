@@ -38,7 +38,7 @@ const throwErrorOnRejectedPromise = async (promise, errorMessage) => {
 let initializedModule;
 const initialize = async () => {
   if (!initializedModule) {
-    initializedModule = await init();
+    initializedModule = await init(new URL("wasm_bg.wasm", import.meta.url));
   }
 };
 

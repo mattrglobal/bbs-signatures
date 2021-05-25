@@ -5,6 +5,10 @@ set -e
 BUILD_MODE=$1
 
 SRC_WASM=lib/wasm.js
+SRC_WASM_CJS=lib/wasm_cjs.js
+
+# Add dev dependencies to current path
+export PATH="$PATH:node_modules/.bin"
 
 if [ -z "$BUILD_MODE" ]
 then
@@ -33,6 +37,16 @@ cp -r src/js/* lib/
 # appears to be invalid and not used
 sed -i -e 's/getObject(arg0).randomFillSync(getArrayU8FromWasm0(arg1, arg2));//g' $SRC_WASM
 sed -i -e 's/var ret = getObject(arg0).require(getStringFromWasm0(arg1, arg2));/var ret = {};/g' $SRC_WASM
+
+# Convert the wasm.js to a cjs version for node compatibility
+yarn rollup $SRC_WASM --file $SRC_WASM_CJS --format cjs
+
+# Convert how the WASM is loaded in the CJS version to use the base64 packed version
+sed -i -e 's/input = new URL(.*/input = require(\".\/wasm_bs64.js\");/' $SRC_WASM_CJS
+
+# Convert wasm output to base64 bytes
+echo "Packing WASM into b64"
+node ./scripts/pack-wasm-base64.js
 
 # Delete the gitignore and readme automatically created by wasm-pack
 rm lib/package.json lib/.gitignore
