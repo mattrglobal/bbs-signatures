@@ -41,12 +41,18 @@ sed -i -e 's/var ret = getObject(arg0).require(getStringFromWasm0(arg1, arg2));/
 # Convert the wasm.js to a cjs version for node compatibility
 yarn rollup $SRC_WASM --file $SRC_WASM_CJS --format cjs
 
-# Convert how the WASM is loaded in the CJS version to use the base64 packed version
-sed -i -e 's/input = new URL(.*/input = require(\".\/wasm_bs64.js\");/' $SRC_WASM_CJS
-
 # Convert wasm output to base64 bytes
 echo "Packing WASM into b64"
 node ./scripts/pack-wasm-base64.js
 
-# Delete the gitignore and readme automatically created by wasm-pack
-rm lib/package.json lib/.gitignore
+# Convert how the WASM is loaded in the CJS version to use the base64 packed version
+sed -i -e 's/input = new URL(.*/input = require(\".\/wasm_bs64.js\");/' $SRC_WASM_CJS
+
+# Delete the un-necessary files automatically created by wasm-pack
+rm lib/package.json lib/.gitignore lib/LICENSE lib/README.md
+
+# Delete the files not needed because using the CJS approach
+rm lib/wasm_bg.wasm lib/wasm_bg.wasm.d.ts lib/wasm.js
+
+# Rename the CJS version over the old file
+mv lib/wasm_cjs.js lib/wasm.js
