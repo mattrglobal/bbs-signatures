@@ -284,6 +284,17 @@ pub async fn bls_verify_proof(request: JsValue) -> Result<JsValue, JsValue> {
     let pk = request.publicKey.to_public_key(message_count)?;
     let messages = request.messages.clone();
     let (revealed, proof) = request.proof.unwrap();
+    if messages.len() != revealed.len() {
+        return Ok(serde_wasm_bindgen::to_value(&BbsVerifyResponse {
+            verified: false,
+            error: Some(format!(
+                "Given messages count ({}) is different from revealed messages count ({}) for this proof",
+                messages.len(),
+                revealed.len()
+            )),
+        })
+            .unwrap())
+    }
     let proof_request = ProofRequest {
         revealed_messages: revealed,
         verification_key: pk,
