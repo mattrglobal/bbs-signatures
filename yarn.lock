@@ -494,7 +494,7 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
-"@mattrglobal/node-bbs-signatures@^0.13.0":
+"@mattrglobal/node-bbs-signatures@0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@mattrglobal/node-bbs-signatures/-/node-bbs-signatures-0.13.0.tgz#3e431b915325d4b139706f8b26fd84b27c192a29"
   integrity sha512-S2wOwDCQYxdjSEjVfcbP3bTq4ZMKeRw/wvBhWRff8CEwuH5u3Qiul+azwDGSesvve1DDceaEhXWiGkXeZTojfQ==
