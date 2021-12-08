@@ -76,7 +76,7 @@
     }
   },
   "optionalDependencies": {
-    "@mattrglobal/node-bbs-signatures": "0.12.0"
+    "@mattrglobal/node-bbs-signatures": "0.13.0"
   },
   "dependencies": {
     "@stablelib/random": "1.0.0"
