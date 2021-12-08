@@ -1,3 +1,9 @@
+# [0.7.0](https://github.com/mattrglobal/bbs-signatures/compare/v0.6.0...v0.7.0) (2021-12-08)
+
+### Bug Fixes
+
+- strict check for given messages count and originally revealed ([fd1fbbf](https://github.com/mattrglobal/bbs-signatures/commit/fd1fbbfd4ac31a2c77e113ff611c6abc81851605))
+
 # [0.6.0](https://github.com/mattrglobal/bbs-signatures/compare/v0.5.0...v0.6.0) (2021-05-25)
 
 BREAKING CHANGES: Support for asm.js has been removed due to its poor performance and it creating bloat for all
