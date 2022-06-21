@@ -15,7 +15,7 @@ const pack = require("./package");
 
 module.exports = {
   preset: "ts-jest",
-  roots: ["<rootDir>/pkg", "<rootDir>/tests"],
+  roots: ["<rootDir>/src", "<rootDir>/tests"],
   testEnvironment: "node",
   testPathIgnorePatterns: ["/node_modules/", "/output/"],
   testRegex: [".spec.ts$"],
