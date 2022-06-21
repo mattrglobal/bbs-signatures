@@ -62,11 +62,6 @@
   "resolutions": {
     "lodash": "4.17.21"
   },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
-  },
   "optionalDependencies": {
     "@mattrglobal/node-bbs-signatures": "0.13.0"
   },
