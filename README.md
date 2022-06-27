@@ -47,7 +47,6 @@ This library includes a couple of features to ensure the most performant impleme
 
 1. If in a node js based environment and the optional dependency of [@mattrglobal/node-bbs-signatures](https://github.com/mattrglobal/node-bbs-signatures) is installed use this.
 2. If in an environment that supports [Web Assembly](https://webassembly.org/) use this.
-3. Else use a version compiled to [asm.js](http://asmjs.org/).
 
 **Note** Please refer to running the benchmarks below where you can compare these different implementations, the differences are very notable.
 
@@ -55,6 +54,8 @@ This library includes a couple of features to ensure the most performant impleme
 
 - `NODE_JS_MODULE` - Use native node module, ensure [@mattrglobal/node-bbs-signatures](https://github.com/mattrglobal/node-bbs-signatures) is installed
 - `WASM` - Use the wasm module
+
+**Note** Previous releases of this library supported an asm.js compilation for usage in react native environments, however this has been deprecated due to performance issues.
 
 ## Usage
 
