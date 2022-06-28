@@ -47,12 +47,14 @@
     "@types/jest": "28.1.1",
     "@types/node": "12.7.2",
     "@wasm-tool/wasm-pack-plugin": "1.6.0",
+    "buffer": "6.0.3",
     "conventional-changelog": "3.1.25",
     "conventional-changelog-cli": "2.2.2",
     "husky": "8.0.0",
     "jest": "28.1.1",
     "prettier": "2.0.4",
     "pretty-quick": "2.0.1",
+    "process": "0.11.10",
     "rollup": "2.49.0",
     "text-encoding": "0.7.0",
     "ts-jest": "28.0.5",
@@ -63,7 +65,7 @@
     "lodash": "4.17.21"
   },
   "optionalDependencies": {
-    "@mattrglobal/node-bbs-signatures": "0.13.0"
+    "@mattrglobal/node-bbs-signatures": "0.14.0"
   },
   "dependencies": {
     "@stablelib/random": "1.0.0"
