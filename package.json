@@ -19,7 +19,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": ">=11.0.0"
+    "node": ">=14"
   },
   "scripts": {
     "install": "./scripts/install-dependencies.sh",
