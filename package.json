@@ -65,7 +65,7 @@
     "lodash": "4.17.21"
   },
   "optionalDependencies": {
-    "@mattrglobal/node-bbs-signatures": "0.14.0"
+    "@mattrglobal/node-bbs-signatures": "0.15.0"
   },
   "dependencies": {
     "@stablelib/random": "1.0.0"
