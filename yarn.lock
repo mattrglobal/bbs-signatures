@@ -761,10 +761,10 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@mattrglobal/node-bbs-signatures@0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@mattrglobal/node-bbs-signatures/-/node-bbs-signatures-0.14.0.tgz#eac9b91dc81d433ae67124e9af73fe7715cdf02d"
-  integrity sha512-avp3zsxzet/AVhTLTIOyRKTURGSMz6o453+EEl1GflfWYi5RX2qBSvN+rbuk8TdGe89on4jdec3PjcsObVGC7A==
+"@mattrglobal/node-bbs-signatures@0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@mattrglobal/node-bbs-signatures/-/node-bbs-signatures-0.15.0.tgz#acbe578253fa95d96141bd44cb65e75cd0b79c67"
+  integrity sha512-ipIwL1neAW/gwC0jg0aOFWiIipdvn6kq0Ta2ccSgc1pZUg6xPYj7dRMEaR6QJ9zV6qOBe7awETd1CoLunwwsLA==
   dependencies:
     "@mapbox/node-pre-gyp" "1.0.9"
     neon-cli "0.10.1"
