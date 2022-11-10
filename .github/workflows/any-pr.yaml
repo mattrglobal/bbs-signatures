@@ -17,6 +17,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
       - run: yarn build:release
+      - run: yarn license:check
       - run: yarn test
   build_test_wasm_env_interop:
     name: Build and Test WASM running cross OS and NodeJS versions
