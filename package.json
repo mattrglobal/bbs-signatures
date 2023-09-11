@@ -19,7 +19,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": ">=14"
+    "node": "=16 || >=18"
   },
   "scripts": {
     "install": "./scripts/install-dependencies.sh",
