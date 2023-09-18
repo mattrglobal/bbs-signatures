@@ -1,3 +1,9 @@
+# [1.2.0](https://github.com/mattrglobal/bbs-signatures/compare/1.0.0...1.2.0) (2023-09-18)
+
+### Features
+
+- add node 18.x support ([5726e4c](https://github.com/mattrglobal/bbs-signatures/commit/5726e4c71637b1b7149698a671fa0cd7663170bb))
+
 # [1.1.0](https://github.com/mattrglobal/bbs-signatures/compare/1.0.0...1.1.0) (2022-07-11)
 
 # [1.0.0](https://github.com/mattrglobal/bbs-signatures/compare/0.7.0...1.0.0) (2022-01-09)
