@@ -29,7 +29,6 @@ try {
     module.exports = require("@mattrglobal/node-bbs-signatures");
   }
 } catch (e) {
-  console.error(e);
   if (process.env.BBS_SIGNATURES_MODE === BBS_SIGNATURES_MODES.nodejs) {
     throw new Error(FAILED_TO_LOAD_NODE_MODULE);
   }
