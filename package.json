@@ -41,7 +41,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.0.2",
+    "@commitlint/cli": "17.7.1",
     "@commitlint/config-conventional": "17.0.2",
     "@stablelib/base64": "1.0.0",
     "@stablelib/benchmark": "1.0.0",
