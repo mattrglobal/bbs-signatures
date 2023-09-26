@@ -12,7 +12,6 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 console = ["console_error_panic_hook"]
-default = ["wee_alloc"]
 
 [dependencies]
 arrayref = "0.3"
@@ -28,7 +27,6 @@ sha2 = "0.8"
 wasm-bindgen = "= 0.2.74"
 wasm-bindgen-futures = "0.4.18"
 web-sys = { version = "0.3.39", features = ['console'] }
-wee_alloc = { version = "0.4.2", optional = true }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.13"
