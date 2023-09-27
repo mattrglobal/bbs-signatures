@@ -11,9 +11,6 @@
  * limitations under the License.
  */
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-
 #[macro_use]
 extern crate arrayref;
 
