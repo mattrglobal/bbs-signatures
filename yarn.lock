@@ -769,10 +769,10 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@mattrglobal/node-bbs-signatures@0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@mattrglobal/node-bbs-signatures/-/node-bbs-signatures-0.17.0.tgz#50d18ae45cd9b6a3ea5f17812cf6fb6c20baaf17"
-  integrity sha512-midEd1qGYfAKjILyIdEgyY7tbVwIFR7ozWli8AaxBaiDie2oBaj6O1A2rh/GCOKTpBZ3Thbi+CE0QZntWf+Xzg==
+"@mattrglobal/node-bbs-signatures@0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@mattrglobal/node-bbs-signatures/-/node-bbs-signatures-0.18.1.tgz#f313da682bdd9b592e7b65549cbbb8f67b0ce583"
+  integrity sha512-s9ccL/1TTvCP1N//4QR84j/d5D/stx/AI1kPcRgiE4O3KrxyF7ZdL9ca8fmFuN6yh9LAbn/OiGRnOXgvn38Dgg==
   dependencies:
     "@mapbox/node-pre-gyp" "1.0.11"
     neon-cli "0.10.1"
@@ -980,10 +980,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@wasm-tool/wasm-pack-plugin@1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@wasm-tool/wasm-pack-plugin/-/wasm-pack-plugin-1.6.0.tgz#a2dbec777b317b04f72e13f0080a3f483cd89809"
-  integrity sha512-Iax4nEgIvVCZqrmuseJm7ln/muWpg7uT5fXMAT0crYo+k5JTuZE58DJvBQoeIAegA3IM9cZgfkcZjAOUCPsT1g==
+"@wasm-tool/wasm-pack-plugin@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@wasm-tool/wasm-pack-plugin/-/wasm-pack-plugin-1.7.0.tgz#63a17357c0c8621a88513134852918cb9a480755"
+  integrity sha512-WikzYsw7nTd5CZxH75h7NxM/FLJAgqfWt+/gk3EL3wYKxiIlpMIYPja+sHQl3ARiicIYy4BDfxkbAVjRYlouTA==
   dependencies:
     chalk "^2.4.1"
     command-exists "^1.2.7"
