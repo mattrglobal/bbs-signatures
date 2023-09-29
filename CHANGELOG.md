@@ -1,3 +1,5 @@
+# [1.3.0](https://github.com/mattrglobal/bbs-signatures/compare/v1.2.0...v1.3.0) (2023-09-29)
+
 # [1.2.0](https://github.com/mattrglobal/bbs-signatures/compare/1.0.0...1.2.0) (2023-09-18)
 
 ### Features
