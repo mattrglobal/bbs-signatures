@@ -1,3 +1,20 @@
+# [1.3.0](https://github.com/mattrglobal/bbs-signatures/compare/v1.2.0...v1.3.0) (2023-09-29)
+
+### Features
+
+- update `@mattrglobal/node-bbs-signatures` to 0.18.1 ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+- update `@wasm-tool/wasm-pack-plugin` to 1.7.0 ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+- update rust edition to 2021 ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+- update `console_error_panic_hook` to 0.1.7 ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+- update `serde-wasm-bindgen` to 0.6.0 ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+- update `wasm-bindgen` to 0.2.87 ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+- update `wasm-bindgen-future` to 0.4.37 ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+- update `web-sys` to 0.3.64 ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+
+### Bug Fixes
+
+- remove support for `wee_alloc` ([b929d7d](https://github.com/mattrglobal/bbs-signatures/commit/b929d7dadc35e6cc52d27227b990d825717c7314))
+
 # [1.2.0](https://github.com/mattrglobal/bbs-signatures/compare/1.0.0...1.2.0) (2023-09-18)
 
 ### Features
