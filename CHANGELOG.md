@@ -1,3 +1,9 @@
+## [1.3.1](https://github.com/mattrglobal/bbs-signatures/compare/v1.3.0...v1.3.1) (2023-10-04)
+
+### Features
+
+- update `debug` from 4.1.1 to 4.3.4 ([a7e7aad](https://github.com/mattrglobal/bbs-signatures/commit/a7e7aad830ddcaef588a27ff53c4104868800b4b))
+
 # [1.3.0](https://github.com/mattrglobal/bbs-signatures/compare/v1.2.0...v1.3.0) (2023-09-29)
 
 ### Features
