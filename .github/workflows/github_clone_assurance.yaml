@@ -1,0 +1,23 @@
+name: Mirror repository to mattrassurance org
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  MirrorRepoToMATTRAssurance:
+    runs-on: [self-hosted, generic]
+    permissions:
+      contents: read
+    steps:
+      - name: mirror repo
+        uses: mattrinternal/sre-reusable-action/actions/github-clone-assurance@master
+        with:
+          github_repository: ${{ env.GITHUB_REPOSITORY }}
+          github_ref_name: ${{ env.GITHUB_REF_NAME }}
+          remote_git_user_name: ${{ secrets.MATTRASSURANCE_GIT_USER_NAME }}
+          remote_git_user_email: ${{ secrets.MATTRASSURANCE_GIT_USER_EMAIL }}
+          remote_git_user_pat: ${{ secrets.MATTRASSURANCE_GIT_USER_PAT }}
+          remote_git_repo: 'mattrassurance/bbs-signatures'
