@@ -11,17 +11,21 @@
  * limitations under the License.
  */
 
-export { BbsBlindSignContext } from "./BbsBlindSignContext";
-export { BbsBlindSignContextRequest } from "./BbsBlindSignContextRequest";
-export { BbsBlindSignRequest } from "./BbsBlindSignRequest";
-export { BbsCreateProofRequest } from "./BbsCreateProofRequest";
-export { BbsKeyPair } from "./BbsKeyPair";
-export { BbsSignRequest } from "./BbsSignRequest";
-export { BbsVerifyBlindSignContextRequest } from "./BbsVerifyBlindSignContextRequest";
-export { BbsVerifyProofRequest } from "./BbsVerifyProofRequest";
-export { BbsVerifyRequest } from "./BbsVerifyRequest";
-export { BlsKeyPair, DEFAULT_BLS12381_PRIVATE_KEY_LENGTH, DEFAULT_BLS12381_PUBLIC_KEY_LENGTH } from "./BlsKeyPair";
-export { Bls12381ToBbsRequest } from "./Bls12381ToBbsRequest";
-export { BlsBbsSignRequest } from "./BlsBbsSignRequest";
-export { BlsBbsVerifyRequest } from "./BlsBbsVerifyRequest";
-export { BbsVerifyResult } from "./BbsVerifyResult";
+export type { BbsBlindSignContext } from "./BbsBlindSignContext";
+export type { BbsBlindSignContextRequest } from "./BbsBlindSignContextRequest";
+export type { BbsBlindSignRequest } from "./BbsBlindSignRequest";
+export type { BbsCreateProofRequest } from "./BbsCreateProofRequest";
+export type { BbsKeyPair } from "./BbsKeyPair";
+export type { BbsSignRequest } from "./BbsSignRequest";
+export type { BbsVerifyBlindSignContextRequest } from "./BbsVerifyBlindSignContextRequest";
+export type { BbsVerifyProofRequest } from "./BbsVerifyProofRequest";
+export type { BbsVerifyRequest } from "./BbsVerifyRequest";
+export {
+  DEFAULT_BLS12381_PRIVATE_KEY_LENGTH,
+  DEFAULT_BLS12381_PUBLIC_KEY_LENGTH,
+} from "./BlsKeyPair";
+export type { BlsKeyPair } from "./BlsKeyPair";
+export type { Bls12381ToBbsRequest } from "./Bls12381ToBbsRequest";
+export type { BlsBbsSignRequest } from "./BlsBbsSignRequest";
+export type { BlsBbsVerifyRequest } from "./BlsBbsVerifyRequest";
+export type { BbsVerifyResult } from "./BbsVerifyResult";
