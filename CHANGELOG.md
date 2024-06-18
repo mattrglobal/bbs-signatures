@@ -1,3 +1,9 @@
+# [1.4.0](https://github.com/mattrglobal/bbs-signatures/compare/v1.3.1...v1.4.0) (2024-06-18)
+
+### Features
+
+- removes node 14.x support ([a8d6f34](https://github.com/mattrglobal/bbs-signatures/commit/a8d6f346327c722fa146a448d9dccaa54b967456))
+
 ## [1.3.1](https://github.com/mattrglobal/bbs-signatures/compare/v1.3.0...v1.3.1) (2023-10-04)
 
 ### Features
