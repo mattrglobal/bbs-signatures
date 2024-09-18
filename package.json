@@ -19,7 +19,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "install": "./scripts/install-dependencies.sh",
@@ -67,7 +67,7 @@
     "lodash": "4.17.21"
   },
   "optionalDependencies": {
-    "@mattrglobal/node-bbs-signatures": "0.18.1"
+    "@mattrglobal/node-bbs-signatures": "0.20.0"
   },
   "dependencies": {
     "@stablelib/random": "1.0.0"
