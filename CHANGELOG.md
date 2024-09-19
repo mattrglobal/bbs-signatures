@@ -1,3 +1,17 @@
+# [2.0.0](https://github.com/mattrglobal/bbs-signatures/compare/v1.4.0...v2.0.0) (2024-09-19)
+
+### Build System
+
+- **deps:** bump @mattrglobal/node-bbs-signatures from 0.18.1 to 0.20.0 ([#187](https://github.com/mattrglobal/bbs-signatures/issues/187)) ([ac35f39](https://github.com/mattrglobal/bbs-signatures/commit/ac35f39afe178e4e4fddb11c0e4016785ab49994))
+
+### Features
+
+- adds node 20.x and 22.x support ([ac35f39](https://github.com/mattrglobal/bbs-signatures/commit/ac35f39afe178e4e4fddb11c0e4016785ab49994))
+
+### BREAKING CHANGES
+
+- removes node 16.x support ([ac35f39](https://github.com/mattrglobal/bbs-signatures/commit/ac35f39afe178e4e4fddb11c0e4016785ab49994))
+
 # [1.4.0](https://github.com/mattrglobal/bbs-signatures/compare/v1.3.1...v1.4.0) (2024-06-18)
 
 ### Features
